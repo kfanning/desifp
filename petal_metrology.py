@@ -4,7 +4,15 @@ Created on Tue Apr 9 19:05:20 2017
 
 @author: Duan Yutong (dyt@physics.bu.edu)
 
-n33d to change paths to metrology files
+Code on SVN:
+    https://desi.lbl.gov/svn/code/focalplane/plate_layout/trunk/metrology_analysis/
+Code on Github:
+    https://github.com/givoltage/desifp
+Results on google drive:
+    https://drive.google.com/open?id=0B8mEgjxcgZeYVVFVZnYyM2Q3REE
+Data on DocDB:
+    DESI-3542: Focal plate survey and alignment data
+    DESI-3543: Zeiss petal metrology data
 
 """
 
@@ -18,14 +26,12 @@ from scipy.optimize import minimize
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 from matplotlib.backends.backend_pdf import PdfPages
-# from tqdm import tqdm
-# from itertools import product
 
 metrology_dir = r'K:\Google Drive\DESI\model_drawings\DESI Focal Plate Assy and Integration\FP Structure\metrology\Zeiss Petal Metrology'
 path_hole_table = r'K:\Google Drive\DESI\model_drawings\petal\DESI-0326-D_HoleTable.xlsx'
 fig_save_dir = r'D:\plots'
-# petal_ids = ['01', '02', '04', '00', '03', '05', '06', '07', '08', '09', '10', '11'] #  petal production sequential order
-petal_ids = ['01', '02', '04', '00', '03', '05', '06', '07', '08', '09', '10', '11']
+petal_ids = ['01', '02', '04', '00', '03', '05', '06', '07', '08', '09',
+             '10', '11']
 paths = {'01': metrology_dir + r'\ptl01\DESI-0326-E_1_chr.txt',
          '02': metrology_dir + r'\ptl02\DESI-0326-E_2_chr.txt',
          '04': metrology_dir + r'\ptl04\DESI-0326-E_3_chr.txt',
@@ -41,7 +47,8 @@ paths = {'01': metrology_dir + r'\ptl01\DESI-0326-E_1_chr.txt',
 make_plots = True
 make_lookup_table = True
 
-#%% function definitions
+# %% function definitions
+
 
 # rotation matrices, input is in radians
 def Rx(angle):
@@ -52,6 +59,7 @@ def Rx(angle):
                   ])
     return Rx
 
+
 def Ry(angle):
     Ry = np.array([
                    [np.cos(angle),  0.0,            np.sin(angle)],
@@ -59,6 +67,7 @@ def Ry(angle):
                    [-np.sin(angle), 0.0,            np.cos(angle)]
                   ])
     return Ry
+
 
 def Rz(angle):
     Rz = np.array([
@@ -68,11 +77,14 @@ def Rz(angle):
                   ])
     return Rz
 
+
 def matmul(*args):
     return reduce(np.dot, [*args])
 
+
 def total_residue(x, y):
     return np.sum(np.linalg.norm(x - y, axis=0))
+
 
 def angles_to_unit_vector(theta_deg, phi_deg):
     # returns a unit vector from polar and azimuthal angles
@@ -80,11 +92,13 @@ def angles_to_unit_vector(theta_deg, phi_deg):
     phi = np.radians(phi_deg)
     return np.array([np.sin(theta)*np.cos(phi), np.sin(theta)*np.sin(phi), np.cos(theta)])
 
+
 def vector_to_angles(x, y, z):
     r = np.sqrt(np.square(x) + np.square(y) + np.square(z))
     theta = np.arccos(z/r) # radians
     phi = np.arctan(y/x)
     return [np.degrees(theta), np.degrees(phi)]
+
 
 def petal_to_cs5(x, petal_location):
     
@@ -101,10 +115,12 @@ def petal_to_cs5(x, petal_location):
     x_rot = matmul(Rz(angle), x)
     return x_rot
 
+
 def throughput_tilt(tilt):
     # takes degree input
     throughput_tilt = -0.0133*np.power(tilt, 2) - 0.0175*tilt + 1.0 # takes deg
     return np.multiply(throughput_tilt, throughput_tilt>0)
+
 
 def throughput_defocus(delta_f):
     delta_f_um = np.abs(delta_f) * 1000 # polyfit only defined for abs value
@@ -116,6 +132,7 @@ def throughput_defocus(delta_f):
                           + 3.251e-7*delta_f_um
                           + 1.0)
     return np.multiply(throughput_defocus, throughput_defocus>0) # force positive valued
+
 
 def par_list_gen(optm, half_ranges, counts):
     hr_fine = half_ranges[0]

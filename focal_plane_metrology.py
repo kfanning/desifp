@@ -4,6 +4,16 @@ Created on Sun Jun  4 13:33:19 2017
 
 @author: Duan Yutong (dyt@physics.bu.edu)
 
+Code on SVN:
+    https://desi.lbl.gov/svn/code/focalplane/plate_layout/trunk/metrology_analysis/
+Code on Github:
+    https://github.com/givoltage/desifp
+Results on google drive:
+    https://drive.google.com/open?id=0B8mEgjxcgZeYVVFVZnYyM2Q3REE
+Data on DocDB:
+    DESI-3542: Focal plate survey and alignment data
+    DESI-3543: Zeiss petal metrology data
+
 """
 
 import os
