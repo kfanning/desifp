@@ -17,8 +17,8 @@ import matplotlib.gridspec as gridspec
 from matplotlib.backends.backend_pdf import PdfPages
 
 # petal_locations = np.arange(10)
-petal_locations = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9] # locations of petals installed and to be evaluated
-petal_id_lookup = {0: '04', # map between petal location and petal ID
+petal_locations = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]  # lo of petals installed
+petal_id_lookup = {0: '04',  # map between petal location and petal ID
                    1: '05',
                    2: '06',
                    3: '07',
@@ -28,9 +28,9 @@ petal_id_lookup = {0: '04', # map between petal location and petal ID
                    7: '02',
                    8: '03',
                    9: '09'}
-petal_ids = ['01', '02', '04', '00', '03', '05', '06', '07', '08', '09', '10', '11'] #  petal production sequential order
-fig_save_dir = r'C:\Users\givoltage\Downloads\plots'
-# fig_save_dir = r'C:\Users\givoltage\Google Drive\DESI\model_drawings\DESI Focal Plate Assy and Integration\FP Structure\metrology\duan_plots_and_data'
+petal_ids = ['01', '02', '04', '00', '03', '05', '06', '07', '08', '09', '10',
+             '11']  # petal production sequential order
+fig_save_dir = r'C:\Users\givoltage\Google Drive\DESI\model_drawings\DESI Focal Plate Assy and Integration\FP Structure\metrology\duan_plots_and_data'
 
 ''' CMM data
 
@@ -352,8 +352,8 @@ dtb_pos_cmm = {0: np.array([[4.418, -25.781, -81.858],   # DTB 0
                6: np.array([[-18.476, 18.237, -81.790],   # DTB 0
                             [-155.512, 396.829, -102.775],   # DTB 1
                             [-282.212, 319.127, -102.832]]), # DTB 2
-               7: np.array([[-25.826, 3.645, -82.360],   # DTB 0 
-                            [-358.962, 229.482, -102.939],   # DTB 1 
+               7: np.array([[-25.826, 3.645, -82.360],  # DTB 0
+                            [-358.962, 229.482, -102.939], # DTB 1
                             [-415.831, 92.454, -102.910]]), # DTB 2
                8: np.array([[-23.354, -12.225, -81.847],   # DTB 0
                             [-425.341, -25.373, -102.810],   # DTB 1
@@ -385,8 +385,8 @@ dtb_pos_cmm = {0: np.array([[4.419, -25.789, -81.842],   # DTB 0
                6: np.array([[-18.470, 18.237, -81.804],   # DTB 0
                             [-155.511, 396.830, -102.774],   # DTB 1
                             [-282.211, 319.128, -102.834]]), # DTB 2
-               7: np.array([[-25.825, 3.646, -82.346],   # DTB 0 
-                            [-358.961, 229.482, -102.942],   # DTB 1 
+               7: np.array([[-25.825, 3.646, -82.346],   # DTB 0
+                            [-358.961, 229.482, -102.942],   # DTB 1
                             [-415.829, 92.456, -102.914]]), # DTB 2
                8: np.array([[-23.357, -12.230, -81.820],   # DTB 0
                             [-425.340, -25.373, -102.816],   # DTB 1
@@ -418,8 +418,8 @@ dtb_pos_cmm = {0: np.array([[4.362, -25.710, -81.810],   # DTB 0
                6: np.array([[-18.734, 18.110, -82.381],   # DTB 0
                             [-155.544, 396.620, -102.928],   # DTB 1
                             [-282.086, 319.174, -102.903]]), # DTB 2
-               7: np.array([[-25.724, 3.686, -81.623],   # DTB 0 
-                            [-358.778, 229.445, -103.418],   # DTB 1 
+               7: np.array([[-25.724, 3.686, -81.623],   # DTB 0
+                            [-358.778, 229.445, -103.418],   # DTB 1
                             [-415.642, 92.188, -102.750]]), # DTB 2
                8: np.array([[-23.228, -12.090, -81.956],   # DTB 0
                             [-425.072, -25.290, -102.936],   # DTB 1
@@ -451,8 +451,8 @@ dtb_pos_cmm = {0: np.array([[4.363, -25.716, -81.781],   # DTB 0
                6: np.array([[-18.736, 18.116, -82.352],   # DTB 0
                             [-155.545, 396.622, -102.931],   # DTB 1
                             [-282.086, 319.175, -102.906]]), # DTB 2
-               7: np.array([[-25.731, 3.691, -81.579],   # DTB 0 
-                            [-358.778, 229.447, -103.419],   # DTB 1 
+               7: np.array([[-25.731, 3.691, -81.579],   # DTB 0
+                            [-358.778, 229.447, -103.419],   # DTB 1
                             [-415.642, 92.188, -102.749]]), # DTB 2
                8: np.array([[-23.223, -12.084, -81.984],   # DTB 0
                             [-425.070, -25.289, -102.934],   # DTB 1
@@ -484,8 +484,8 @@ dtb_pos_cmm = {0: np.array([[4.362, -25.713, -81.798],   # DTB 0
                6: np.array([[-18.723, 18.200, -81.796],   # DTB 0
                             [-155.290, 396.507, -102.851],   # DTB 1
                             [-282.285, 318.730, -102.672]]), # DTB 2
-               7: np.array([[-25.726, 3.692, -81.606],   # DTB 0 
-                            [-358.859, 229.332, -103.417],   # DTB 1 
+               7: np.array([[-25.726, 3.692, -81.606],   # DTB 0
+                            [-358.859, 229.332, -103.417],   # DTB 1
                             [-415.675, 92.053, -102.750]]), # DTB 2
                8: np.array([[-23.230, -12.090, -81.938],   # DTB 0
                             [-425.072, -25.278, -102.934],   # DTB 1
@@ -495,50 +495,50 @@ dtb_pos_cmm = {0: np.array([[4.362, -25.713, -81.798],   # DTB 0
                             [-216.270, -367.187, -102.845]]), # DTB 2
               }
 
-''' 
+'''
 
 
 # DTB coordinates in CS5 measured by CMM
 # 2018-01-25 (run 4)
-dtb_pos_cmm = {0: np.array([[4.362, -25.713, -81.798],   # DTB 0
-                            [-107.414, -412.211, -102.913],   # DTB 1
-                            [40.760, -423.970, -102.891]]), # DTB 2
+dtb_pos_cmm = {0: np.array([[4.362, -25.713, -81.798],  # DTB 0
+                            [-107.414, -412.211, -102.913],  # DTB 1
+                            [40.760, -423.970, -102.891]]),  # DTB 2
                1: np.array([[18.447, -18.242, -81.779],   # DTB 0
-                            [155.481, -396.838, -102.773],   # DTB 1
-                            [282.181, -319.136, -102.831]]), # DTB 2
-               2: np.array([[25.917, -3.717, -81.825],   # DTB 0
-                            [358.885, -229.714, -102.860],   # DTB 1
-                            [416.055, -92.175, -102.830]]), # DTB 2
-               3: np.array([[23.338, 12.239, -81.776],   # DTB 0
-                            [425.317, 25.412, -102.809],   # DTB 1
-                            [390.827, 169.856, -102.861]]), # DTB 2
-               4: np.array([[11.671, 23.542, -81.893],   # DTB 0
-                            [329.177, 270.374, -102.877],   # DTB 1
-                            [216.397, 367.140, -102.898]]), # DTB 2
+                            [155.481, -396.838, -102.773],  # DTB 1
+                            [282.181, -319.136, -102.831]]),  # DTB 2
+               2: np.array([[25.917, -3.717, -81.825],  # DTB 0
+                            [358.885, -229.714, -102.860],  # DTB 1
+                            [416.055, -92.175, -102.830]]),  # DTB 2
+               3: np.array([[23.338, 12.239, -81.776],  # DTB 0
+                            [425.317, 25.412, -102.809],  # DTB 1
+                            [390.827, 169.856, -102.861]]),  # DTB 2
+               4: np.array([[11.671, 23.542, -81.893],  # DTB 0
+                            [329.177, 270.374, -102.877],  # DTB 1
+                            [216.397, 367.140, -102.898]]),  # DTB 2
                5: np.array([[-4.388, 25.952, -81.701],   # DTB 0
                             [107.598, 412.227, -102.772],   # DTB 1
-                            [-40.727, 424.155, -102.756]]), # DTB 2
-               6: np.array([[-18.723, 18.200, -81.796],   # DTB 0
-                            [-155.290, 396.507, -102.851],   # DTB 1
-                            [-282.285, 318.730, -102.672]]), # DTB 2
-               7: np.array([[-25.726, 3.692, -81.606],   # DTB 0 
-                            [-358.859, 229.332, -103.417],   # DTB 1 
-                            [-415.675, 92.053, -102.750]]), # DTB 2
-               8: np.array([[-23.230, -12.090, -81.938],   # DTB 0
-                            [-425.072, -25.278, -102.934],   # DTB 1
-                            [-390.606, -169.821, -102.957]]), # DTB 2
-               9: np.array([[-11.496, -23.316,  -81.685],   # DTB 0
-                            [-329.255, -270.513, -102.869],   # DTB 1
-                            [-216.270, -367.187, -102.845]]), # DTB 2
-              }
+                            [-40.727, 424.155, -102.756]]),  # DTB 2
+               6: np.array([[-18.723, 18.200, -81.796],  # DTB 0
+                            [-155.290, 396.507, -102.851],  # DTB 1
+                            [-282.285, 318.730, -102.672]]),  # DTB 2
+               7: np.array([[-25.726, 3.692, -81.606],  # DTB 0
+                            [-358.859, 229.332, -103.417],  # DTB 1
+                            [-415.675, 92.053, -102.750]]),  # DTB 2
+               8: np.array([[-23.230, -12.090, -81.938],  # DTB 0
+                            [-425.072, -25.278, -102.934],  # DTB 1
+                            [-390.606, -169.821, -102.957]]),  # DTB 2
+               9: np.array([[-11.496, -23.316,  -81.685],  # DTB 0
+                            [-329.255, -270.513, -102.869],  # DTB 1
+                            [-216.270, -367.187, -102.845]]),  # DTB 2
+               }
 
-#%% function definitions
+# %% function definitions
 
-''' 
+'''
 rotation matrices, input in radians
 
-This is a rotation whose yaw, pitch, and roll angles are α, β and γ, 
-or more formally intrinsic rotation whose Tait-Bryan angles are α, β, γ 
+This is a rotation whose yaw, pitch, and roll angles are α, β and γ,
+or more formally intrinsic rotation whose Tait-Bryan angles are α, β, γ
 about axes z, y, x respectively.
 
 For intrinsic rotations, the coordinate system is rotated.
@@ -549,6 +549,7 @@ For intrinsic rotations, the coordinate system is rotated.
 def matmul(*args):
     return reduce(np.dot, [*args])
 
+
 def Rx(angle):
     Rx = np.array([
                    [1.0,           0.0,            0.0],
@@ -556,6 +557,7 @@ def Rx(angle):
                    [0.0,           -np.sin(angle), np.cos(angle)]
                   ])
     return Rx
+
 
 def Ry(angle):
     Ry = np.array([
@@ -565,6 +567,7 @@ def Ry(angle):
                   ])
     return Ry
 
+
 def Rz(angle):
     Rz = np.array([
                    [np.cos(angle),  np.sin(angle), 0.0],
@@ -573,19 +576,21 @@ def Rz(angle):
                   ])
     return Rz
 
+
 def Rxyz(alpha, beta, gamma):
-    
-    Rxyz = matmul(Rz(gamma), Ry(beta), Rx(alpha)) # yaw-pitch-roll system
+
+    Rxyz = matmul(Rz(gamma), Ry(beta), Rx(alpha))  # yaw-pitch-roll system
     return Rxyz
+
 
 def R_general(axis, angle):
     '''
     axis must be a 3-element unit vector
-    
+
     the rotation formalism is outlined in
-    http://ksuweb.kennesaw.edu/~plaval/math4490/rotgen.pdf    
+    http://ksuweb.kennesaw.edu/~plaval/math4490/rotgen.pdf
     where the arbitrary axis passes through the origin.
-    
+
     '''
     ux = axis[0]
     uy = axis[1]
@@ -599,85 +604,93 @@ def R_general(axis, angle):
                           [t*ux*uz-S*uy, t*uy*uz+S*ux, t*uz**2+C]])
     return R_general
 
+
 def angles_to_unit_vector(theta_deg, phi_deg):
     # returns a unit vector from polar and azimuthal angles
     theta = np.radians(theta_deg)
     phi = np.radians(phi_deg)
-    return np.array([np.sin(theta)*np.cos(phi), np.sin(theta)*np.sin(phi), np.cos(theta)])
+    return np.array([np.sin(theta)*np.cos(phi),
+                     np.sin(theta)*np.sin(phi),
+                     np.cos(theta)])
+
 
 def vector_to_angles(x, y, z):
     r = np.sqrt(np.square(x) + np.square(y) + np.square(z))
-    theta = np.arccos(z/r) # radians
+    theta = np.arccos(z/r)  # radians
     phi = np.arctan(y/x)
     return [np.degrees(theta), np.degrees(phi)]
 
-# calculate combined throughput
+
 def throughput_tilt(tilt):
     # takes degree input
-    throughput_tilt = -0.0133*np.power(tilt, 2) - 0.0175*tilt + 1.0 # takes deg
-    return np.multiply(throughput_tilt, throughput_tilt>0)
+    throughput_tilt = -0.0133*np.power(tilt, 2) - 0.0175*tilt + 1.0
+    return np.multiply(throughput_tilt, throughput_tilt > 0)
+
 
 def throughput_defocus(delta_f):
     delta_f_um = np.abs(delta_f) * 1000
     # takes micron input
-    throughput_defocus = (- 1.804e-14*np.power(delta_f_um, 5) # takes micron input
+    throughput_defocus = (- 1.804e-14*np.power(delta_f_um, 5)
                           + 1.593e-11*np.power(delta_f_um, 4)
                           - 5.955e-10*np.power(delta_f_um, 3)
                           - 3.433e-6*np.power(delta_f_um, 2)
                           + 3.251e-7*delta_f_um
                           + 1.0)
-    return np.multiply(throughput_defocus, throughput_defocus>0)
+    return np.multiply(throughput_defocus, throughput_defocus > 0)
+
 
 def cs5_to_petal(x, petal_location):
-    
+
     '''
-    given a petal location (designated by interger 0 to 9) and measurement 
+    given a petal location (designated by interger 0 to 9) and measurement
     of a point in CS6, rotate the point by an integer number of 36 degrees
     to petal's local CS defined in the petal solid model.
-    
-    according to DESI-0742v3, the petal at location 3 shares the same 
+
+    according to DESI-0742v3, the petal at location 3 shares the same
     coordinate system with CS6 (X5 Y5 Z5)
     '''
-    
+
     theta = 2*np.pi/10*(petal_location-3)
     x_rot = matmul(Rz(theta), x)
     return x_rot
 
 
-#%% evaluate petal throughput and calculate optimal 1DF alignment
+# %% evaluate petal throughput and calculate optimal 1DF alignment
 
 def evaluate_petal(petal_location):
-    
+
     petal_id = petal_id_lookup[petal_location]
     # read in dataframes
     df = pd.read_pickle(os.path.join(fig_save_dir,
-                           str(petal_ids.index(petal_id)+1).zfill(2) \
-                           + '-ptl_' + petal_id + '-df_data.pickle'),
+                                     str(petal_ids.index(petal_id)+1).zfill(2)
+                                     + '-ptl_' + petal_id + '-df_data.pickle'),
                         compression='gzip')
-    
-    df_transformations = pd.read_pickle(os.path.join(fig_save_dir,
-                           str(petal_ids.index(petal_id)+1).zfill(2) \
-                           + '-ptl_' + petal_id + '-df_transformations.pickle'),
-                           compression='gzip')
-        
-    #%% from 3 DTB positions, calculate all petal info and throughput
-    
+
+    df_transformations = pd.read_pickle(os.path.join(
+            fig_save_dir,
+            str(petal_ids.index(petal_id)+1).zfill(2)
+            + '-ptl_' + petal_id + '-df_transformations.pickle'),
+        compression='gzip')
+
+    # %% from 3 DTB positions, calculate all petal info and throughput
+
     df.loc[('diameter', 'ACT')] = df.loc[('diameter', 'ABC')].values
     # create arrays for datum tooling ball positions in two alignments
-    dtb_pos_abc = np.concatenate((df.loc[('dtb_x', 'ABC'),'actual'].values.reshape(-1, 1),
-                                  df.loc[('dtb_y', 'ABC'),'actual'].values.reshape(-1, 1),
-                                  df.loc[('dtb_z', 'ABC'),'actual'].values.reshape(-1, 1)),
-                                  axis=1).T.astype(np.float64)[:, :3]
+    dtb_pos_abc = np.concatenate((
+            df.loc[('dtb_x', 'ABC'), 'actual'].values.reshape(-1, 1),
+            df.loc[('dtb_y', 'ABC'), 'actual'].values.reshape(-1, 1),
+            df.loc[('dtb_z', 'ABC'), 'actual'].values.reshape(-1, 1)),
+        axis=1).T.astype(np.float64)[:, :3]
     dtb_pos_act_cs5 = dtb_pos_cmm[petal_location].T
     dtb_pos_act = np.empty(dtb_pos_act_cs5.shape)
     # the measured actual positions are in CS5
     # need to rotate by an integer multiple of 36 degrees
     for j in range(3):
         dtb_pos_act[:, j] = cs5_to_petal(dtb_pos_act_cs5[:, j], petal_location)
-        df.loc[('dtb_x', 'ACT'),'actual'][j] = dtb_pos_act[0, j]
-        df.loc[('dtb_y', 'ACT'),'actual'][j] = dtb_pos_act[1, j]
-        df.loc[('dtb_z', 'ACT'),'actual'][j] = dtb_pos_act[2, j]
-    
+        df.loc[('dtb_x', 'ACT'), 'actual'][j] = dtb_pos_act[0, j]
+        df.loc[('dtb_y', 'ACT'), 'actual'][j] = dtb_pos_act[1, j]
+        df.loc[('dtb_z', 'ACT'), 'actual'][j] = dtb_pos_act[2, j]
+
     def total_residue(parameters):
         # this is the function to be minimised
         alpha = parameters[0]
@@ -685,89 +698,102 @@ def evaluate_petal(petal_location):
         gamma = parameters[2]
         T = parameters[3:]
         R = Rxyz(alpha, beta, gamma)
-        dtb_pos_abc_rot = np.empty(dtb_pos_abc.shape) # rotated matrix from ABC
+        dtb_pos_abc_rot = np.empty(dtb_pos_abc.shape)  # rotated from ABC
         # rotate each column of x_abc and fill x_abc_rot
         for j in range(dtb_pos_abc.shape[1]):
             dtb_pos_abc_rot[:, j] = matmul(R, dtb_pos_abc[:, j]) + T
-        
+
         return np.sum(np.linalg.norm(dtb_pos_abc_rot - dtb_pos_act), axis=0)
-    
+
     # minimisation routine
     # p0 = np.array([0.0, 0.0, 0.0, 0.0, 0.0, 0.0])
     p0 = df_transformations.loc['ZBF'].values
-    bounds = ((-np.pi/2, np.pi//2), (-np.pi/2, np.pi/2), (-np.pi/2, np.pi/2), (-10, 10), (-10, 10), (-10, 10))
-    solution_act = minimize(total_residue, p0, 
-                          bounds = bounds, 
-                          method='SLSQP', 
-                          options={'disp': True,
-                                   'maxiter': 1000})
+    bounds = ((-np.pi/2, np.pi//2), (-np.pi/2, np.pi/2), (-np.pi/2, np.pi/2),
+              (-10, 10), (-10, 10), (-10, 10))
+    solution_act = minimize(total_residue, p0,
+                            bounds=bounds,
+                            method='SLSQP',
+                            options={'disp': True,
+                                     'maxiter': 1000})
     print('PTL'+petal_id+' ACT transformation found as \n'
-          +'X Rotation (Roll) : {}° \n'.format(np.degrees(solution_act.x[0]))
-          +'Y Rotation (Pitch): {}° \n'.format(np.degrees(solution_act.x[1]))
-          +'Z Rotation (Yaw)  : {}° \n'.format(np.degrees(solution_act.x[2]))
-          +'Translation: {} \n'.format(solution_act.x[3:])
-          +'With least square: {} \n'.format(solution_act.fun))
-    
+          + 'X Rotation (Roll) : {}° \n'.format(np.degrees(solution_act.x[0]))
+          + 'Y Rotation (Pitch): {}° \n'.format(np.degrees(solution_act.x[1]))
+          + 'Z Rotation (Yaw)  : {}° \n'.format(np.degrees(solution_act.x[2]))
+          + 'Translation: {} \n'.format(solution_act.x[3:])
+          + 'With least square: {} \n'.format(solution_act.fun))
+
     # save transformation parameters
     df_transformations.loc['ACT'] = solution_act.x
-    
+
     # Calculate R and T
     parameters = solution_act.x
     alpha = parameters[0]
     beta = parameters[1]
     gamma = parameters[2]
     T = parameters[3:]
-    R = Rxyz(alpha, beta, gamma) # yaw-pitch-roll system
-    
+    R = Rxyz(alpha, beta, gamma)  # yaw-pitch-roll system
+
     # write results with these parameters to dataframe
-    x_abc = np.concatenate((df.loc[('x', 'ABC'),'actual'].values.reshape(-1, 1),
-                            df.loc[('y', 'ABC'),'actual'].values.reshape(-1, 1),
-                            df.loc[('z', 'ABC'),'actual'].values.reshape(-1, 1)),
-                            axis=1).T.astype(np.float64)
-    theta_abc = np.radians(df.loc[('nutation', 'ABC'),'actual'].values.astype(np.float64))
-    phi_abc = np.radians(df.loc[('precession', 'ABC'),'actual'].values.astype(np.float64))
+    x_abc = np.concatenate((
+            df.loc[('x', 'ABC'), 'actual'].values.reshape(-1, 1),
+            df.loc[('y', 'ABC'), 'actual'].values.reshape(-1, 1),
+            df.loc[('z', 'ABC'), 'actual'].values.reshape(-1, 1)),
+        axis=1).T.astype(np.float64)
+    theta_abc = np.radians(df.loc[('nutation', 'ABC'), 'actual']
+                           .values.astype(np.float64))
+    phi_abc = np.radians(df.loc[('precession', 'ABC'), 'actual']
+                         .values.astype(np.float64))
     x0_abc = x_abc - np.array([np.sin(theta_abc)*np.cos(phi_abc),
                                np.sin(theta_abc)*np.sin(phi_abc),
                                np.cos(theta_abc)])  # another point along axis
-    
-    x_abc_rot = np.empty(x_abc.shape) # rotated matrix from ABC
+
+    x_abc_rot = np.empty(x_abc.shape)  # rotated matrix from ABC
     x0_abc_rot = np.empty(x_abc.shape)
-    
+
     # rotate each column of x_abc and fill x_abc_rot
     for j in range(x_abc.shape[1]):
         x_abc_rot[:, j] = matmul(R, x_abc[:, j]) + T
         x0_abc_rot[:, j] = matmul(R, x0_abc[:, j]) + T
-        
-    n_rot = x_abc_rot - x0_abc_rot # rotated axis direction
-    [theta_rot, phi_rot] = vector_to_angles(n_rot[0, :], n_rot[1, :], n_rot[2, :])
-    
+
+    n_rot = x_abc_rot - x0_abc_rot  # rotated axis direction
+    [theta_rot, phi_rot] = vector_to_angles(
+            n_rot[0, :], n_rot[1, :], n_rot[2, :])
+
     df.loc[('x', 'ACT'), 'actual'] = x_abc_rot[0, :]
     df.loc[('y', 'ACT'), 'actual'] = x_abc_rot[1, :]
     df.loc[('z', 'ACT'), 'actual'] = x_abc_rot[2, :]
     df.loc[('nutation', 'ACT'), 'actual'] = theta_rot
     df.loc[('precession', 'ACT'), 'actual'] = phi_rot
-    df.loc[('x', 'ACT'), 'deviation'] = df.loc[('x', 'ACT'), 'actual'].values - df.loc[('x', 'ACT'), 'nominal'].values
-    df.loc[('y', 'ACT'), 'deviation'] = df.loc[('y', 'ACT'), 'actual'].values - df.loc[('y', 'ACT'), 'nominal'].values
-    df.loc[('z', 'ACT'), 'deviation'] = df.loc[('z', 'ACT'), 'actual'].values - df.loc[('z', 'ACT'), 'nominal'].values
-    df.loc[('nutation', 'ACT'), 'deviation'] = df.loc[('nutation', 'ACT'), 'actual'].values - df.loc[('nutation', 'ACT'), 'nominal'].values
-    df.loc[('precession', 'ACT'), 'deviation'] = df.loc[('precession', 'ACT'), 'actual'].values - df.loc[('precession', 'ACT'), 'nominal'].values
-    
-    # calculate r 
+    df.loc[('x', 'ACT'), 'deviation'] = df.loc[('x', 'ACT'), 'actual'].values \
+        - df.loc[('x', 'ACT'), 'nominal'].values
+    df.loc[('y', 'ACT'), 'deviation'] = df.loc[('y', 'ACT'), 'actual'].values \
+        - df.loc[('y', 'ACT'), 'nominal'].values
+    df.loc[('z', 'ACT'), 'deviation'] = df.loc[('z', 'ACT'), 'actual'].values \
+        - df.loc[('z', 'ACT'), 'nominal'].values
+    df.loc[('nutation', 'ACT'), 'deviation'] = \
+        df.loc[('nutation', 'ACT'), 'actual'].values \
+        - df.loc[('nutation', 'ACT'), 'nominal'].values
+    df.loc[('precession', 'ACT'), 'deviation'] = \
+        df.loc[('precession', 'ACT'), 'actual'].values \
+        - df.loc[('precession', 'ACT'), 'nominal'].values
+
+    # calculate r
     df.loc[('r', 'ACT'), 'actual'] = np.sqrt(
-                            np.square(df.loc[('x', 'ACT'), 'actual'].values.astype(np.float64))
-                            + np.square(df.loc[('y', 'ACT'), 'actual'].values.astype(np.float64)))
-    
+        np.square(df.loc[('x', 'ACT'), 'actual'].values.astype(np.float64))
+        + np.square(df.loc[('y', 'ACT'), 'actual'].values.astype(np.float64)))
+
     # calculate tilt
     theta0 = df.loc['nutation', 'ACT']['nominal'].values.astype(np.float64)
     theta = df.loc['nutation', 'ACT']['actual'].values.astype(np.float64)
     phi0 = df.loc['precession', 'ACT']['nominal'].values.astype(np.float64)
     phi = df.loc['precession', 'ACT']['actual'].values.astype(np.float64)
-    
+
     n0 = angles_to_unit_vector(theta0, phi0)
     n = angles_to_unit_vector(theta, phi)
-    tilt = np.array([np.degrees(np.arccos(np.dot(n0[:, i], n[:, i]))) for i in range(514)])
+    tilt = np.array(
+        [np.degrees(np.arccos(np.dot(n0[:, i], n[:, i]))) for i in range(514)])
     df.loc[('tilt', 'ACT'), 'actual'] = tilt
-    
+
     # calculate defocus
     delta_r = np.array([
                 df.loc[('x', 'ACT'), 'deviation'].values.astype(np.float64),
@@ -776,81 +802,90 @@ def evaluate_petal(petal_location):
                 ])
     delta_f = np.array([np.dot(delta_r[:, i], n0[:, i]) for i in range(514)])
     df.loc[('defocus', 'ACT'), 'actual'] = delta_f
-    
+
     # calculate combined throughput
     throughput = throughput_tilt(tilt) * throughput_defocus(delta_f)
     df.loc[('throughput', 'ACT'), 'actual'] = throughput
     df.loc[('throughput', 'ACT'), 'deviation'] = 1 - throughput
-        
-    #%% 1DF alignment, based on 3 DTb positions
+
+    # %% 1DF alignment, based on 3 DTb positions
     '''
     the predicted 1 degree of freedom that is actually adjustable
     is an axis of rotation passing through two points:
         [438.99959, 0.6, -108]
         [355.1584605, 258.0377258, -108]
     '''
-    
+
     df.loc[('diameter', '1DF')] = df.loc[('diameter', 'ABC')].values
-    
+
     axp1 = np.array([355.1584605, 258.0377258, -108])
     axp2 = np.array([438.99959,   0.6,         -108])
     axis = (axp1-axp2)/np.linalg.norm(axp1-axp2)
-    
-    x_act = np.concatenate((df.loc[('x', 'ACT'),'actual'].values.reshape(-1, 1),
-                            df.loc[('y', 'ACT'),'actual'].values.reshape(-1, 1),
-                            df.loc[('z', 'ACT'),'actual'].values.reshape(-1, 1)),
-                            axis=1).T.astype(np.float64)
-    theta_act = np.radians(df.loc[('nutation', 'ACT'),'actual'].values.astype(np.float64))
-    phi_act = np.radians(df.loc[('precession', 'ACT'),'actual'].values.astype(np.float64))
+
+    x_act = np.concatenate((
+            df.loc[('x', 'ACT'), 'actual'].values.reshape(-1, 1),
+            df.loc[('y', 'ACT'), 'actual'].values.reshape(-1, 1),
+            df.loc[('z', 'ACT'), 'actual'].values.reshape(-1, 1)),
+        axis=1).T.astype(np.float64)
+    theta_act = np.radians(df.loc[('nutation', 'ACT'), 'actual']
+                           .values.astype(np.float64))
+    phi_act = np.radians(df.loc[('precession', 'ACT'), 'actual']
+                           .values.astype(np.float64))
     x0_act = x_act - np.array([np.sin(theta_act)*np.cos(phi_act),
                                np.sin(theta_act)*np.sin(phi_act),
                                np.cos(theta_act)])  # another point along axis
-    
+
     def throughput_loss_min_1df(angle):
         # this is the function to be minimised
         R = R_general(axis, angle)
-        x_act_rot = np.empty(x_act.shape) # rotated matrix from ABC
+        x_act_rot = np.empty(x_act.shape)  # rotated matrix from ABC
         x0_act_rot = np.empty(x_act.shape)
         # rotate each column of x_abc and fill x_abc_rot
         for k in range(x_act.shape[1]):
             x_act_rot[:, k] = matmul(R, x_act[:, k] - axp1) + axp1
             x0_act_rot[:, k] = matmul(R, x0_act[:, k] - axp1) + axp1
-        n_rot = x_act_rot - x0_act_rot # not necessarily of unit length
-        [theta_rot, phi_rot] = vector_to_angles(n_rot[0, :], n_rot[1, :], n_rot[2, :])
-        delta_r = np.array([x_act_rot[0, :] - df.loc[('x', 'ABC'), 'nominal'].values,
-                            x_act_rot[1, :] - df.loc[('y', 'ABC'), 'nominal'].values,
-                            x_act_rot[2, :] - df.loc[('z', 'ABC'), 'nominal'].values])
+        n_rot = x_act_rot - x0_act_rot  # not necessarily of unit length
+        [theta_rot, phi_rot] = vector_to_angles(
+                n_rot[0, :], n_rot[1, :], n_rot[2, :])
+        delta_r = np.array(
+                [x_act_rot[0, :] - df.loc[('x', 'ABC'), 'nominal'].values,
+                 x_act_rot[1, :] - df.loc[('y', 'ABC'), 'nominal'].values,
+                 x_act_rot[2, :] - df.loc[('z', 'ABC'), 'nominal'].values])
         # calculate tilt
-        n = angles_to_unit_vector(theta_rot, phi_rot) # ensure unit length
-        tilt = np.array([np.degrees(np.arccos(np.dot(n0[:, i], n[:, i]))) for i in range(514)])
-        delta_f = np.array([np.dot(delta_r[:, i], n0[:, i]) for i in range(514)])
+        n = angles_to_unit_vector(theta_rot, phi_rot)  # ensure unit length
+        tilt = np.array(
+                [np.degrees(np.arccos(np.dot(n0[:, i], n[:, i])))
+                 for i in range(514)])
+        delta_f = np.array(
+                [np.dot(delta_r[:, i], n0[:, i]) for i in range(514)])
         throughput = throughput_tilt(tilt) * throughput_defocus(delta_f)
-        
+
         return np.mean(1-throughput)
 
-    solution_1df = minimize_scalar(throughput_loss_min_1df, 
-                            bounds = (-np.pi/2, np.pi/2),
-                            method = 'Brent')
-    
+    solution_1df = minimize_scalar(throughput_loss_min_1df,
+                                   bounds=(-np.pi/2, np.pi/2),
+                                   method='Brent')
+
     print('PTL'+petal_id+' 1DF transformation found as \n'
-          +'Rotation: {}° \n'.format(np.degrees(solution_1df.x))
-          +'With least mean throughput loss: {} \n'.format(solution_1df.fun)
-          +'Compared with current throughput loss: {} \n'.format(
+          + 'Rotation: {}° \n'.format(np.degrees(solution_1df.x))
+          + 'With least mean throughput loss: {} \n'.format(solution_1df.fun)
+          + 'Compared with current throughput loss: {} \n'.format(
                   np.mean(df.loc[('throughput', 'ACT'), 'deviation'].values)))
-    
+
     # save transformation parameters
     df_transformations.loc['1DF', 'alpha'] = solution_1df.x
-    
+
     R = R_general(axis, solution_1df.x)
-    x_act_rot = np.empty(x_act.shape) # rotated matrix from ABC
+    x_act_rot = np.empty(x_act.shape)  # rotated matrix from ABC
     x0_act_rot = np.empty(x_act.shape)
     # rotate each column of x_abc and fill x_abc_rot
     for k in range(x_act.shape[1]):
         x_act_rot[:, k] = matmul(R, x_act[:, k] - axp1) + axp1
         x0_act_rot[:, k] = matmul(R, x0_act[:, k] - axp1) + axp1
-    n_rot = x_act_rot - x0_act_rot # not necessarily of unit length
-    [theta_rot, phi_rot] = vector_to_angles(n_rot[0, :], n_rot[1, :], n_rot[2, :])
-    
+    n_rot = x_act_rot - x0_act_rot  # not necessarily of unit length
+    [theta_rot, phi_rot] = vector_to_angles(
+            n_rot[0, :], n_rot[1, :], n_rot[2, :])
+
     df.loc[('x', '1DF'), 'actual'] = x_act_rot[0, :]
     df.loc[('y', '1DF'), 'actual'] = x_act_rot[1, :]
     df.loc[('z', '1DF'), 'actual'] = x_act_rot[2, :]
@@ -859,14 +894,26 @@ def evaluate_petal(petal_location):
     df.loc[('x', '1DF'), 'nominal'] = df.loc[('x', 'ABC'), 'nominal'].values
     df.loc[('y', '1DF'), 'nominal'] = df.loc[('y', 'ABC'), 'nominal'].values
     df.loc[('z', '1DF'), 'nominal'] = df.loc[('z', 'ABC'), 'nominal'].values
-    df.loc[('nutation', '1DF'), 'nominal'] = df.loc[('nutation', 'ABC'), 'nominal'].values
-    df.loc[('precession', '1DF'), 'nominal'] = df.loc[('precession', 'ABC'), 'nominal'].values
-    df.loc[('x', '1DF'), 'deviation'] = df.loc[('x', '1DF'), 'actual'].values - df.loc[('x', '1DF'), 'nominal'].values
-    df.loc[('y', '1DF'), 'deviation'] = df.loc[('y', '1DF'), 'actual'].values - df.loc[('y', '1DF'), 'nominal'].values
-    df.loc[('z', '1DF'), 'deviation'] = df.loc[('z', '1DF'), 'actual'].values - df.loc[('z', '1DF'), 'nominal'].values
-    df.loc[('nutation', '1DF'), 'deviation'] = df.loc[('nutation', '1DF'), 'actual'].values - df.loc[('nutation', '1DF'), 'nominal'].values
-    df.loc[('precession', '1DF'), 'deviation'] = df.loc[('precession', '1DF'), 'actual'].values - df.loc[('precession', '1DF'), 'nominal'].values
-    
+    df.loc[('nutation', '1DF'), 'nominal'] = \
+        df.loc[('nutation', 'ABC'), 'nominal'].values
+    df.loc[('precession', '1DF'), 'nominal'] = \
+        df.loc[('precession', 'ABC'), 'nominal'].values
+    df.loc[('x', '1DF'), 'deviation'] = \
+        df.loc[('x', '1DF'), 'actual'].values \
+        - df.loc[('x', '1DF'), 'nominal'].values
+    df.loc[('y', '1DF'), 'deviation'] = \
+        df.loc[('y', '1DF'), 'actual'].values \
+        - df.loc[('y', '1DF'), 'nominal'].values
+    df.loc[('z', '1DF'), 'deviation'] = \
+        df.loc[('z', '1DF'), 'actual'].values \
+        - df.loc[('z', '1DF'), 'nominal'].values
+    df.loc[('nutation', '1DF'), 'deviation'] = \
+        df.loc[('nutation', '1DF'), 'actual'].values \
+        - df.loc[('nutation', '1DF'), 'nominal'].values
+    df.loc[('precession', '1DF'), 'deviation'] = \
+        df.loc[('precession', '1DF'), 'actual'].values \
+        - df.loc[('precession', '1DF'), 'nominal'].values
+
     # datum tooilng balls
     for j in range(3):
         x = np.array([df.loc[('dtb_x', 'ACT'), 'actual'][j],
@@ -876,23 +923,25 @@ def evaluate_petal(petal_location):
         df.loc[('dtb_x', '1DF'), 'actual'][j] = xp[0]
         df.loc[('dtb_y', '1DF'), 'actual'][j] = xp[1]
         df.loc[('dtb_z', '1DF'), 'actual'][j] = xp[2]
-        
-    # calculate r 
+
+    # calculate r
     df.loc[('r', '1DF'), 'actual'] = np.sqrt(
-                            np.square(df.loc[('x', '1DF'), 'actual'].values.astype(np.float64))
-                            + np.square(df.loc[('y', '1DF'), 'actual'].values.astype(np.float64)))
-    
+        np.square(df.loc[('x', '1DF'), 'actual'].values.astype(np.float64))
+        + np.square(df.loc[('y', '1DF'), 'actual'].values.astype(np.float64)))
+
     # calculate tilt
     theta0 = df.loc['nutation', 'ABC']['nominal'].values.astype(np.float64)
     theta = df.loc['nutation', '1DF']['actual'].values.astype(np.float64)
     phi0 = df.loc['precession', 'ABC']['nominal'].values.astype(np.float64)
     phi = df.loc['precession', '1DF']['actual'].values.astype(np.float64)
-    
+
     n0 = angles_to_unit_vector(theta0, phi0)
     n = angles_to_unit_vector(theta, phi)
-    tilt = np.array([np.degrees(np.arccos(np.dot(n0[:, i], n[:, i]))) for i in range(514)])
+    tilt = np.array(
+            [np.degrees(np.arccos(np.dot(n0[:, i], n[:, i])))
+             for i in range(514)])
     df.loc[('tilt', '1DF'), 'actual'] = tilt
-    
+
     # calculate defocus
     delta_r = np.array([
                 df.loc[('x', '1DF'), 'deviation'].values.astype(np.float64),
@@ -901,13 +950,13 @@ def evaluate_petal(petal_location):
                 ])
     delta_f = np.array([np.dot(delta_r[:, i], n0[:, i]) for i in range(514)])
     df.loc[('defocus', '1DF'), 'actual'] = delta_f
-    
+
     # calculate combined throughput
     throughput = throughput_tilt(tilt) * throughput_defocus(delta_f)
     df.loc[('throughput', '1DF'), 'actual'] = throughput
     df.loc[('throughput', '1DF'), 'deviation'] = 1 - throughput
-    
-    #%% all plots
+
+    # %% all plots
     figtitle_prefix = 'Petal ' + str(petal_id)
     figtitles = {'diameter': 'Cylinder Diameter Deviation',
                  'x': 'Spotface Centre X Deviation',
@@ -965,7 +1014,7 @@ def evaluate_petal(petal_location):
              'throughput': ''}
 
     for alignment in ['ACT', '1DF']:
-        
+
         x = df.loc['x', alignment]['nominal']
         y = df.loc['y', alignment]['nominal']
         r = df.loc['r', alignment]['actual']
@@ -978,86 +1027,95 @@ def evaluate_petal(petal_location):
                    'tilt': df.loc['tilt', alignment]['actual'],
                    'defocus': df.loc['defocus', alignment]['actual'],
                    'throughput': df.loc['throughput', alignment]['deviation']}
-        
-        for feature in ['diameter', 'x', 'y', 'z', 'nutation', 'precession', 'tilt', 'defocus', 'throughput']:
-            
-            fig = plt.figure(figsize = (18, 6))
+
+        for feature in ['diameter', 'x', 'y', 'z', 'nutation', 'precession',
+                        'tilt', 'defocus', 'throughput']:
+
+            fig = plt.figure(figsize=(18, 6))
             gs = gridspec.GridSpec(1, 2, width_ratios=[3, 2])
-            fig.suptitle(figtitle_prefix + ' ' + figtitles[feature] + ' (' + alignment + ' Alignment)')
-            mean = np.mean(colours[feature]) # in microns
-            rms = np.std(colours[feature]) # in microns
-            textstr = (r'$\mu={0:.7f}$' + units[feature] + '\n' + r'$\sigma={1:.7f}$' + units[feature]).format(mean, rms)
+            fig.suptitle(figtitle_prefix + ' ' + figtitles[feature] + ' ('
+                         + alignment + ' Alignment)')
+            mean = np.mean(colours[feature])  # in microns
+            rms = np.std(colours[feature])  # in microns
+            textstr = (r'$\mu={0:.7f}$' + units[feature]
+                       + '\n' + r'$\sigma={1:.7f}$'
+                       + units[feature]).format(mean, rms)
             textbbox = {'boxstyle': 'square',
                         'facecolor': 'white',
                         'alpha': 0.5}
             ax0 = plt.subplot(gs[0])
-            plot0 = ax0.scatter(x, y, marker='o', lw = 4, 
-                                c=colours[feature], cmap='plasma', 
-                                )
+            plot0 = ax0.scatter(x, y, marker='o', lw=4,
+                                c=colours[feature], cmap='plasma')
             # vmin = colour_range[feature][0], vmax = colour_range[feature][1]
             fig.colorbar(plot0, ax=ax0)
             ax0.axis('equal')
             ax0.set_title(axtitles[feature])
             ax0.set_xlabel('x/mm')
             ax0.set_ylabel('y/mm')
-            ax0.text(50, 150, textstr, fontsize=12, linespacing=1.5, bbox=textbbox, ha='left', va='bottom')
+            ax0.text(50, 150, textstr, fontsize=12, linespacing=1.5,
+                     bbox=textbbox, ha='left', va='bottom')
             ax1 = plt.subplot(gs[1])
-            ax1.plot(r, colours[feature], 'b.', r, tol_upper[feature], 'r--', r, tol_lower[feature], 'r--', )
+            ax1.plot(r, colours[feature], 'b.', r, tol_upper[feature], 'r--',
+                     r, tol_lower[feature], 'r--', )
             ax1.set_xlabel('r/mm')
             ax1.set_ylabel(axtitles[feature])
             fig.tight_layout()
             # save figure
             figname = str(petal_ids.index(petal_id)+1).zfill(2) \
-                      + '-ptl_' + petal_id + '-' + alignment.lower() \
-                      + '-' + feature + '.pdf'
+                + '-ptl_' + petal_id + '-' + alignment.lower() \
+                + '-' + feature + '.pdf'
             # fig.savefig(os.path.join(fig_save_dir, figname), dpi=600)
             pp = PdfPages(os.path.join(fig_save_dir, figname))
             pp.savefig(fig, dpi=1000)
             pp.close()
             plt.close('all')
-            
+
     # export dataframes
-    df.to_csv(os.path.join(fig_save_dir, 
-                           str(petal_ids.index(petal_id)+1).zfill(2) \
+    df.to_csv(os.path.join(fig_save_dir,
+                           str(petal_ids.index(petal_id)+1).zfill(2)
                            + '-ptl_' + petal_id + '-df_data.csv'))
-    df.to_pickle(os.path.join(fig_save_dir, 
-                           str(petal_ids.index(petal_id)+1).zfill(2) \
-                           + '-ptl_' + petal_id + '-df_data.pickle'),
+    df.to_pickle(os.path.join(fig_save_dir,
+                              str(petal_ids.index(petal_id)+1).zfill(2)
+                              + '-ptl_' + petal_id + '-df_data.pickle'),
                  compression='gzip')
-    df_transformations.to_csv(os.path.join(fig_save_dir, 
-                                          str(petal_ids.index(petal_id)+1).zfill(2) \
-                                          + '-ptl_' + petal_id + '-df_transformations.csv'))
-    df_transformations.to_pickle(os.path.join(fig_save_dir, 
-                                          str(petal_ids.index(petal_id)+1).zfill(2) \
-                                          + '-ptl_' + petal_id + '-df_transformations.pickle'),
-                 compression='gzip')
+    df_transformations.to_csv(os.path.join(
+            fig_save_dir,
+            str(petal_ids.index(petal_id)+1).zfill(2)
+            + '-ptl_' + petal_id + '-df_transformations.csv'))
+    df_transformations.to_pickle(os.path.join(
+            fig_save_dir,
+            str(petal_ids.index(petal_id)+1).zfill(2)
+            + '-ptl_' + petal_id + '-df_transformations.pickle'),
+        compression='gzip')
+
 
 def ics_output():
 
     # per DESI-2850
     df_focal_plane_ics = pd.DataFrame(
-            index = np.arange(10),
-            columns = ['petal_id', 'petal_loc', 
-                       'petal_offset_x', 'petal_offset_y', 'petal_offset_z',
-                       'petal_rot_x', 'petal_rot_y', 'petal_rot_z',
-                       'tb0_543_x', 'tb0_543_y', 'tb0_543_z',
-                       'tb1_544_x', 'tb1_544_y', 'tb1_544_z',
-                       'tb2_545_x', 'tb2_545_y', 'tb2_545_z'])
- 
+            index=np.arange(10),
+            columns=['petal_id', 'petal_loc',
+                     'petal_offset_x', 'petal_offset_y', 'petal_offset_z',
+                     'petal_rot_x', 'petal_rot_y', 'petal_rot_z',
+                     'tb0_543_x', 'tb0_543_y', 'tb0_543_z',
+                     'tb1_544_x', 'tb1_544_y', 'tb1_544_z',
+                     'tb2_545_x', 'tb2_545_y', 'tb2_545_z'])
+
     # convention is R = matmul(Rz(gamma), Ry(beta), Rx(alpha))
     for petal_location in petal_locations:
 
         # incorrect transformation values, needs work
         petal_id = petal_id_lookup[petal_location]
-        df = pd.read_pickle(os.path.join(fig_save_dir,
-                               str(petal_ids.index(petal_id)+1).zfill(2) \
-                               + '-ptl_' + petal_id + '-df_data.pickle'),
-                            compression='gzip')
+        df = pd.read_pickle(os.path.join(
+                fig_save_dir,
+                str(petal_ids.index(petal_id)+1).zfill(2)
+                + '-ptl_' + petal_id + '-df_data.pickle'),
+            compression='gzip')
         dtb_pos_ptl = np.array([df.loc[('dtb_x', 'ZBF'), 'actual'][0:3],
                                 df.loc[('dtb_y', 'ZBF'), 'actual'][0:3],
                                 df.loc[('dtb_z', 'ZBF'), 'actual'][0:3]])
         dtb_pos_act_cs5 = dtb_pos_cmm[petal_location].T
-            
+
         # find transformation from petal local CS to focal plane CS5
         def total_residue_ics(parameters):
             # this is the function to be minimised
@@ -1069,40 +1127,39 @@ def ics_output():
             dtb_pos_rot = np.empty(dtb_pos_ptl.shape)
             for j in range(dtb_pos_ptl.shape[1]):
                 dtb_pos_rot[:, j] = matmul(R, dtb_pos_ptl[:, j]) + T
-            return np.sum(np.linalg.norm(dtb_pos_rot - dtb_pos_act_cs5), axis=0)
-        
-        gamma_nominal = 2*np.pi/10*(petal_location-3)
-        p0 = np.array([0.0, 0.0, gamma_nominal, 0.0, 0.0, 0.0])
-        # gamma rotation about z-axis is limited by the 0.6 mm gap between petals
+            return np.sum(
+                    np.linalg.norm(dtb_pos_rot - dtb_pos_act_cs5), axis=0)
+
+        gamma0 = 2*np.pi/10*(petal_location-3)
+        p0 = np.array([0.0, 0.0, gamma0, 0.0, 0.0, 0.0])
         bounds = ((-np.pi/2, np.pi/2), (-np.pi/2, np.pi/2),
-                  (gamma_nominal-1, gamma_nominal+1),
+                  (gamma0-1, gamma0+1),
                   (-10, 10), (-10, 10), (-10, 10))
-        solution_ics = minimize(total_residue_ics, p0,
-                      bounds = bounds, 
-                      method = 'SLSQP', 
-                      options={'ftol': 1e-12,
-                               'eps': 1e-12,
-                               'disp': True,
-                               'maxiter': 10000})
+        sol_ics = minimize(total_residue_ics, p0,
+                           bounds=bounds, method='SLSQP',
+                           options={'ftol': 1e-12,
+                                    'eps': 1e-12,
+                                    'disp': True,
+                                    'maxiter': 10000})
         # reset angle within the range (-pi, pi)
-        solution_ics.x[2] = np.arctan2(np.sin(solution_ics.x[2]), 
-                                       np.cos(solution_ics.x[2]))
+        sol_ics.x[2] = np.arctan2(np.sin(sol_ics.x[2]),
+                                  np.cos(sol_ics.x[2]))
         print('PTL{} CS5 transformation for ICS found as \n'.format(petal_id)
-              +'X Rotation (Roll) : {}° \n'.format(np.degrees(solution_ics.x[0]))
-              +'Y Rotation (Pitch): {}° \n'.format(np.degrees(solution_ics.x[1]))
-              +'Z Rotation (Yaw)  : {}° \n'.format(np.degrees(solution_ics.x[2]))
-              +'Translation: {} \n'.format(solution_ics.x[3:])
-              +'With least square: {} \n'.format(solution_ics.fun))
-    
+              + 'X Rotation (Roll) : {}° \n'.format(np.degrees(sol_ics.x[0]))
+              + 'Y Rotation (Pitch): {}° \n'.format(np.degrees(sol_ics.x[1]))
+              + 'Z Rotation (Yaw)  : {}° \n'.format(np.degrees(sol_ics.x[2]))
+              + 'Translation: {} \n'.format(sol_ics.x[3:])
+              + 'With least square: {} \n'.format(sol_ics.fun))
+
         df_focal_plane_ics.loc[petal_location] = {
                 'petal_id':       petal_id_lookup[petal_location],
                 'petal_loc':      petal_location,
-                'petal_offset_x': solution_ics.x[3],
-                'petal_offset_y': solution_ics.x[4],
-                'petal_offset_z': solution_ics.x[5],
-                'petal_rot_x':    np.degrees(solution_ics.x[0]),
-                'petal_rot_y':    np.degrees(solution_ics.x[1]),
-                'petal_rot_z':    np.degrees(solution_ics.x[2]),
+                'petal_offset_x': sol_ics.x[3],
+                'petal_offset_y': sol_ics.x[4],
+                'petal_offset_z': sol_ics.x[5],
+                'petal_rot_x':    np.degrees(sol_ics.x[0]),
+                'petal_rot_y':    np.degrees(sol_ics.x[1]),
+                'petal_rot_z':    np.degrees(sol_ics.x[2]),
                 'tb0_543_x':      dtb_pos_cmm[petal_location][0, 0],
                 'tb0_543_y':      dtb_pos_cmm[petal_location][0, 1],
                 'tb0_543_z':      dtb_pos_cmm[petal_location][0, 2],
@@ -1112,26 +1169,26 @@ def ics_output():
                 'tb2_545_x':      dtb_pos_cmm[petal_location][2, 0],
                 'tb2_545_y':      dtb_pos_cmm[petal_location][2, 1],
                 'tb2_545_z':      dtb_pos_cmm[petal_location][2, 2]}
-        
+
     df_focal_plane_ics.to_csv(
             os.path.join(fig_save_dir, 'focal_plane_metrology_ics.csv'),
-            columns = ['petal_id', 'petal_loc', 
-                       'petal_offset_x', 'petal_offset_y', 'petal_offset_z',
-                       'petal_rot_x', 'petal_rot_y', 'petal_rot_z',
-                       'tb0_543_x', 'tb0_543_y', 'tb0_543_z',
-                       'tb1_544_x', 'tb1_544_y', 'tb1_544_z',
-                       'tb2_545_x', 'tb2_545_y', 'tb2_545_z'],
+            columns=['petal_id', 'petal_loc',
+                     'petal_offset_x', 'petal_offset_y', 'petal_offset_z',
+                     'petal_rot_x', 'petal_rot_y', 'petal_rot_z',
+                     'tb0_543_x', 'tb0_543_y', 'tb0_543_z',
+                     'tb1_544_x', 'tb1_544_y', 'tb1_544_z',
+                     'tb2_545_x', 'tb2_545_y', 'tb2_545_z'],
             float_format='%.15f')
     df_focal_plane_ics.to_pickle(
             os.path.join(fig_save_dir, 'focal_plane_metrology_ics.pickle'),
             compression='gzip')
-    
-#%% main
+
+# %% main
+
 
 if __name__ == '__main__':
-    
+
     # evaluate quality of petal-ring integration by calculating throughput
-    pool = Pool() # create a multiprocessing Pool
-    pool.map(evaluate_petal, petal_locations) # evaluate petal throughput
+    pool = Pool()  # create a multiprocessing Pool
+    pool.map(evaluate_petal, petal_locations)  # evaluate petal throughput
     ics_output()
-    
