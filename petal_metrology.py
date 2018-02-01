@@ -232,8 +232,8 @@ def process_petal(petal_id):
     df.loc['defocus', 'ABC']['uppertol'] = df.loc['z', 'ABC']['uppertol']
     df.loc[('tilt', 'ABC'), 'lowertol'] = 0
     df.loc[('tilt', 'ABC'), 'uppertol'] = 0.06
-    df.loc[('throughput', 'ABC'), 'lowertol'] = 0.005 # for throughput loss
-    df.loc[('throughput', 'ABC'), 'uppertol'] = 0 # for throughput loss
+    df.loc[('throughput', 'ABC'), 'lowertol'] = 1-0.005 # 1 - throughput loss
+    df.loc[('throughput', 'ABC'), 'uppertol'] = 1 # for throughput loss
     
     # calculate combined throughput    
     throughput = throughput_tilt(tilt) * throughput_defocus(delta_f)
@@ -584,7 +584,7 @@ def process_petal(petal_id):
                      'precession': df.loc['precession', 'ABC']['lowertol'],
                      'tilt': df.loc['tilt', 'ABC']['lowertol'],
                      'defocus': df.loc['defocus', 'ABC']['lowertol'],
-                     'throughput': df.loc['throughput', 'ABC']['lowertol']}
+                     'throughput': 1-df.loc['throughput', 'ABC']['lowertol']}
         tol_upper = {'diameter': df.loc['diameter', 'ABC']['uppertol'],
                      'x': df.loc['x', 'ABC']['uppertol'],
                      'y': df.loc['y', 'ABC']['uppertol'],
@@ -593,7 +593,7 @@ def process_petal(petal_id):
                      'precession': df.loc['precession', 'ABC']['uppertol'],
                      'tilt': df.loc['tilt', 'ABC']['uppertol'],
                      'defocus': df.loc['defocus', 'ABC']['uppertol'],
-                     'throughput': df.loc['throughput', 'ABC']['uppertol']}
+                     'throughput': 1-df.loc['throughput', 'ABC']['uppertol']}
         units = {'diameter': ' mm',
                  'x': ' mm',
                  'y': ' mm',
@@ -624,9 +624,13 @@ def process_petal(petal_id):
                 fig = plt.figure(figsize = (18, 6))
                 gs = gridspec.GridSpec(1, 2, width_ratios=[3, 2])
                 fig.suptitle(figtitle_prefix + ' ' + figtitles[feature] + ' (' + alignment + ' Alignment)')
-                mean = np.mean(colours[feature]) # in microns
-                rms = np.std(colours[feature]) # in microns
-                textstr = (r'$\mu={0:.7f}$' + units[feature] + '\n' + r'$\sigma={1:.7f}$' + units[feature]).format(mean, rms)
+                rms = np.sqrt(np.mean(np.square(colours[feature])))
+                mean = np.mean(colours[feature])
+                sd = np.std(colours[feature])
+                textstr = (r'RMS={0:.7f}' + units[feature] + '\n'
+                           + r'$\mu={1:.7f}$' + units[feature] + '\n'
+                           + r'$\sigma={2:.7f}$'
+                           + units[feature]).format(rms, mean, sd)
                 textbbox = {'boxstyle': 'square',
                             'facecolor': 'white',
                             'alpha': 0.5}

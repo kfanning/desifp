@@ -41,7 +41,7 @@ petal_id_lookup = {0: '04',  # map between petal location and petal ID
 petal_ids = ['01', '02', '04', '00', '03', '05', '06', '07', '08', '09', '10',
              '11']  # petal production sequential order
 fig_save_dir = r'C:\Users\givoltage\Google Drive\DESI\model_drawings\DESI Focal Plate Assy and Integration\FP Structure\metrology\duan_plots_and_data'
-
+fig_save_dir = r'C:\Users\givoltage\Downloads\20180125 (run 4)'
 ''' CMM data
 
 2017/06
@@ -976,7 +976,7 @@ def evaluate_petal(petal_location):
                  'precession': 'Precession Deviation',
                  'tilt': 'Cylinder Axial Tilt',
                  'defocus': 'Spotface Centre Defocus',
-                 'throughput': 'Throughput Loss'}
+                 'throughput': 'Throughput Percentage'}
     axtitles = {'diameter': r'$\delta D/\mathrm{mm}$',
                 'x': r'$\delta x/\mathrm{mm}$',
                 'y': r'$\delta y/\mathrm{mm}$',
@@ -985,7 +985,7 @@ def evaluate_petal(petal_location):
                 'precession': r'$\delta \varphi/\degree$',
                 'tilt': r'$\delta/\degree$',
                 'defocus': r'$\delta f/\mathrm{mm}$',
-                'throughput': r'$1-\eta$'}
+                'throughput': r'$\eta \times 100\%$'}
 #    colour_range = {'diameter': [0.008, 0.018],
 #                    'x': [-0.03, 0.03],
 #                    'y': [-0.03, 0.03],
@@ -1003,7 +1003,7 @@ def evaluate_petal(petal_location):
                  'precession': df.loc['precession', 'ABC']['lowertol'],
                  'tilt': df.loc['tilt', 'ABC']['lowertol'],
                  'defocus': df.loc['defocus', 'ABC']['lowertol'],
-                 'throughput': df.loc['throughput', 'ABC']['lowertol']}
+                 'throughput': df.loc['throughput', 'ABC']['lowertol']*100}
     tol_upper = {'diameter': df.loc['diameter', 'ABC']['uppertol'],
                  'x': df.loc['x', 'ABC']['uppertol'],
                  'y': df.loc['y', 'ABC']['uppertol'],
@@ -1012,7 +1012,7 @@ def evaluate_petal(petal_location):
                  'precession': df.loc['precession', 'ABC']['uppertol'],
                  'tilt': df.loc['tilt', 'ABC']['uppertol'],
                  'defocus': df.loc['defocus', 'ABC']['uppertol'],
-                 'throughput': df.loc['throughput', 'ABC']['uppertol']}
+                 'throughput': df.loc['throughput', 'ABC']['uppertol']*100}
     units = {'diameter': ' mm',
              'x': ' mm',
              'y': ' mm',
@@ -1021,7 +1021,7 @@ def evaluate_petal(petal_location):
              'precession': r'$\degree$',
              'tilt': r'$\degree$',
              'defocus': ' mm',
-             'throughput': ''}
+             'throughput': '%'}
 
     for alignment in ['ACT', '1DF']:
 
@@ -1036,7 +1036,7 @@ def evaluate_petal(petal_location):
                    'precession': df.loc['precession', alignment]['deviation'],
                    'tilt': df.loc['tilt', alignment]['actual'],
                    'defocus': df.loc['defocus', alignment]['actual'],
-                   'throughput': df.loc['throughput', alignment]['deviation']}
+                   'throughput': df.loc['throughput', alignment]['actual']*100}
 
         for feature in ['diameter', 'x', 'y', 'z', 'nutation', 'precession',
                         'tilt', 'defocus', 'throughput']:
@@ -1045,11 +1045,13 @@ def evaluate_petal(petal_location):
             gs = gridspec.GridSpec(1, 2, width_ratios=[3, 2])
             fig.suptitle(figtitle_prefix + ' ' + figtitles[feature] + ' ('
                          + alignment + ' Alignment)')
-            mean = np.mean(colours[feature])  # in microns
-            rms = np.std(colours[feature])  # in microns
-            textstr = (r'$\mu={0:.7f}$' + units[feature]
-                       + '\n' + r'$\sigma={1:.7f}$'
-                       + units[feature]).format(mean, rms)
+            rms = np.sqrt(np.mean(np.square(colours[feature])))
+            mean = np.mean(colours[feature])
+            sd = np.std(colours[feature])
+            textstr = (r'RMS={0:.7f}' + units[feature] + '\n'
+            		   + r'$\mu={1:.7f}$' + units[feature] + '\n'
+                       + r'$\sigma={2:.7f}$'
+                       + units[feature]).format(rms, mean, sd)
             textbbox = {'boxstyle': 'square',
                         'facecolor': 'white',
                         'alpha': 0.5}
