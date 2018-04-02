@@ -29,7 +29,7 @@ from matplotlib.backends.backend_pdf import PdfPages
 
 metrology_dir = r'K:\Google Drive\DESI\model_drawings\DESI Focal Plate Assy and Integration\FP Structure\metrology\Zeiss Petal Metrology'
 path_hole_table = r'K:\Google Drive\DESI\model_drawings\petal\DESI-0326-D_HoleTable.xlsx'
-fig_save_dir = r'D:\plots'
+fig_save_dir = r'D:\20171122 (run 4)'
 petal_ids = ['01', '02', '04', '00', '03', '05', '06', '07', '08', '09',
              '10', '11']
 paths = {'01': metrology_dir + r'\ptl01\DESI-0326-E_1_chr.txt',
@@ -45,7 +45,7 @@ paths = {'01': metrology_dir + r'\ptl01\DESI-0326-E_1_chr.txt',
          '10': metrology_dir + r'\ptl10\DESI-0326-E_11_chr.txt',
          '11': metrology_dir + r'\ptl11\DESI-0326-E_12_chr.txt'}
 make_plots = True
-make_lookup_table = True
+make_lookup_table = False
 
 # %% function definitions
 
@@ -557,7 +557,7 @@ def process_petal(petal_id):
                      'precession': 'Precession Deviation',
                      'tilt': 'Cylinder Axial Tilt',
                      'defocus': 'Spotface Centre Defocus',
-                     'throughput': 'Throughput Loss'}
+                     'throughput': 'Throughput Percentage'}
         axtitles = {'diameter': r'$\delta D/\mathrm{mm}$',
                     'x': r'$\delta x/\mathrm{mm}$',
                     'y': r'$\delta y/\mathrm{mm}$',
@@ -566,7 +566,7 @@ def process_petal(petal_id):
                     'precession': r'$\delta \varphi/\degree$',
                     'tilt': r'$\delta/\degree$',
                     'defocus': r'$\delta f/\mathrm{mm}$',
-                    'throughput': r'$1-\eta$'}
+                    'throughput': r'$\eta \times 100\%$'}
         colour_range = {'diameter': [0.008, 0.018],
                         'x': [-0.03, 0.03],
                         'y': [-0.03, 0.03],
@@ -575,7 +575,7 @@ def process_petal(petal_id):
                         'precession': [-0.028, 0.028],
                         'tilt': [0, 0.05],
                         'defocus': [-0.03, 0.03],
-                        'throughput': [0, 0.005]}
+                        'throughput': [100, 99.5]}
         tol_lower = {'diameter': df.loc['diameter', 'ABC']['lowertol'],
                      'x': df.loc['x', 'ABC']['lowertol'],
                      'y': df.loc['y', 'ABC']['lowertol'],
@@ -584,7 +584,7 @@ def process_petal(petal_id):
                      'precession': df.loc['precession', 'ABC']['lowertol'],
                      'tilt': df.loc['tilt', 'ABC']['lowertol'],
                      'defocus': df.loc['defocus', 'ABC']['lowertol'],
-                     'throughput': 1-df.loc['throughput', 'ABC']['lowertol']}
+                     'throughput': df.loc['throughput', 'ABC']['lowertol']*100}
         tol_upper = {'diameter': df.loc['diameter', 'ABC']['uppertol'],
                      'x': df.loc['x', 'ABC']['uppertol'],
                      'y': df.loc['y', 'ABC']['uppertol'],
@@ -593,7 +593,7 @@ def process_petal(petal_id):
                      'precession': df.loc['precession', 'ABC']['uppertol'],
                      'tilt': df.loc['tilt', 'ABC']['uppertol'],
                      'defocus': df.loc['defocus', 'ABC']['uppertol'],
-                     'throughput': 1-df.loc['throughput', 'ABC']['uppertol']}
+                     'throughput': df.loc['throughput', 'ABC']['uppertol']*100}
         units = {'diameter': ' mm',
                  'x': ' mm',
                  'y': ' mm',
@@ -602,9 +602,10 @@ def process_petal(petal_id):
                  'precession': r'$\degree$',
                  'tilt': r'$\degree$',
                  'defocus': ' mm',
-                 'throughput': ''}
+                 'throughput': '%'}
     
         for alignment in ['ZBF', 'SPT', 'TPT']:
+        # for alignment in ['ZBF']:
             
             x = df.loc['x', alignment]['nominal']
             y = df.loc['y', alignment]['nominal']
@@ -617,7 +618,7 @@ def process_petal(petal_id):
                        'precession': df.loc['precession', alignment]['deviation'],
                        'tilt': df.loc['tilt', alignment]['actual'],
                        'defocus': df.loc['defocus', alignment]['actual'],
-                       'throughput': df.loc['throughput', alignment]['deviation']}
+                       'throughput': df.loc['throughput', alignment]['actual']*100}
             
             for feature in ['diameter', 'x', 'y', 'z', 'nutation', 'precession', 'tilt', 'defocus', 'throughput']:
                 

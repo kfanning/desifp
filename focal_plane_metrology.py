@@ -26,22 +26,36 @@ import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 from matplotlib.backends.backend_pdf import PdfPages
 
-# petal_locations = np.arange(10)
-petal_locations = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]  # lo of petals installed
-petal_id_lookup = {0: '04',  # map between petal location and petal ID
-                   1: '05',
-                   2: '06',
-                   3: '07',
-                   4: '08',
+# 2017-11-22 (run 4)
+petal_locations = [0, 1, 2, 3, 4, 6, 7, 8]  # lo of petals installed
+petal_id_lookup = {0: '06',  # map between petal location and petal ID
+                   1: '03',
+                   2: '00',
+                   3: '04',
+                   4: '02',
                    5: '10',
-                   6: '11',
-                   7: '02',
-                   8: '03',
+                   6: '05',
+                   7: '01',
+                   8: '07',
                    9: '09'}
+
+# # final alignment, 10 official petals
+# petal_locations = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]  # lo of petals installed
+# petal_id_lookup = {0: '04',  # map between petal location and petal ID
+#                    1: '05',
+#                    2: '06',
+#                    3: '07',
+#                    4: '08',
+#                    5: '10',
+#                    6: '11',
+#                    7: '02',
+#                    8: '03',
+#                    9: '09'}
+
 petal_ids = ['01', '02', '04', '00', '03', '05', '06', '07', '08', '09', '10',
              '11']  # petal production sequential order
 fig_save_dir = r'C:\Users\givoltage\Google Drive\DESI\model_drawings\DESI Focal Plate Assy and Integration\FP Structure\metrology\duan_plots_and_data'
-fig_save_dir = r'C:\Users\givoltage\Downloads\20180125 (run 4)'
+fig_save_dir = r'D:\20171122 (run 4)'
 ''' CMM data
 
 2017/06
@@ -510,37 +524,38 @@ dtb_pos_cmm = {0: np.array([[4.362, -25.713, -81.798],   # DTB 0
 
 # DTB coordinates in CS5 measured by CMM
 # 2018-01-25 (run 4)
-dtb_pos_cmm = {0: np.array([[4.362, -25.713, -81.798],  # DTB 0
-                            [-107.414, -412.211, -102.913],  # DTB 1
-                            [40.760, -423.970, -102.891]]),  # DTB 2
-               1: np.array([[18.447, -18.242, -81.779],   # DTB 0
-                            [155.481, -396.838, -102.773],  # DTB 1
-                            [282.181, -319.136, -102.831]]),  # DTB 2
-               2: np.array([[25.917, -3.717, -81.825],  # DTB 0
-                            [358.885, -229.714, -102.860],  # DTB 1
-                            [416.055, -92.175, -102.830]]),  # DTB 2
-               3: np.array([[23.338, 12.239, -81.776],  # DTB 0
-                            [425.317, 25.412, -102.809],  # DTB 1
-                            [390.827, 169.856, -102.861]]),  # DTB 2
-               4: np.array([[11.671, 23.542, -81.893],  # DTB 0
-                            [329.177, 270.374, -102.877],  # DTB 1
-                            [216.397, 367.140, -102.898]]),  # DTB 2
-               5: np.array([[-4.388, 25.952, -81.701],   # DTB 0
-                            [107.598, 412.227, -102.772],   # DTB 1
-                            [-40.727, 424.155, -102.756]]),  # DTB 2
-               6: np.array([[-18.723, 18.200, -81.796],  # DTB 0
-                            [-155.290, 396.507, -102.851],  # DTB 1
-                            [-282.285, 318.730, -102.672]]),  # DTB 2
-               7: np.array([[-25.726, 3.692, -81.606],  # DTB 0
-                            [-358.859, 229.332, -103.417],  # DTB 1
-                            [-415.675, 92.053, -102.750]]),  # DTB 2
-               8: np.array([[-23.230, -12.090, -81.938],  # DTB 0
-                            [-425.072, -25.278, -102.934],  # DTB 1
-                            [-390.606, -169.821, -102.957]]),  # DTB 2
-               9: np.array([[-11.496, -23.316,  -81.685],  # DTB 0
-                            [-329.255, -270.513, -102.869],  # DTB 1
-                            [-216.270, -367.187, -102.845]]),  # DTB 2
-               }
+# 20171122 (run 4)
+dtb_pos_cmm = {0: np.array([[4.418, -25.781, -81.858],   # DTB 0
+                            [-107.553, -412.325, -102.839],   # DTB 1
+                            [40.924, -424.167, -102.811]]), # DTB 2
+               1: np.array([[18.663, -18.308, -81.955],   # DTB 0
+                            [155.414, -396.399, -102.924],   # DTB 1
+                            [282.221, -318.943, -102.959]]), # DTB 2
+               2: np.array([[25.761, -3.876, -81.836],   # DTB 0
+                            [358.742, -229.547, -102.913],   # DTB 1
+                            [415.987, -92.192, -102.837]]), # DTB 2
+               3: np.array([[23.109, 12.129, -81.804],   # DTB 0
+                            [425.231, 25.245, -102.929],   # DTB 1
+                            [390.630, 169.802, -102.902]]), # DTB 2
+               4: np.array([[11.487, 23.292, -81.590],   # DTB 0
+                            [329.002, 270.423, -103.408],   # DTB 1
+                            [215.990, 366.870, -102.735]]), # DTB 2
+               5: np.array([[-4.3501, 25.7340,  -81.9638],   # DTB 0
+                            [107.3870,  412.2233, -102.9615],   # DTB 1
+                            [-40.7836,  423.9673, -102.9348]]), # DTB 2
+               6: np.array([[-18.476, 18.237, -81.790],   # DTB 0
+                            [-155.512, 396.829, -102.775],   # DTB 1
+                            [-282.212, 319.127, -102.832]]), # DTB 2
+               7: np.array([[-25.826, 3.645, -82.360],  # DTB 0
+                            [-358.962, 229.482, -102.939], # DTB 1
+                            [-415.831, 92.454, -102.910]]), # DTB 2
+               8: np.array([[-23.354, -12.225, -81.847],   # DTB 0
+                            [-425.341, -25.373, -102.810],   # DTB 1
+                            [-390.863, -169.819, -102.860]]), # DTB 2
+               9: np.array([[ 23.13790,  12.17047,  -82.36447],   # DTB 0
+                            [425.43710,  24.27891, -102.91776],   # DTB 1
+                            [391.25734, 168.64819, -102.89321]]), # DTB 2
+              }
 
 # %% function definitions
 
@@ -1023,7 +1038,8 @@ def evaluate_petal(petal_location):
              'defocus': ' mm',
              'throughput': '%'}
 
-    for alignment in ['ACT', '1DF']:
+    # for alignment in ['ACT', '1DF']:
+    for alignment in ['ACT']:
 
         x = df.loc['x', alignment]['nominal']
         y = df.loc['y', alignment]['nominal']
