@@ -232,8 +232,8 @@ def process_petal(petal_id):
     df.loc['defocus', 'ABC']['uppertol'] = df.loc['z', 'ABC']['uppertol']
     df.loc[('tilt', 'ABC'), 'lowertol'] = 0
     df.loc[('tilt', 'ABC'), 'uppertol'] = 0.06
-    df.loc[('throughput', 'ABC'), 'lowertol'] = 1-0.005 # 1 - throughput loss
-    df.loc[('throughput', 'ABC'), 'uppertol'] = 1 # for throughput loss
+    df.loc[('throughput', 'ABC'), 'lowertol'] = 1  # 1 - throughput loss
+    df.loc[('throughput', 'ABC'), 'uppertol'] = 0.995  # for throughput loss
     
     # calculate combined throughput    
     throughput = throughput_tilt(tilt) * throughput_defocus(delta_f)
@@ -547,6 +547,7 @@ def process_petal(petal_id):
     
     #%% all plots
     if make_plots:
+        print('Saving plots...')
         
         figtitle_prefix = 'Petal ' + str(petal_id)
         figtitles = {'diameter': 'Cylinder Diameter Deviation',
@@ -628,7 +629,7 @@ def process_petal(petal_id):
                 rms = np.sqrt(np.mean(np.square(colours[feature])))
                 mean = np.mean(colours[feature])
                 sd = np.std(colours[feature])
-                textstr = (r'RMS={0:.7f}' + units[feature] + '\n'
+                textstr = (r'$\mathrm{{RMS}}={0:.7f}$' + units[feature] + '\n'
                            + r'$\mu={1:.7f}$' + units[feature] + '\n'
                            + r'$\sigma={2:.7f}$'
                            + units[feature]).format(rms, mean, sd)
@@ -656,7 +657,7 @@ def process_petal(petal_id):
                           + '-' + feature + '.pdf'
                 # fig.savefig(os.path.join(fig_save_dir, figname), dpi=600)
                 pp = PdfPages(os.path.join(fig_save_dir, figname))
-                pp.savefig(fig, dpi=1000)
+                pp.savefig(fig, dpi=1000)  #bbox_inches='tight'
                 pp.close()
                 plt.close('all')
     else:
