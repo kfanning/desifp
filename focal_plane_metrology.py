@@ -999,7 +999,7 @@ def evaluate_petal(petal_location):
                 'precession': r'$\delta \varphi/\degree$',
                 'tilt': r'$\delta/\degree$',
                 'defocus': r'$\delta f/\mathrm{mm}$',
-                'throughput': r'$\eta \times 100\%$'}
+                'throughput': r'$\eta \cdot 100\%$'}
 #    colour_range = {'diameter': [0.008, 0.018],
 #                    'x': [-0.03, 0.03],
 #                    'y': [-0.03, 0.03],
