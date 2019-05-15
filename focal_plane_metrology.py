@@ -4,6 +4,7 @@ Created on Sun Jun  4 13:33:19 2017
 
 @author: Duan Yutong (dyt@physics.bu.edu)
 
+# evaluate quality of petal-ring integration by calculating throughput
 Code on SVN:
     https://desi.lbl.gov/svn/code/focalplane/plate_layout/trunk/metrology_analysis/
 Code on Github:
@@ -17,7 +18,7 @@ Data on DocDB:
 """
 
 import os
-from functools import reduce
+# from functools import reduce
 from multiprocessing import Pool
 import numpy as np
 import pandas as pd
@@ -25,32 +26,35 @@ from scipy.optimize import minimize, minimize_scalar
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 from matplotlib.backends.backend_pdf import PdfPages
+from petal_metrology import (
+    Rxyz, matmul, angles_to_unit_vector, vector_to_angles, cs5_to_petal,
+    throughput_tilt, throughput_defocus)
 
 # # 2017-11-22 (run 4)
-# petal_locations = [0, 1, 2, 3, 4, 6, 7, 8]  # lo of petals installed
-# petal_id_lookup = {0: '06',  # map between petal location and petal ID
-#                    1: '03',
-#                    2: '00',
-#                    3: '04',
-#                    4: '02',
-#                    5: '10',
-#                    6: '05',
-#                    7: '01',
-#                    8: '07',
-#                    9: '09'}
+petal_locations = [0, 1, 2, 3, 4, 6, 7, 8]  # lo of petals installed
+petal_id_lookup = {0: '06',  # map between petal location and petal ID
+                   1: '03',
+                   2: '00',
+                   3: '04',
+                   4: '02',
+                   5: '10',
+                   6: '05',
+                   7: '01',
+                   8: '07',
+                   9: '09'}
 
 # final alignment, 10 official petals
-petal_locations = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]  # lo of petals installed
-petal_id_lookup = {0: '04',  # map between petal location and petal ID
-                   1: '05',
-                   2: '06',
-                   3: '07',
-                   4: '08',
-                   5: '10',
-                   6: '11',
-                   7: '02',
-                   8: '03',
-                   9: '09'}
+# petal_locations = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]  # lo of petals installed
+# petal_id_lookup = {0: '04',  # map between petal location and petal ID
+#                    1: '05',
+#                    2: '06',
+#                    3: '07',
+#                    4: '08',
+#                    5: '10',
+#                    6: '11',
+#                    7: '02',
+#                    8: '03',
+#                    9: '09'}
 
 petal_ids = ['01', '02', '04', '00', '03', '05', '06', '07', '08', '09', '10',
              '11']  # petal production sequential order
@@ -521,90 +525,110 @@ dtb_pos_cmm = {0: np.array([[4.362, -25.713, -81.798],   # DTB 0
 
 '''
 
+# 20171122 (run 4)
+dtb_pos_cmm = {0: np.array([[4.418, -25.781, -81.858],   # DTB 0
+                            [-107.553, -412.325, -102.839],   # DTB 1
+                            [40.924, -424.167, -102.811]]), # DTB 2
+               1: np.array([[18.663, -18.308, -81.955],   # DTB 0
+                            [155.414, -396.399, -102.924],   # DTB 1
+                            [282.221, -318.943, -102.959]]), # DTB 2
+               2: np.array([[25.761, -3.876, -81.836],   # DTB 0
+                            [358.742, -229.547, -102.913],   # DTB 1
+                            [415.987, -92.192, -102.837]]), # DTB 2
+               3: np.array([[23.109, 12.129, -81.804],   # DTB 0
+                            [425.231, 25.245, -102.929],   # DTB 1
+                            [390.630, 169.802, -102.902]]), # DTB 2
+               4: np.array([[11.487, 23.292, -81.590],   # DTB 0
+                            [329.002, 270.423, -103.408],   # DTB 1
+                            [215.990, 366.870, -102.735]]), # DTB 2
+               5: np.array([[-4.3501,   25.7340,    -81.9638],   # DTB 0
+                            [107.3870,  412.2233,   -102.9615],   # DTB 1
+                            [-40.7836,  423.9673,   -102.9348]]), # DTB 2
+               6: np.array([[-18.476, 18.237, -81.790],   # DTB 0
+                            [-155.512, 396.829, -102.775],   # DTB 1
+                            [-282.212, 319.127, -102.832]]), # DTB 2
+               7: np.array([[-25.826, 3.645, -82.360],  # DTB 0
+                            [-358.962, 229.482, -102.939], # DTB 1
+                            [-415.831, 92.454, -102.910]]), # DTB 2
+               8: np.array([[-23.354, -12.225, -81.847],   # DTB 0
+                            [-425.341, -25.373, -102.810],   # DTB 1
+                            [-390.863, -169.819, -102.860]]), # DTB 2
+               9: np.array([[ 23.13790,  12.17047,  -82.36447],   # DTB 0
+                            [425.43710,  24.27891, -102.91776],   # DTB 1
+                            [391.25734, 168.64819, -102.89321]]), # DTB 2
+              }
 
 # DTB coordinates in CS5 measured by CMM
 # 2018-01-25 (run 4)
-dtb_pos_cmm = {0: np.array([[4.362, -25.713, -81.798],   # DTB 0
-                            [-107.414, -412.211, -102.913],   # DTB 1
-                            [40.760, -423.970, -102.891]]), # DTB 2
-               1: np.array([[18.447, -18.242, -81.779],   # DTB 0
-                            [155.481, -396.838, -102.773],   # DTB 1
-                            [282.181, -319.136, -102.831]]), # DTB 2
-               2: np.array([[25.917, -3.717, -81.825],   # DTB 0
-                            [358.885, -229.714, -102.860],   # DTB 1
-                            [416.055, -92.175, -102.830]]), # DTB 2
-               3: np.array([[23.338, 12.239, -81.776],   # DTB 0
-                            [425.317, 25.412, -102.809],   # DTB 1
-                            [390.827, 169.856, -102.861]]), # DTB 2
-               4: np.array([[11.671, 23.542, -81.893],   # DTB 0
-                            [329.177, 270.374, -102.877],   # DTB 1
-                            [216.397, 367.140, -102.898]]), # DTB 2
-               5: np.array([[-4.388, 25.952, -81.701],   # DTB 0
-                            [107.598, 412.227, -102.772],   # DTB 1
-                            [-40.727, 424.155, -102.756]]), # DTB 2
-               6: np.array([[-18.723, 18.200, -81.796],   # DTB 0
-                            [-155.290, 396.507, -102.851],   # DTB 1
-                            [-282.285, 318.730, -102.672]]), # DTB 2
-               7: np.array([[-25.726, 3.692, -81.606],   # DTB 0
-                            [-358.859, 229.332, -103.417],   # DTB 1
-                            [-415.675, 92.053, -102.750]]), # DTB 2
-               8: np.array([[-23.230, -12.090, -81.938],   # DTB 0
-                            [-425.072, -25.278, -102.934],   # DTB 1
-                            [-390.606, -169.821, -102.957]]), # DTB 2
-               9: np.array([[-11.496, -23.316,  -81.685],   # DTB 0
-                            [-329.255, -270.513, -102.869],   # DTB 1
-                            [-216.270, -367.187, -102.845]]), # DTB 2
-              }
+# dtb_pos_cmm = {0: np.array([[4.362, -25.713, -81.798],   # DTB 0
+#                             [-107.414, -412.211, -102.913],   # DTB 1
+#                             [40.760, -423.970, -102.891]]), # DTB 2
+#                1: np.array([[18.447, -18.242, -81.779],   # DTB 0
+#                             [155.481, -396.838, -102.773],   # DTB 1
+#                             [282.181, -319.136, -102.831]]), # DTB 2
+#                2: np.array([[25.917, -3.717, -81.825],   # DTB 0
+#                             [358.885, -229.714, -102.860],   # DTB 1
+#                             [416.055, -92.175, -102.830]]), # DTB 2
+#                3: np.array([[23.338, 12.239, -81.776],   # DTB 0
+#                             [425.317, 25.412, -102.809],   # DTB 1
+#                             [390.827, 169.856, -102.861]]), # DTB 2
+#                4: np.array([[11.671, 23.542, -81.893],   # DTB 0
+#                             [329.177, 270.374, -102.877],   # DTB 1
+#                             [216.397, 367.140, -102.898]]), # DTB 2
+#                5: np.array([[-4.388, 25.952, -81.701],   # DTB 0
+#                             [107.598, 412.227, -102.772],   # DTB 1
+#                             [-40.727, 424.155, -102.756]]), # DTB 2
+#                6: np.array([[-18.723, 18.200, -81.796],   # DTB 0
+#                             [-155.290, 396.507, -102.851],   # DTB 1
+#                             [-282.285, 318.730, -102.672]]), # DTB 2
+#                7: np.array([[-25.726, 3.692, -81.606],   # DTB 0
+#                             [-358.859, 229.332, -103.417],   # DTB 1
+#                             [-415.675, 92.053, -102.750]]), # DTB 2
+#                8: np.array([[-23.230, -12.090, -81.938],   # DTB 0
+#                             [-425.072, -25.278, -102.934],   # DTB 1
+#                             [-390.606, -169.821, -102.957]]), # DTB 2
+#                9: np.array([[-11.496, -23.316,  -81.685],   # DTB 0
+#                             [-329.255, -270.513, -102.869],   # DTB 1
+#                             [-216.270, -367.187, -102.845]]), # DTB 2
+#               }
 
 # %% function definitions
 
-'''
-rotation matrices, input in radians
-
-This is a rotation whose yaw, pitch, and roll angles are α, β and γ,
-or more formally intrinsic rotation whose Tait-Bryan angles are α, β, γ
-about axes z, y, x respectively.
-
-For intrinsic rotations, the coordinate system is rotated.
-
-'''
+# def matmul(*args):
+#     return reduce(np.dot, [*args])
 
 
-def matmul(*args):
-    return reduce(np.dot, [*args])
+# def Rx(angle):
+#     Rx = np.array([
+#                    [1.0,           0.0,            0.0],
+#                    [0.0,           np.cos(angle),  np.sin(angle)],
+#                    [0.0,           -np.sin(angle), np.cos(angle)]
+#                   ])
+#     return Rx
 
 
-def Rx(angle):
-    Rx = np.array([
-                   [1.0,           0.0,            0.0],
-                   [0.0,           np.cos(angle),  np.sin(angle)],
-                   [0.0,           -np.sin(angle), np.cos(angle)]
-                  ])
-    return Rx
+# def Ry(angle):
+#     Ry = np.array([
+#                    [np.cos(angle), 0.0,           -np.sin(angle)],
+#                    [0.0,           1.0,           0.0],
+#                    [np.sin(angle), 0.0,           np.cos(angle)]
+#                   ])
+#     return Ry
 
 
-def Ry(angle):
-    Ry = np.array([
-                   [np.cos(angle), 0.0,           -np.sin(angle)],
-                   [0.0,           1.0,           0.0],
-                   [np.sin(angle), 0.0,           np.cos(angle)]
-                  ])
-    return Ry
+# def Rz(angle):
+#     Rz = np.array([
+#                    [np.cos(angle),  np.sin(angle), 0.0],
+#                    [-np.sin(angle), np.cos(angle), 0.0],
+#                    [0.0,            0.0,           1.0]
+#                   ])
+#     return Rz
 
 
-def Rz(angle):
-    Rz = np.array([
-                   [np.cos(angle),  np.sin(angle), 0.0],
-                   [-np.sin(angle), np.cos(angle), 0.0],
-                   [0.0,            0.0,           1.0]
-                  ])
-    return Rz
+# def Rxyz(alpha, beta, gamma):
 
-
-def Rxyz(alpha, beta, gamma):
-
-    Rxyz = matmul(Rz(gamma), Ry(beta), Rx(alpha))  # yaw-pitch-roll system
-    return Rxyz
+#     Rxyz = matmul(Rz(gamma), Ry(beta), Rx(alpha))  # yaw-pitch-roll system
+#     return Rxyz
 
 
 def R_general(axis, angle):
@@ -629,54 +653,70 @@ def R_general(axis, angle):
     return R_general
 
 
-def angles_to_unit_vector(theta_deg, phi_deg):
-    # returns a unit vector from polar and azimuthal angles
-    theta = np.radians(theta_deg)
-    phi = np.radians(phi_deg)
-    return np.array([np.sin(theta)*np.cos(phi),
-                     np.sin(theta)*np.sin(phi),
-                     np.cos(theta)])
+# def angles_to_unit_vector(theta_deg, phi_deg):
+#     # returns a unit vector from polar and azimuthal angles
+#     theta = np.radians(theta_deg)
+#     phi = np.radians(phi_deg)
+#     return np.array([np.sin(theta)*np.cos(phi),
+#                      np.sin(theta)*np.sin(phi),
+#                      np.cos(theta)])
 
 
-def vector_to_angles(x, y, z):
-    r = np.sqrt(np.square(x) + np.square(y) + np.square(z))
-    theta = np.arccos(z/r)  # radians
-    phi = np.arctan(y/x)
-    return [np.degrees(theta), np.degrees(phi)]
+# def vector_to_angles(x, y, z):
+#     r = np.sqrt(np.square(x) + np.square(y) + np.square(z))
+#     theta = np.arccos(z/r)  # radians
+#     phi = np.arctan(y/x)
+#     return [np.degrees(theta), np.degrees(phi)]
 
 
-def throughput_tilt(tilt):
-    # takes degree input
-    throughput_tilt = -0.0133*np.power(tilt, 2) - 0.0175*tilt + 1.0
-    return np.multiply(throughput_tilt, throughput_tilt > 0)
+# def throughput_tilt(tilt):
+#     # takes degree input
+#     throughput_tilt = -0.0133*np.power(tilt, 2) - 0.0175*tilt + 1.0
+#     return np.multiply(throughput_tilt, throughput_tilt > 0)
 
 
-def throughput_defocus(delta_f):
-    delta_f_um = np.abs(delta_f) * 1000
-    # takes micron input
-    throughput_defocus = (- 1.804e-14*np.power(delta_f_um, 5)
-                          + 1.593e-11*np.power(delta_f_um, 4)
-                          - 5.955e-10*np.power(delta_f_um, 3)
-                          - 3.433e-6*np.power(delta_f_um, 2)
-                          + 3.251e-7*delta_f_um
-                          + 1.0)
-    return np.multiply(throughput_defocus, throughput_defocus > 0)
+# def throughput_defocus(delta_f):
+#     delta_f_um = np.abs(delta_f) * 1000
+#     # takes micron input
+#     throughput_defocus = (- 1.804e-14*np.power(delta_f_um, 5)
+#                           + 1.593e-11*np.power(delta_f_um, 4)
+#                           - 5.955e-10*np.power(delta_f_um, 3)
+#                           - 3.433e-6*np.power(delta_f_um, 2)
+#                           + 3.251e-7*delta_f_um
+#                           + 1.0)
+#     return np.multiply(throughput_defocus, throughput_defocus > 0)
 
 
-def cs5_to_petal(x, petal_location):
+# def petal_to_cs5(x, petal_location):
 
-    '''
-    given a petal location (designated by interger 0 to 9) and measurement
-    of a point in CS6, rotate the point by an integer number of 36 degrees
-    to petal's local CS defined in the petal solid model.
+#     '''
+#     given a petal location (designated by interger 0 to 9) and measurement
+#     of a point in CS6, rotate the point by an integer number of 36 degrees
+#     to petal's local CS defined in the petal solid model.
 
-    according to DESI-0742v3, the petal at location 3 shares the same
-    coordinate system with CS6 (X5 Y5 Z5)
-    '''
+#     according to DESI-0742v3, the petal at location 3 shares the same
+#     coordinate system with CS6 (X5 Y5 Z5)
+#     '''
 
-    theta = 2*np.pi/10*(petal_location-3)
-    x_rot = matmul(Rz(theta), x)
-    return x_rot
+#     angle = 2*np.pi/10*(petal_location-3) # the point is rotated
+#     x_rot = matmul(Rz(angle), x)
+#     return x_rot
+
+
+# def cs5_to_petal(x, petal_location):
+
+#     '''
+#     given a petal location (designated by interger 0 to 9) and measurement
+#     of a point in CS6, rotate the point by an integer number of 36 degrees
+#     to petal's local CS defined in the petal solid model.
+
+#     according to DESI-0742v3, the petal at location 3 shares the same
+#     coordinate system with CS6 (X5 Y5 Z5)
+#     '''
+
+#     theta = 2*np.pi/10*(petal_location-3)
+#     x_rot = matmul(Rz(theta), x)
+#     return x_rot
 
 
 # %% evaluate petal throughput and calculate optimal 1DF alignment
@@ -999,7 +1039,7 @@ def evaluate_petal(petal_location):
                 'precession': r'$\delta \varphi/\degree$',
                 'tilt': r'$\delta/\degree$',
                 'defocus': r'$\delta f/\mathrm{mm}$',
-                'throughput': r'$\eta \times 100\%$'}
+                'throughput': r'$\eta \cdot 100\%$'}
 #    colour_range = {'diameter': [0.008, 0.018],
 #                    'x': [-0.03, 0.03],
 #                    'y': [-0.03, 0.03],
@@ -1149,18 +1189,18 @@ def ics_output():
             beta = parameters[1]
             gamma = parameters[2]
             T = parameters[3:]
-            R = Rxyz(alpha, beta, -gamma)  # yaw-pitch-roll system
+            R = Rxyz(alpha, beta, gamma)  # yaw-pitch-roll system
             dtb_pos_rot = np.empty(dtb_pos_ptl.shape)
             for j in range(dtb_pos_ptl.shape[1]):
                 dtb_pos_rot[:, j] = matmul(R, dtb_pos_ptl[:, j]) + T
             return np.sum(
-                    np.linalg.norm(dtb_pos_rot - dtb_pos_act_cs5), axis=0)
-
+                    np.linalg.norm(dtb_pos_rot - dtb_pos_act_cs5, axis=0))
+        # initial guesses
         gamma0 = 2*np.pi/10*(petal_location-3)
         p0 = np.array([0.0, 0.0, gamma0, 0.0, 0.0, 0.0])
         bounds = ((-np.pi/2, np.pi/2), (-np.pi/2, np.pi/2),
-                  (gamma0-1, gamma0+1),
-                  (-10, 10), (-10, 10), (-10, 10))
+                  (gamma0-0.05, gamma0+0.05),
+                  (-1, 1), (-1, 1), (-1, 1))
         sol_ics = minimize(total_residue_ics, p0,
                            bounds=bounds, method='SLSQP',
                            options={'ftol': 1e-12,
@@ -1214,7 +1254,6 @@ def ics_output():
 
 if __name__ == '__main__':
 
-    # evaluate quality of petal-ring integration by calculating throughput
     pool = Pool()  # create a multiprocessing Pool
     pool.map(evaluate_petal, petal_locations)  # evaluate petal throughput
     ics_output()

@@ -24,7 +24,7 @@ import numpy as np
 import pandas as pd
 from scipy.optimize import minimize
 import matplotlib.pyplot as plt
-import matplotlib.gridspec as gridspec
+from matplotlib import gridspec
 from matplotlib.backends.backend_pdf import PdfPages
 
 metrology_dir = r'K:\Google Drive\DESI\model_drawings\DESI Focal Plate Assy and Integration\FP Structure\metrology\Zeiss Petal Metrology'
@@ -47,10 +47,20 @@ paths = {'01': metrology_dir + r'\ptl01\DESI-0326-E_1_chr.txt',
 make_plots = True
 make_lookup_table = False
 
+
 # %% function definitions
 
+'''
+rotation matrices, input in radians
 
-# rotation matrices, input is in radians
+This is a rotation whose yaw, pitch, and roll angles are α, β and γ,
+or more formally intrinsic rotation whose Tait-Bryan angles are α, β, γ
+about axes z, y, x respectively.
+
+For intrinsic rotations, the coordinate system is rotated.
+
+'''
+
 def Rx(angle):
     Rx = np.array([
                    [1.0,           0.0,            0.0],
@@ -78,12 +88,14 @@ def Rz(angle):
     return Rz
 
 
+def Rxyz(alpha, beta, gamma):
+
+    Rxyz = matmul(Rz(gamma), Ry(beta), Rx(alpha))  # yaw-pitch-roll system
+    return Rxyz
+
+
 def matmul(*args):
     return reduce(np.dot, [*args])
-
-
-def total_residue(x, y):
-    return np.sum(np.linalg.norm(x - y, axis=0))
 
 
 def angles_to_unit_vector(theta_deg, phi_deg):
@@ -98,22 +110,6 @@ def vector_to_angles(x, y, z):
     theta = np.arccos(z/r) # radians
     phi = np.arctan(y/x)
     return [np.degrees(theta), np.degrees(phi)]
-
-
-def petal_to_cs5(x, petal_location):
-    
-    '''
-    given a petal location (designated by interger 0 to 9) and measurement 
-    of a point in CS6, rotate the point by an integer number of 36 degrees
-    to petal's local CS defined in the petal solid model.
-    
-    according to DESI-0742v3, the petal at location 3 shares the same 
-    coordinate system with CS6 (X5 Y5 Z5)
-    '''
-    
-    angle = 2*np.pi/10*(petal_location-3) # the point is rotated
-    x_rot = matmul(Rz(angle), x)
-    return x_rot
 
 
 def throughput_tilt(tilt):
@@ -132,6 +128,42 @@ def throughput_defocus(delta_f):
                           + 3.251e-7*delta_f_um
                           + 1.0)
     return np.multiply(throughput_defocus, throughput_defocus>0) # force positive valued
+
+
+def petal_to_cs5(x, petal_location):
+
+    '''
+    given a petal location (designated by interger 0 to 9) and measurement
+    of a point in CS6, rotate the point by an integer number of 36 degrees
+    to petal's local CS defined in the petal solid model.
+
+    according to DESI-0742v3, the petal at location 3 shares the same
+    coordinate system with CS6 (X5 Y5 Z5)
+    '''
+
+    angle = 2*np.pi/10*(petal_location-3)  # the point is rotated
+    x_rot = matmul(Rz(angle), x)
+    return x_rot
+
+
+def cs5_to_petal(x, petal_location):
+
+    '''
+    given a petal location (designated by interger 0 to 9) and measurement
+    of a point in CS6, rotate the point by an integer number of 36 degrees
+    to petal's local CS defined in the petal solid model.
+
+    according to DESI-0742v3, the petal at location 3 shares the same
+    coordinate system with CS6 (X5 Y5 Z5)
+    '''
+
+    angle = -2*np.pi/10*(petal_location-3)
+    x_rot = matmul(Rz(angle), x)
+    return x_rot
+
+
+def total_residue(x, y):
+    return np.sum(np.linalg.norm(x - y, axis=0))
 
 
 def par_list_gen(optm, half_ranges, counts):
@@ -232,8 +264,8 @@ def process_petal(petal_id):
     df.loc['defocus', 'ABC']['uppertol'] = df.loc['z', 'ABC']['uppertol']
     df.loc[('tilt', 'ABC'), 'lowertol'] = 0
     df.loc[('tilt', 'ABC'), 'uppertol'] = 0.06
-    df.loc[('throughput', 'ABC'), 'lowertol'] = 1  # 1 - throughput loss
-    df.loc[('throughput', 'ABC'), 'uppertol'] = 0.995  # for throughput loss
+    df.loc[('throughput', 'ABC'), 'lowertol'] = 0.995  # 1 - throughput loss
+    df.loc[('throughput', 'ABC'), 'uppertol'] = 1  # for throughput loss
     
     # calculate combined throughput    
     throughput = throughput_tilt(tilt) * throughput_defocus(delta_f)
@@ -567,7 +599,7 @@ def process_petal(petal_id):
                     'precession': r'$\delta \varphi/\degree$',
                     'tilt': r'$\delta/\degree$',
                     'defocus': r'$\delta f/\mathrm{mm}$',
-                    'throughput': r'$\eta \times 100\%$'}
+                    'throughput': r'$\eta \cdot 100\%$'}
         colour_range = {'diameter': [0.008, 0.018],
                         'x': [-0.03, 0.03],
                         'y': [-0.03, 0.03],
