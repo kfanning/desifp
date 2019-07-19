@@ -61,6 +61,7 @@ For intrinsic rotations, the coordinate system is rotated.
 
 '''
 
+
 def Rx(angle):
     Rx = np.array([
                    [1.0,           0.0,            0.0],
@@ -298,7 +299,7 @@ def process_petal(petal_id):
         beta = parameters[1]
         gamma = parameters[2]
         T = parameters[3:]
-        R = matmul(Rz(gamma), Ry(beta), Rx(alpha)) # yaw-pitch-roll system
+        R = Rxyz(alpha, beta, gamma) # yaw-pitch-roll system
         x_abc_rot = np.empty(x_abc.shape) # rotated matrix from ABC
         # rotate each column of x_abc and fill x_abc_rot
         for j in range(x_abc.shape[1]):
@@ -333,7 +334,7 @@ def process_petal(petal_id):
     beta = parameters[1]
     gamma = parameters[2]
     T = parameters[3:]
-    R = matmul(Rz(gamma), Ry(beta), Rx(alpha)) # yaw-pitch-roll system
+    R = Rxyz(alpha, beta, gamma) # yaw-pitch-roll system
     
     # datum tooilng balls
     for j in range(3):
@@ -357,7 +358,7 @@ def process_petal(petal_id):
         beta = parameters[1]
         gamma = parameters[2]
         T = parameters[3:]
-        R = matmul(Rz(gamma), Ry(beta), Rx(alpha)) # yaw-pitch-roll system
+        R = Rxyz(alpha, beta, gamma)  # yaw-pitch-roll system
         x_abc_rot = np.empty(x_abc.shape) # rotated matrix from ABC
         # rotate each column of x_abc and fill x_abc_rot
         for j in range(x_abc.shape[1]):
@@ -385,7 +386,7 @@ def process_petal(petal_id):
     beta = parameters[1]
     gamma = parameters[2]
     T = parameters[3:]
-    R = matmul(Rz(gamma), Ry(beta), Rx(alpha)) # yaw-pitch-roll system
+    R = Rxyz(alpha, beta, gamma)  # yaw-pitch-roll system
     x_abc_rot = np.empty(x_abc.shape) # rotated matrix from ABC
     x0_abc_rot = np.empty(x_abc.shape)
 
@@ -461,7 +462,7 @@ def process_petal(petal_id):
         beta = parameters[1]
         gamma = parameters[2]
         T = parameters[3:]
-        R = matmul(Rz(gamma), Ry(beta), Rx(alpha)) # yaw-pitch-roll system
+        R = Rxyz(alpha, beta, gamma)  # yaw-pitch-roll system
         x_abc_rot = np.empty(x_abc.shape) # rotated matrix from ABC
         x0_abc_rot = np.empty(x_abc.shape)
         # rotate each column of x_abc and fill x_abc_rot
@@ -503,7 +504,7 @@ def process_petal(petal_id):
     beta = parameters[1]
     gamma = parameters[2]
     T = parameters[3:]
-    R = matmul(Rz(gamma), Ry(beta), Rx(alpha)) # yaw-pitch-roll system
+    R = R = Rxyz(alpha, beta, gamma) # yaw-pitch-roll system
     x_abc_rot = np.empty(x_abc.shape) # rotated matrix from ABC
     x0_abc_rot = np.empty(x_abc.shape)
     
@@ -775,7 +776,7 @@ def process_petal(petal_id):
     def tpt_eval(alpha, beta, gamma, Tx, Ty, Tz):
         # given transforamtion parameters w.r.t. ABC, return throughput
         T = np.array([Tx, Ty, Tz])
-        R = matmul(Rz(gamma), Ry(beta), Rx(alpha)) # yaw-pitch-roll system
+        R = Rxyz(alpha, beta, gamma) # yaw-pitch-roll system
         
         # calculate tooling ball positions
         dtb_pos = np.empty((3,3))
