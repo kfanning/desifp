@@ -1183,7 +1183,7 @@ def ics_output():
         dtb_pos_act_cs5 = dtb_pos_cmm[petal_location].T
 
         # find transformation from petal local nominal (ZBF or CAD) CS
-        # to focal plane CS5. 
+        # to focal plane CS5.
         def total_residue_ics(parameters):
             # this is the function to be minimised
             alpha = parameters[0]
