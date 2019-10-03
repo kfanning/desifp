@@ -2,7 +2,7 @@
 """
 Created on Fri Sep 27 20:49:23 2019
 
-@author: givoltage
+@author: Duan Yutong (dyt@physics.bu.edu)
 """
 import os
 import numpy as np
@@ -81,7 +81,7 @@ if __name__ == '__main__':
     # petal_id = 11
     dfs = []
     rows = []
-    for petal_id in range(2, 12):
+    for petal_id in range(3, 4):
         sol, data = qst_petal(petal_id)
         rows.append({'petal_id': petal_id,
                      'petal_loc': petal_locs[petal_id],
@@ -97,4 +97,4 @@ if __name__ == '__main__':
     pd.DataFrame(rows).to_csv(os.path.join(
         data_dir, 'qst_focal_plate_alignment.csv'))
     pd.DataFrame(pd.concat(dfs, sort=False)).to_csv(os.path.join(
-        data_dir, 'qst_fiducials.csv'))
+        data_dir, 'qst_fiducials_iter1.csv'))
