@@ -1,6 +1,6 @@
 '''
 start server with the following command:
-    bokeh serve --allow-websocket-origin=desi-2.kpno.noao.edu:5006 main.py
+    bokeh serve fp_plot --allow-websocket-origin=desi-2.kpno.noao.edu:5006
 
 view at:
     http://desi-2.kpno.noao.edu:5006/main
@@ -14,8 +14,8 @@ import psycopg2
 from DOSlib.positioner_index import PositionerIndex
 from datetime import datetime, timezone, timedelta
 # from bokeh.io import show
-from bokeh.io import curdoc, show
-from bokeh.layouts import row, column
+from bokeh.io import curdoc
+from bokeh.layouts import row  # , column
 from bokeh.palettes import Magma256
 from bokeh.plotting import figure
 from bokeh.models import ColumnDataSource, LinearColorMapper
@@ -33,13 +33,13 @@ def init_data():
     data = {col: pd.Series(dtype=dt) for col, dt in zip(cols, dtypes)}
     data = pi_df.join(pd.DataFrame(data=data, index=pi_df.index))
     # add obsXYZ positions to data for plotting
-    ptlXYZ = pd.read_csv(pc.dirs['positioner_locations_file'],
-                         usecols=['device_loc', 'X', 'Y', 'Z'],
-                         index_col='device_loc').T.values
+    ptlXYZ_df = pd.read_csv(pc.dirs['positioner_locations_file'],
+                            usecols=['device_loc', 'X', 'Y', 'Z'],
+                            index_col='device_loc')
     for petal_loc in range(10):
         trans = PetalTransforms(gamma=np.pi/5*(petal_loc-3))
-        obsXY = trans.ptlXYZ_to_obsXYZ(ptlXYZ)[:2, :]
-        xy_df = pd.DataFrame(data=obsXY.T, index=df.index,
+        obsXY = trans.ptlXYZ_to_obsXYZ(ptlXYZ_df.T.values)[:2, :]
+        xy_df = pd.DataFrame(data=obsXY.T, index=ptlXYZ_df.index,
                              columns=['obs_x', 'obs_y'])
         petal_data = (data[data['petal_loc'] == petal_loc]
                       .reset_index().set_index('device_loc'))
@@ -55,9 +55,7 @@ def query_db(hours=24):
         f"""SELECT * FROM pc_telemetry_can_all
             WHERE time_recorded >= '{time_cut}'""",
         conn)
-    if query.empty:
-        return query_db(hours=hours+1)
-    return query
+    return query_db(hours=hours+1) if query.empty else query
 
 
 def process_query_data(query):
@@ -66,8 +64,8 @@ def process_query_data(query):
         for device_loc, temp in series['posfid_temps'].items():
             if 'can' in device_loc:
                 print(f"Skipping DB entry in old telemetry format"
-                	  f"submitted by PC-{series['pcid']} "
-                	  f"at {series['time_recorded']}")
+                      f"submitted by PC-{series['pcid']} "
+                      f"at {series['time_recorded']}")
                 break
             device_ids.append(pi.find_by_petal_loc_device_loc(
                 series['pcid'], device_loc, key='DEVICE_ID'))
@@ -124,4 +122,4 @@ layout = row(fp_temp)
 curdoc().add_root(layout)
 curdoc().title = title
 # show(fp_temp)
-curdoc().add_periodic_callback(update_plots, 1000*refresh_interval)
+curdoc().add_periodic_callback(update_plots, 1000*refresh_interval)  # in ms
