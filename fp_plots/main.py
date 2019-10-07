@@ -33,12 +33,12 @@ def init_data():
     data = {col: pd.Series(dtype=dt) for col, dt in zip(cols, dtypes)}
     data = pi_df.join(pd.DataFrame(data=data, index=pi_df.index))
     # add obsXYZ positions to data for plotting
-    df = pd.read_csv(pc.dirs['positioner_locations_file'],
-                     usecols=['device_loc', 'X', 'Y', 'Z'],
-                     index_col='device_loc')
+    ptlXYZ = pd.read_csv(pc.dirs['positioner_locations_file'],
+                         usecols=['device_loc', 'X', 'Y', 'Z'],
+                         index_col='device_loc').T.values
     for petal_loc in range(10):
         trans = PetalTransforms(gamma=np.pi/5*(petal_loc-3))
-        obsXY = trans.ptlXYZ_to_obsXYZ(df.T.values)[:2, :]
+        obsXY = trans.ptlXYZ_to_obsXYZ(ptlXYZ)[:2, :]
         xy_df = pd.DataFrame(data=obsXY.T, index=df.index,
                              columns=['obs_x', 'obs_y'])
         petal_data = (data[data['petal_loc'] == petal_loc]
@@ -65,8 +65,9 @@ def process_query_data(query):
         device_ids, temps = [], []
         for device_loc, temp in series['posfid_temps'].items():
             if 'can' in device_loc:
-                print(f"Skipping entry at {series['time_recorded']}"
-                      " in old telemetry format")
+                print(f"Skipping DB entry in old telemetry format"
+                	  f"submitted by PC-{series['pcid']} "
+                	  f"at {series['time_recorded']}")
                 break
             device_ids.append(pi.find_by_petal_loc_device_loc(
                 series['pcid'], device_loc, key='DEVICE_ID'))
@@ -91,8 +92,9 @@ def update_plots():  # minute
     print('Refreshing plots...')
     update_data_and_source(hours=0.1)
     fp_temp.title.text = (
-        'Focal Plane Temperature\n'
-        f' (last updated: {datetime.now(timezone.utc).isoformat()})')
+        'Focal Plane Temperature '
+        f'(last updated: {datetime.now(timezone.utc).isoformat()}, '
+        f'refresh interval: {refresh_interval} s)')
     print(f'Refreshing in {refresh_interval} s...')
 
 
