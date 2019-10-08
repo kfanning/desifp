@@ -68,7 +68,7 @@ def init_data():
         data.loc[data['petal_loc'] == petal_loc,
                  'spectro_sn'] = spectro_sns[petal_loc]
         data.loc[data['petal_loc'] == petal_loc,
-                 'spectro_sn'] = spectro_lns[petal_loc]
+                 'spectro_ln'] = spectro_lns[petal_loc]
     return data, ColumnDataSource(data)
 
 
@@ -155,7 +155,7 @@ def plot_histogram(petal_loc):
                left=f'left_{petal_loc}_{device_type}',
                right=f'right_{petal_loc}_{device_type}',
                source=source_hist, legend=device_type,
-               fill_color=color, line_color="white", alpha=0.6)
+               fill_color=color, line_color="white", alpha=0.5)
     p.y_range.start = bottom
     p.legend.location = "top_right"
     p.xaxis.axis_label = 'Temp / °C'
@@ -173,13 +173,13 @@ data, source = init_data()  # canonical data (dataframe) and source
 update_data_and_source(hours=24, update_hist=False)
 source_hist = ColumnDataSource(generate_hist_data())  # requires updated data
 # initial plot, focal plane temperature heatmap
-tooltips = ([('Cursor obsXY', '($x, $y)')]
+tooltips = ([('cursor obsXY', '($x, $y)')]
             + [(col_name, '@'+col_name) for col_name in data.columns
                if col_name not in ['line_color']])
 fp_temp = figure(title='Focal Plane Temperature',
                  tools='pan,wheel_zoom,reset,hover,save',
                  tooltips=tooltips,
-                 aspect_scale=1, plot_width=1000, plot_height=1000)
+                 aspect_scale=1, plot_width=950, plot_height=1000)
 fp_temp.xaxis.axis_label = 'obsX / mm'
 fp_temp.yaxis.axis_label = 'obsY / mm'
 fp_temp.hover.show_arrow = True
