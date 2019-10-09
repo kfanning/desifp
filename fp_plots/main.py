@@ -19,7 +19,7 @@ from bokeh.layouts import row, gridplot
 from bokeh.palettes import Magma256
 from bokeh.plotting import figure
 from bokeh.models import (
-    ColumnDataSource, LinearColorMapper, ColorBar, AdaptiveTicker, Label)
+    ColumnDataSource, LinearColorMapper, ColorBar, AdaptiveTicker, LabelSet)
 
 
 spectro_sns = {0: 'SM04', 1: 'SM10', 2: 'SM05', 3: 'SM06', 4: 'SM01',
@@ -73,6 +73,12 @@ def init_data():
                             usecols=['device_location_id', 'X', 'Y', 'Z'],
                             index_col='device_location_id')
     ptlXYZ_df.index.rename('device_loc', inplace=True)
+    data_status = pd.DataFrame(
+        data={'x': 22 + 9 * (np.arange(len(status_colors.keys()))//9),
+              'y': np.power(
+                      10, 2-0.17*(np.arange(len(status_colors.keys())) % 9))},
+        index=status_colors.keys())
+    data_status.index.rename('status_field', inplace=True)
     for petal_loc in petal_locs:
         trans = PetalTransforms(gamma=np.pi/5*(petal_loc-3))
         obsXY = trans.ptlXYZ_to_obsXYZ(ptlXYZ_df.T.values)[:2, :]
@@ -88,15 +94,11 @@ def init_data():
                  'spectro_sn'] = spectro_sns[petal_loc]
         data.loc[data['petal_loc'] == petal_loc,
                  'spectro_ln'] = spectro_lns[petal_loc]
-    # initial pc telemetry status data
-    data_status = {field: np.nan for field in
-                   ['time_recorded'] + list(status_colors.keys())}
-    for i, field in enumerate(status_colors.keys()):
-        data_status[field+'_color'] = 'grey'  # initial colors
-        data_status[field+'_x'] = 23 + 12 * (i//9)
-        data_status[field+'_y'] = np.power(10, 2 - 0.17 * (i % 9))
-    sources_status = {petal_loc: data_status for petal_loc in petal_locs}
-    return data, ColumnDataSource(data), sources_status
+        # pc telemetry status data
+        data_status[f'val_{petal_loc}'] = np.nan
+        data_status[f'color_{petal_loc}'] = 'grey'
+    return (data, ColumnDataSource(data),
+            data_status, ColumnDataSource(data_status))
 
 
 def query_db(hours=24, table='pc_telemetry_can_all'):
@@ -139,16 +141,15 @@ def process_pc_telemetry_status(query):
             continue  # no data for this petal/petalcontroller, skip to next
         # select the last row, latest entry
         series = query_petal.sort_values('time_recorded').iloc[-1]
-        for field in ['time_recorded'] + list(status_colors.keys()):
-            sources_status[petal_loc][field] = series[field]
         for field in status_colors.keys():
-            value = sources_status[petal_loc][field]
+            value = series[field]
             if not (value == 0 or value == 1 or np.isnan(value)):
                 print(f'Bad status value: '
                       f'{field} = {value}, type {type(value)}')
                 continue
-            sources_status[petal_loc][field+'_color'] = (
-                    status_colors[field][value])
+            data_status.loc[field, f'val_{petal_loc}'] = series[field]
+            data_status.loc[field,
+                            f'color_{petal_loc}'] = status_colors[field][value]
 
 
 def update_data_and_source(hours=24, update_hist=True):
@@ -157,24 +158,26 @@ def update_data_and_source(hours=24, update_hist=True):
     query = query_db(hours=hours, table='pc_telemetry_status')
     process_pc_telemetry_status(query)
     source.data = data  # source is a global variable that applies to all plots
+    source_status.data = data_status
     if update_hist:
         source_hist.data = generate_hist_data()
 
 
 def update_plots():  # minute
-    print('Refreshing plots...')
+    print(f'[{strtimenow()}] Refreshing plots...')
+    print('Updating data source with latest DB entries...')
     update_data_and_source(hours=0.1)  # update data
-    plot_status_indicators()
+    print('Updating plot texts...')
     fp_temp.title.text = (  # update text in plots
         f'Focal Plane Temperature (last updated: {strtimenow()}, '
         f'refresh interval: {refresh_interval} s)')
     for i, petal_hist in enumerate(petal_hists):
         petal_hist.title.text = (
             f'petal_loc = {i} (last updated: {strtimenow()})')
-    print(f'Refreshing in {refresh_interval} s...')
+    print(f'[{strtimenow()}] Refreshing in {refresh_interval} s...')
 
 
-def generate_hist_data(n_bins=15):
+def generate_hist_data(n_bins=10):
     '''create source for histogram, fields are
     left_0_pos, left_0_fid, ..., right_0_pos, ..., top_0_pos,  bottom_0_pos,...
     '''
@@ -196,7 +199,7 @@ def plot_histogram(petal_loc):
     bottom = 0.1  # log cannot properly handle bottom = 0, set above zero
     p = figure(
         title=f'petal_loc = {petal_loc} Temperature Distribution',
-        y_axis_type='log', x_range=(9, 45), y_range=(0.1, 130),
+        y_axis_type='log', x_range=(10, 40), y_range=(0.1, 130),
         plot_width=500, plot_height=450)
     for device_type, color in zip(['pos', 'fid'], ['royalblue', 'orangered']):
         p.quad(top=f'top_{petal_loc}_{device_type}',
@@ -206,27 +209,22 @@ def plot_histogram(petal_loc):
                source=source_hist, legend=device_type,
                fill_color=color, line_color="white", alpha=0.5)
     p.y_range.start = bottom
-    p.legend.location = "top_left"
+    p.legend.location = "bottom_right"
     p.xaxis.axis_label = 'Temp / °C'
     p.yaxis.axis_label = 'Device Count'
     # add indicator labels only once
-    for field in status_colors.keys():
-        label = Label(x=sources_status[petal_loc][field+'_x']+1,
-                      y=sources_status[petal_loc][field+'_y'],
-                      text=field, render_mode='css', text_baseline='middle',
+    labels = LabelSet(x='x', y='y', text='status_field', source=source_status,
+                      x_offset=10, render_mode='css', text_baseline='middle',
                       text_font_size='11pt')
-        p.add_layout(label)
+    p.circle(x='x', y='y', radius=0.4, alpha=1, line_alpha=0,
+             fill_color=f'color_{petal_loc}', source=source_status)
+#    for field in status_colors.keys():
+#        label = Label(x=sources_status[petal_loc][field+'_x']+1,
+#                      y=sources_status[petal_loc][field+'_y'],
+#                      text=field, render_mode='css', text_baseline='middle',
+#                      text_font_size='11pt')
+    p.add_layout(labels)
     return p
-
-
-def plot_status_indicators():
-    for petal_loc, p in enumerate(petal_hists):
-        for field in status_colors.keys():
-            p.circle(x=sources_status[petal_loc][field+'_x'],
-                     y=sources_status[petal_loc][field+'_y'],
-                     fill_color=sources_status[petal_loc][field+'_color'],
-                     line_alpha=0,
-                     radius=0.5, alpha=1)
 
 
 # %% main
@@ -235,7 +233,7 @@ pi = PositionerIndex()
 conn = psycopg2.connect(host="desi-db", port="5442", database="desi_dev",
                         user="desi_reader", password="reader")  # DB connection
 # canonical data (dataframe) and source
-data, source, sources_status = init_data()
+data, source, data_status, source_status = init_data()
 # load past 24 hr and use the latest readout
 update_data_and_source(hours=24, update_hist=False)
 source_hist = ColumnDataSource(generate_hist_data())  # requires updated data
@@ -256,7 +254,7 @@ color_mapper = LinearColorMapper(palette=Magma256,
 fp_temp.circle(
     x='obs_x', y='obs_y', source=source, radius=5,
     fill_color={'field': 'temp_color', 'transform': color_mapper},
-    fill_alpha=0.7, line_color='line_color', line_width=1.3,
+    fill_alpha=0.7, line_color='line_color', line_width=1.8,
     hover_line_color='black')
 colorbar = ColorBar(color_mapper=color_mapper,  # border_line_color=None,
                     ticker=AdaptiveTicker(), orientation='horizontal',
@@ -265,7 +263,6 @@ colorbar = ColorBar(color_mapper=color_mapper,  # border_line_color=None,
 fp_temp.add_layout(colorbar, place='above')  # above
 # make temperature histograms for each petal
 petal_hists = [plot_histogram(petal_loc) for petal_loc in petal_locs]
-plot_status_indicators()
 grid = gridplot(petal_hists, ncols=len(petal_locs)//2)
 layout = row([fp_temp, grid])
 update_plots()
