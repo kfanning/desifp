@@ -22,12 +22,15 @@ from DOSlib.positioner_index import PositionerIndex
 from petaltransforms import PetalTransforms
 
 petal_locs = [3]
-fvc_img_dir = r'C:\Users\givoltage\Google Drive\DESI\focal_plane_software\calibration'
+fvc_img_dir = r'K:\Google Drive\DESI\focal_plane_software\calibration'
 bright_exps = ['fvc.20191003213313',  # initial position, close to home
                'fvc.20191003214640',  # After +30 deg phi move
                'fvc.20191003222441']  # After -60 deg theta move
-fp_alignment = pd.read_csv(r'C:\Users\givoltage\Google Drive\DESI\repository\desifp\focal_plane_alignment_pm.csv',
+fp_alignment = pd.read_csv(os.path.join(fvc_img_dir,
+                                        'focal_plane_alignment_pm.csv'),
                            index_col='PETAL_LOC')
+fp_alignment.columns = meapos.columns.str.lower()
+
 
 def initialise_data():
     path = os.getenv('DOS_POSITIONERINDEXTABLE',
@@ -37,7 +40,7 @@ def initialise_data():
     # pi_df.set_index('device_id', inplace=True)
     ptlXYZ_df = pd.read_csv(pc.dirs['positioner_locations_file'],
                             usecols=['device_loc', 'X', 'Y', 'Z'],
-                            index_col='device_loc') 
+                            index_col='device_loc')
     data_dfs = []
     for petal_loc in petal_locs:  # create nominal cenre for each petal
         petal_df = (pi_df[pi_df['petal_loc']==petal_loc]
@@ -94,8 +97,8 @@ def check_movement():
     data['dr_23'] = np.linalg.norm(data[['obsX_2', 'obsY_2']].values
                                    - row['obsX_3', 'obsY_3'].values, axis=1)
     data[data['dr_12'] < ]
-    
-    
+
+
 # %% main
 df = initialise_data()
 for i, bright_exp in enumrate(bright_exps):

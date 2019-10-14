@@ -7,13 +7,12 @@ view at:
 '''
 from collections import OrderedDict
 import os
-import numpy as np
-import pandas as pd
-import posconstants as pc
-from petaltransforms import PetalTransforms
-import psycopg2
-from DOSlib.positioner_index import PositionerIndex
 from datetime import datetime, timezone, timedelta
+import numpy as np
+import psycopg2
+import pandas as pd
+from petaltransforms import PetalTransforms
+from DOSlib.positioner_index import PositionerIndex
 from bokeh.io import curdoc, output_file, save
 from bokeh.layouts import row, gridplot
 from bokeh.palettes import Magma256
@@ -218,11 +217,6 @@ def plot_histogram(petal_loc):
                       text_font_size='11pt')
     p.circle(x='x', y='y', radius=0.4, alpha=1, line_alpha=0,
              fill_color=f'color_{petal_loc}', source=source_status)
-#    for field in status_colors.keys():
-#        label = Label(x=sources_status[petal_loc][field+'_x']+1,
-#                      y=sources_status[petal_loc][field+'_y'],
-#                      text=field, render_mode='css', text_baseline='middle',
-#                      text_font_size='11pt')
     p.add_layout(labels)
     return p
 
