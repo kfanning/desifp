@@ -207,10 +207,10 @@ Duplicate fiducial spot matched for P113 at: [1811.631 5295.837]
 Duplicate fiducial spot matched for P072 at: [1971.925 5383.396]
 Duplicate fiducial spot matched for P072 at: [1965.722 5386.924]
 End of pass 4, unmatched spots remaining: 2
-Duplicate fiducial spot matched for P060 at: [ 993.758 4627.48 ]
-Duplicate fiducial spot matched for P060 at: [ 989.343 4635.706]
 __main__:8: RuntimeWarning: All-NaN slice encountered
 
+Duplicate fiducial spot matched for P060 at: [ 993.758 4627.48 ]
+Duplicate fiducial spot matched for P060 at: [ 989.343 4635.706]
 End of pass 5, unmatched spots remaining: 0
 === Spotmatch success for petal_loc = 4, exp_no = 1 ===
 Spotmatch for petal_loc = 4 complete, 544 of 544 spots matched to known device IDs, largest errors:
