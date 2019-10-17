@@ -142,7 +142,15 @@ def process_pc_telemetry_status(query):
         series = query_petal.sort_values('time_recorded').iloc[-1]
         for field in status_colors.keys():
             value = series[field]
-            if not (value == 0 or value == 1 or np.isnan(value)):
+            if value == 0 or value == 1:
+                pass
+            elif value is None or False:
+                value = 0
+            elif value is True:
+                value = 1
+            elif np.isnan(value):
+                value = 0
+            else:
                 print(f'Bad status value: '
                       f'{field} = {value}, type {type(value)}')
                 continue
