@@ -2,7 +2,7 @@
 """
 Created on Thu Oct 17 15:40:51 2019
 
-@author: givoltage
+@author: Duan Yutong (dyt@physics.bu.edu)
 """
 
 import os
@@ -101,8 +101,8 @@ def plot_dark_pos(posid):
 if __name__ == '__main__':
     for petal_loc in petal_locs:
         for posid in missing_pos[petal_loc]:
-            if posid not in overexposed:
-                continue
+            # if posid not in overexposed:  # for redoing overexposed posids
+            #     continue
             print(f'Click on estimated fibre position for {posid}')
             fig, ax = plot_dark_pos(posid)
             # get one point, the 0th point in the list
