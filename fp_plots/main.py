@@ -100,48 +100,67 @@ def init_data():
             data_status, ColumnDataSource(data_status))
 
 
-def query_db(hours=24, table='pc_telemetry_can_all'):
-    time_range = timedelta(hours=hours)
+def query_db(minutes=5, table='pc_telemetry_can_all'):
+    time_range = timedelta(minutes=minutes)
     time_cut = (datetime.utcnow() - time_range).strftime('%Y-%m-%d %H:%M:%S')
     query = pd.read_sql_query(
-        f"SELECT * FROM {table} WHERE time_recorded >= '{time_cut}'",
-        conn)
-    return query_db(hours=hours+1, table=table) if query.empty else query
+        f"""SELECT * FROM {table}
+            WHERE time_recorded >= '{time_cut}'""",
+        conn).sort_values('time_recorded')  # ascending order, old to n
+    # return query_db(minutes=minutes+1, table=table) if query.empty else query
+    return query  # just return query even if it is empty and no data in 5 min
 
 
-def process_pc_telemetry_can_all(query):
+def process_pc_telemetry_can_all(query, latest_row_only=True):
     '''adds the result of a sql query to the data source'''
-    for i, series in query.iterrows():
-        device_ids, temps = [], []
-        for device_loc, temp in series['posfid_temps'].items():
-            if 'can' in device_loc:
-                print(f"Skipping DB entry in old telemetry format "
-                      f"submitted by PC-{series['pcid']} "
-                      f"at {series['time_recorded']}")
-                break
-            device_ids.append(pi.find_by_petal_loc_device_loc(
-                series['pcid'], device_loc, key='DEVICE_ID'))
-            temps.append(temp)
-        time = series['time_recorded'].strftime('%Y-%m-%dT%H:%M:%S%z')
-        data.loc[device_ids, 'time_recorded'] = time[:-2] + ':' + time[-2:]
-        data.loc[device_ids, 'temp'] = temps
-        data.loc[device_ids, 'posfid_state'] = series['posfid_state']
-    # update mean temperature of each device_type
+    if query.empty:
+        print('Skipping empty pc_telemetry_can_all entry...')
+        return
+    for petal_loc in petal_locs:
+        query_petal = query[query['pcid'] == petal_loc]
+        if query_petal.empty:
+            continue
+        for i, series in query_petal.iterrows():
+            if latest_row_only and i < len(query_petal)-1:
+                # current row i is not the last/latest row, skip it
+                continue
+            device_ids, temps = [], []
+            # gather all device_id and temp info in this row into 2 lists
+            for device_loc, temp in series['posfid_temps'].items():
+                if 'can' in device_loc:
+                    print(f"Skipping DB entry in old telemetry format "
+                          f"submitted by PC-{series['pcid']} "
+                          f"at {series['time_recorded']}")
+                    break
+                device_id = pi.find_by_petal_loc_device_loc(
+                    series['pcid'], device_loc, key='DEVICE_ID')
+                device_ids.append(device_id)
+                temps.append(temp)
+            print(f'Processed {len(device_ids)} devices for PC0{series.pcid}')
+            time = series['time_recorded'].strftime('%Y-%m-%dT%H:%M:%S%z')
+            data.loc[device_ids, 'time_recorded'] = time[:-2] + ':' + time[-2:]
+            data.loc[device_ids, 'temp'] = temps
+            data.loc[device_ids, 'posfid_state'] = series['posfid_state']
+    # update temperature value for each device_type for FP temp display
     posmask = data['device_type'] == 'POS'
-    for mask in [posmask, ~posmask]:  # color = temp / temp_mean of device type
+    for mask in [posmask, ~posmask]:  # color = temp - temp_mean of device type
         data.loc[mask, 'temp_color'] = (data[mask]['temp']
                                         - data[mask]['temp'].mean(skipna=True))
 
 
 def process_pc_telemetry_status(query):
+    if query.empty:
+        print('Skipping empty pc_telemetry_status entry...')
+        return  # no data for this petal/petalcontroller
     for petal_loc in petal_locs:
         query_petal = query[query['pcid'] == petal_loc]
         if query_petal.empty:
-            continue  # no data for this petal/petalcontroller, skip to next
-        # select the last row, latest entry
-        series = query_petal.sort_values('time_recorded').iloc[-1]
+            print(f'No status telemetry found for PC0{petal_loc}')
+            continue
+        series = query_petal.iloc[-1]  # select the last row, latest entry
         for field in status_colors.keys():
             value = series[field]
+            # cast values to binary int
             if value == 0 or value == 1:
                 pass
             elif value is None or False:
@@ -151,18 +170,20 @@ def process_pc_telemetry_status(query):
             elif np.isnan(value):
                 value = 0
             else:
-                print(f'Bad status value: '
-                      f'{field} = {value}, type {type(value)}')
-                continue
+                print(f'Bad status value: {field} = {value}, '
+                      'type {type(value)}')
+                continue  # skip bad vaue for this field
             data_status.loc[field, f'val_{petal_loc}'] = series[field]
             data_status.loc[field,
                             f'color_{petal_loc}'] = status_colors[field][value]
 
 
-def update_data_and_source(hours=24, update_hist=True):
-    query = query_db(hours=hours, table='pc_telemetry_can_all')
+def update_data_and_sources(minutes=5, update_hist=True):
+    print('Updating telemetry data and plotting sources...')
+    # do one SQL query for all telemetry data in the past x min for efficiency
+    query = query_db(minutes=minutes, table='pc_telemetry_can_all')
     process_pc_telemetry_can_all(query)
-    query = query_db(hours=hours, table='pc_telemetry_status')
+    query = query_db(minutes=minutes, table='pc_telemetry_status')
     process_pc_telemetry_status(query)
     source.data = data  # source is a global variable that applies to all plots
     source_status.data = data_status
@@ -170,10 +191,10 @@ def update_data_and_source(hours=24, update_hist=True):
         source_hist.data = generate_hist_data()
 
 
-def update_plots():  # minute
+def update_plots():
     print(f'[{strtimenow()}] Refreshing plots...')
     print('Updating data source with latest DB entries...')
-    update_data_and_source(hours=0.1)  # update data
+    update_data_and_sources()  # update data using default time span
     print('Updating plot texts...')
     fp_temp.title.text = (  # update text in plots
         f'Focal Plane Temperature (last updated: {strtimenow()}, '
@@ -203,14 +224,18 @@ def generate_hist_data(n_bins=10):
 
 
 def plot_histogram(petal_loc):
-    bottom = 0.1  # log cannot properly handle bottom = 0, set above zero
+    bottom = 0.1  # log cannot properly handle bottom = 0, set it above zero
     p = figure(
         title=f'petal_loc = {petal_loc} Temperature Distribution',
         y_axis_type='log', x_range=(10, 40), y_range=(0.1, 130),
         plot_width=500, plot_height=450)
     for device_type, color in zip(['pos', 'fid'], ['royalblue', 'orangered']):
-        p.quad(top=f'top_{petal_loc}_{device_type}',
-               bottom=bottom,
+        if np.all(source_hist.data[f'top_{petal_loc}_{device_type}'] == 0):
+            # empty telemetry data, hist is all zeros
+            top = 0.1  # use alternative top so bokeh doesn't crash
+        else:
+            top = f'top_{petal_loc}_{device_type}'
+        p.quad(top=top, bottom=bottom,
                left=f'left_{petal_loc}_{device_type}',
                right=f'right_{petal_loc}_{device_type}',
                source=source_hist, legend=device_type,
@@ -235,10 +260,12 @@ pi = PositionerIndex()
 conn = psycopg2.connect(host="desi-db", port="5442", database="desi_dev",
                         user="desi_reader", password="reader")  # DB connection
 # canonical data (dataframe) and source
+print('Initialising data structures...')
 data, source, data_status, source_status = init_data()
-# load past 24 hr and use the latest readout
-update_data_and_source(hours=24, update_hist=False)
+# load past 5 min and use the latest readout
+update_data_and_sources(update_hist=False)
 source_hist = ColumnDataSource(generate_hist_data())  # requires updated data
+print(f'[{strtimenow()}] Initialising plots...')
 # initial plot, focal plane temperature heatmap
 tooltips = ([('cursor obsXY', '($x, $y)')]
             + [(col_name, '@'+col_name) for col_name in data.columns
@@ -263,13 +290,15 @@ colorbar = ColorBar(color_mapper=color_mapper,  # border_line_color=None,
                     title='Deviation from mean of device_type / °C',
                     padding=5, location=(300, 0), height=15, width=250)
 fp_temp.add_layout(colorbar, place='above')  # above
-# make temperature histograms for each petal
+# make initial temperature histograms for each petal
 petal_hists = [plot_histogram(petal_loc) for petal_loc in petal_locs]
 grid = gridplot(petal_hists, ncols=len(petal_locs)//2)
 layout = row([fp_temp, grid])
+# update plots and save output html and setup curdoc callback
 update_plots()
+print(f'[{strtimenow()}] Setting up Bokeh document...')
 output_file('main.html')
-save(layout)
+# save(layout)
 curdoc().add_root(layout)
 curdoc().title = 'Focal Plane Telemetry Monitor Application'
 # add callback to update existing plots
