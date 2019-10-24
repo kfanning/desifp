@@ -190,7 +190,8 @@ def process_pc_telemetry_status(query):
 
 
 def update_data_and_sources(minutes=5, update_hist=True):
-    print('Updating telemetry data and plotting sources...')
+    print(f'Updating plotting sources with new telemetry data '
+          f'in the past {minutes} minutes...')
     # do one SQL query for all telemetry data in the past x min for efficiency
     query = query_db(minutes=minutes, table='pc_telemetry_can_all')
     process_pc_telemetry_can_all(query)
