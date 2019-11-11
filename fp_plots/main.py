@@ -248,9 +248,10 @@ def plot_fp_temp():
     fp_temp.xaxis.axis_label = 'obsX / mm'
     fp_temp.yaxis.axis_label = 'obsY / mm'
     fp_temp.hover.show_arrow = True
-    color_mapper = LinearColorMapper(palette=Magma256,
-                                     low=data['temp_color'].min(skipna=True),
-                                     high=data['temp_color'].max(skipna=True))
+    # low = data['temp_color'].min(skipna=True)
+    # high = data['temp_color'].max(skipna=True)
+    low, high = -4, 10  # colormap isn't auto-updated when new data come in
+    color_mapper = LinearColorMapper(palette=Magma256, low=low, high=high)
     fp_temp.circle(
         x='obs_x', y='obs_y', source=source, radius=5,
         fill_color={'field': 'temp_color', 'transform': color_mapper},
@@ -268,7 +269,7 @@ def plot_histogram(petal_loc):
     bottom = 0.1  # log cannot properly handle bottom = 0, set it above zero
     p = figure(
         title=f'petal_loc = {petal_loc} Temperature Distribution',
-        y_axis_type='log', x_range=(10, 40), y_range=(0.1, 130),
+        y_axis_type='log', x_range=(7, 40), y_range=(0.1, 130),
         plot_width=500, plot_height=450)
     for device_type, color in zip(['pos', 'fid'], ['royalblue', 'orangered']):
         p.quad(top=f'top_{petal_loc}_{device_type}', bottom=bottom,
