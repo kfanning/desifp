@@ -67,7 +67,9 @@ def check_colinear(positions):
         otherpos = np.vstack([positions[:i], positions[i+1:]])  # three others
         matrix = np.vstack([[1, 1, 1], otherpos.T])
         area = np.abs(np.linalg.det(matrix))  # area of triangle
-        if 0 < area < 1:  # this point is # 1
+        if 0 < area < 0.2:
+            # area of 3 linearly independent points is about 1 or 2
+            # if 3 colienar, area close to 0
             return positions[i], otherpos
 
 
