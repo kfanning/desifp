@@ -22,7 +22,8 @@ from bokeh.plotting import figure
 from bokeh.models import (
     ColumnDataSource, LinearColorMapper, ColorBar, AdaptiveTicker, LabelSet)
 
-
+ptlids = {0: '04', 1: '05', 2: '06', 3: '03', 4: '08',
+          5: '10', 6: '11', 7: '02', 8: '07', 9: '09'}
 spectro_sns = {0: 'SM04', 1: 'SM10', 2: 'SM05', 3: 'SM06', 4: 'SM01',
                5: 'SM09', 6: 'SM07', 7: 'SM08', 8: 'SM02', 9: 'SM03'}
 spectro_lns = {0: 'SP0', 1: 'SP1', 2: 'SP2', 3: 'SP3', 4: 'SP4',
@@ -221,7 +222,7 @@ def update_plots():
         f'refresh interval: {refresh_interval} s)')
     for i, petal_hist in enumerate(petal_hists):
         petal_hist.title.text = (
-            f'PC{i:02} (last updated: {pc.timestamp_str()})')
+            f'PC{i:02}, PTL{ptlids[i]} (last updated: {pc.timestamp_str()})')
     logger.info(f'Refreshing in {refresh_interval} s...')
 
 
