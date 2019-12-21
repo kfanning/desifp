@@ -63,6 +63,7 @@ def init_data():
     pi_df = pd.read_csv(path)
     pi_df.columns = pi_df.columns.str.lower()
     pi_df.set_index('device_id', inplace=True)
+    pi_df.insert(0, 'device_id', pi_df.index)
     cols = ['spectro_sn', 'spectro_ln',
             'time_recorded', 'temp', 'posfid_state', 'obs_x', 'obs_y',
             'temp_color', 'line_color']
@@ -325,5 +326,5 @@ output_file('main.html')
 save(layout)
 curdoc().add_root(layout)
 curdoc().title = 'Focal Plane Telemetry Monitor Application'
-# add callback to update existing plots
+# add callback to update existing plots, each webpage creates a callback though
 curdoc().add_periodic_callback(update_plots, 1000*refresh_interval)  # in ms
