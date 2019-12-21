@@ -89,7 +89,7 @@ def init_data():
                             index_col='device_location_id')
     ptlXYZ_df.index.rename('device_loc', inplace=True)
     data_status = pd.DataFrame(
-        data={'x': 22 + 9 * (np.arange(len(status_colors.keys()))//9),
+        data={'x': 21.5 + 9.5 * (np.arange(len(status_colors.keys()))//9),
               'y': np.power(
                       10, 2-0.17*(np.arange(len(status_colors.keys())) % 9))},
         index=status_colors.keys())
