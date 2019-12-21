@@ -61,8 +61,8 @@ def init_data():
     if not os.path.isfile(path):
         raise ValueError(f'$DOS_POSITIONERINDEXTABLE = {path}')
     pi_df = pd.read_csv(path)
+    pi_df.set_index('DEVICE_ID', inplace=True)
     pi_df.columns = pi_df.columns.str.lower()
-    pi_df.set_index('device_id', inplace=True)
     pi_df.insert(0, 'device_id', pi_df.index)
     cols = ['spectro_sn', 'spectro_ln',
             'time_recorded', 'temp', 'posfid_state', 'obs_x', 'obs_y',
