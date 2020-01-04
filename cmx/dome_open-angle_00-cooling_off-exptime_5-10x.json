@@ -1,0 +1,78 @@
+[
+    {
+        "sequence": "FVC",
+        "action": "calibrate",
+        "exptime": 5,
+        "program": "fvc/sm stability: calibrate for 5s"
+    },
+    {
+        "sequence": "FVC",
+        "action": "measure",
+        "exptime": 5,
+        "program": "fvc/sm stability: dome open, angle 00, cooling off, exptime 5, expnum 0",
+        "illuminator": "on"
+    },
+    {
+        "sequence": "FVC",
+        "action": "measure",
+        "exptime": 5,
+        "program": "fvc/sm stability: dome open, angle 00, cooling off, exptime 5, expnum 1",
+        "leave_illuminator": "on"
+    },
+    {
+        "sequence": "FVC",
+        "action": "measure",
+        "exptime": 5,
+        "program": "fvc/sm stability: dome open, angle 00, cooling off, exptime 5, expnum 2",
+        "leave_illuminator": "on"
+    },
+    {
+        "sequence": "FVC",
+        "action": "measure",
+        "exptime": 5,
+        "program": "fvc/sm stability: dome open, angle 00, cooling off, exptime 5, expnum 3",
+        "leave_illuminator": "on"
+    },
+    {
+        "sequence": "FVC",
+        "action": "measure",
+        "exptime": 5,
+        "program": "fvc/sm stability: dome open, angle 00, cooling off, exptime 5, expnum 4",
+        "leave_illuminator": "on"
+    },
+    {
+        "sequence": "FVC",
+        "action": "measure",
+        "exptime": 5,
+        "program": "fvc/sm stability: dome open, angle 00, cooling off, exptime 5, expnum 5",
+        "leave_illuminator": "on"
+    },
+    {
+        "sequence": "FVC",
+        "action": "measure",
+        "exptime": 5,
+        "program": "fvc/sm stability: dome open, angle 00, cooling off, exptime 5, expnum 6",
+        "leave_illuminator": "on"
+    },
+    {
+        "sequence": "FVC",
+        "action": "measure",
+        "exptime": 5,
+        "program": "fvc/sm stability: dome open, angle 00, cooling off, exptime 5, expnum 7",
+        "leave_illuminator": "on"
+    },
+    {
+        "sequence": "FVC",
+        "action": "measure",
+        "exptime": 5,
+        "program": "fvc/sm stability: dome open, angle 00, cooling off, exptime 5, expnum 8",
+        "leave_illuminator": "on"
+    },
+    {
+        "sequence": "FVC",
+        "action": "measure",
+        "exptime": 5,
+        "program": "fvc/sm stability: dome open, angle 00, cooling off, exptime 5, expnum 9",
+        "illuminator": "off"
+    }
+]
