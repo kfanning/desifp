@@ -5,107 +5,162 @@
         "exptime": 0.5,
         "program": "fvc/sm stability: calibrate for exptime 0.5s, bias included",
         "leave_fiducials": "on",
-        "leave_illuminator": "on"
+        "leave_illuminator": "on",
+        "passthru": {
+            "dome": "open",
+            "angle": "50",
+            "cooling": "on"
+        }
     },
     {
         "sequence": "FVC",
         "action": "measure",
         "exptime": 0.5,
         "program": "fvc/sm stability: dome open, angle 50, cooling on (1 of 10)",
-        "fiducial": "on",
+        "fiducials": "on",
         "illuminator": "on",
         "leave_fiducials": "on",
-        "leave_illuminator": "on"
+        "leave_illuminator": "on",
+        "passthru": {
+            "dome": "open",
+            "angle": "50",
+            "cooling": "on"
+        }
     },
     {
         "sequence": "FVC",
         "action": "measure",
         "exptime": 0.5,
         "program": "fvc/sm stability: dome open, angle 50, cooling on (2 of 10)",
-        "fiducial": "on",
+        "fiducials": "on",
         "illuminator": "on",
         "leave_fiducials": "on",
-        "leave_illuminator": "on"
+        "leave_illuminator": "on",
+        "passthru": {
+            "dome": "open",
+            "angle": "50",
+            "cooling": "on"
+        }
     },
     {
         "sequence": "FVC",
         "action": "measure",
         "exptime": 0.5,
         "program": "fvc/sm stability: dome open, angle 50, cooling on (3 of 10)",
-        "fiducial": "on",
+        "fiducials": "on",
         "illuminator": "on",
         "leave_fiducials": "on",
-        "leave_illuminator": "on"
+        "leave_illuminator": "on",
+        "passthru": {
+            "dome": "open",
+            "angle": "50",
+            "cooling": "on"
+        }
     },
     {
         "sequence": "FVC",
         "action": "measure",
         "exptime": 0.5,
         "program": "fvc/sm stability: dome open, angle 50, cooling on (4 of 10)",
-        "fiducial": "on",
+        "fiducials": "on",
         "illuminator": "on",
         "leave_fiducials": "on",
-        "leave_illuminator": "on"
+        "leave_illuminator": "on",
+        "passthru": {
+            "dome": "open",
+            "angle": "50",
+            "cooling": "on"
+        }
     },
     {
         "sequence": "FVC",
         "action": "measure",
         "exptime": 0.5,
         "program": "fvc/sm stability: dome open, angle 50, cooling on (5 of 10)",
-        "fiducial": "on",
+        "fiducials": "on",
         "illuminator": "on",
         "leave_fiducials": "on",
-        "leave_illuminator": "on"
+        "leave_illuminator": "on",
+        "passthru": {
+            "dome": "open",
+            "angle": "50",
+            "cooling": "on"
+        }
     },
     {
         "sequence": "FVC",
         "action": "measure",
         "exptime": 0.5,
         "program": "fvc/sm stability: dome open, angle 50, cooling on (6 of 10)",
-        "fiducial": "on",
+        "fiducials": "on",
         "illuminator": "on",
         "leave_fiducials": "on",
-        "leave_illuminator": "on"
+        "leave_illuminator": "on",
+        "passthru": {
+            "dome": "open",
+            "angle": "50",
+            "cooling": "on"
+        }
     },
     {
         "sequence": "FVC",
         "action": "measure",
         "exptime": 0.5,
         "program": "fvc/sm stability: dome open, angle 50, cooling on (7 of 10)",
-        "fiducial": "on",
+        "fiducials": "on",
         "illuminator": "on",
         "leave_fiducials": "on",
-        "leave_illuminator": "on"
+        "leave_illuminator": "on",
+        "passthru": {
+            "dome": "open",
+            "angle": "50",
+            "cooling": "on"
+        }
     },
     {
         "sequence": "FVC",
         "action": "measure",
         "exptime": 0.5,
         "program": "fvc/sm stability: dome open, angle 50, cooling on (8 of 10)",
-        "fiducial": "on",
+        "fiducials": "on",
         "illuminator": "on",
         "leave_fiducials": "on",
-        "leave_illuminator": "on"
+        "leave_illuminator": "on",
+        "passthru": {
+            "dome": "open",
+            "angle": "50",
+            "cooling": "on"
+        }
     },
     {
         "sequence": "FVC",
         "action": "measure",
         "exptime": 0.5,
         "program": "fvc/sm stability: dome open, angle 50, cooling on (9 of 10)",
-        "fiducial": "on",
+        "fiducials": "on",
         "illuminator": "on",
         "leave_fiducials": "on",
-        "leave_illuminator": "on"
+        "leave_illuminator": "on",
+        "passthru": {
+            "dome": "open",
+            "angle": "50",
+            "cooling": "on"
+        }
     },
     {
         "sequence": "FVC",
         "action": "measure",
         "exptime": 0.5,
         "program": "fvc/sm stability: dome open, angle 50, cooling on (10 of 10)",
-        "fiducial": "on",
+        "fiducials": "on",
         "illuminator": "on",
         "leave_fiducials": "on",
-        "leave_illuminator": "on"
+        "leave_illuminator": "on",
+        "passthru": {
+            "dome": "open",
+            "angle": "50",
+            "cooling": "on"
+        }
     },
     {
         "sequence": "FVC",
@@ -113,107 +168,162 @@
         "exptime": 0.8,
         "program": "fvc/sm stability: calibrate for exptime 0.8s, bias included",
         "leave_fiducials": "on",
-        "leave_illuminator": "on"
+        "leave_illuminator": "on",
+        "passthru": {
+            "dome": "open",
+            "angle": "50",
+            "cooling": "on"
+        }
     },
     {
         "sequence": "FVC",
         "action": "measure",
         "exptime": 0.8,
         "program": "fvc/sm stability: dome open, angle 50, cooling on (1 of 10)",
-        "fiducial": "on",
+        "fiducials": "on",
         "illuminator": "on",
         "leave_fiducials": "on",
-        "leave_illuminator": "on"
+        "leave_illuminator": "on",
+        "passthru": {
+            "dome": "open",
+            "angle": "50",
+            "cooling": "on"
+        }
     },
     {
         "sequence": "FVC",
         "action": "measure",
         "exptime": 0.8,
         "program": "fvc/sm stability: dome open, angle 50, cooling on (2 of 10)",
-        "fiducial": "on",
+        "fiducials": "on",
         "illuminator": "on",
         "leave_fiducials": "on",
-        "leave_illuminator": "on"
+        "leave_illuminator": "on",
+        "passthru": {
+            "dome": "open",
+            "angle": "50",
+            "cooling": "on"
+        }
     },
     {
         "sequence": "FVC",
         "action": "measure",
         "exptime": 0.8,
         "program": "fvc/sm stability: dome open, angle 50, cooling on (3 of 10)",
-        "fiducial": "on",
+        "fiducials": "on",
         "illuminator": "on",
         "leave_fiducials": "on",
-        "leave_illuminator": "on"
+        "leave_illuminator": "on",
+        "passthru": {
+            "dome": "open",
+            "angle": "50",
+            "cooling": "on"
+        }
     },
     {
         "sequence": "FVC",
         "action": "measure",
         "exptime": 0.8,
         "program": "fvc/sm stability: dome open, angle 50, cooling on (4 of 10)",
-        "fiducial": "on",
+        "fiducials": "on",
         "illuminator": "on",
         "leave_fiducials": "on",
-        "leave_illuminator": "on"
+        "leave_illuminator": "on",
+        "passthru": {
+            "dome": "open",
+            "angle": "50",
+            "cooling": "on"
+        }
     },
     {
         "sequence": "FVC",
         "action": "measure",
         "exptime": 0.8,
         "program": "fvc/sm stability: dome open, angle 50, cooling on (5 of 10)",
-        "fiducial": "on",
+        "fiducials": "on",
         "illuminator": "on",
         "leave_fiducials": "on",
-        "leave_illuminator": "on"
+        "leave_illuminator": "on",
+        "passthru": {
+            "dome": "open",
+            "angle": "50",
+            "cooling": "on"
+        }
     },
     {
         "sequence": "FVC",
         "action": "measure",
         "exptime": 0.8,
         "program": "fvc/sm stability: dome open, angle 50, cooling on (6 of 10)",
-        "fiducial": "on",
+        "fiducials": "on",
         "illuminator": "on",
         "leave_fiducials": "on",
-        "leave_illuminator": "on"
+        "leave_illuminator": "on",
+        "passthru": {
+            "dome": "open",
+            "angle": "50",
+            "cooling": "on"
+        }
     },
     {
         "sequence": "FVC",
         "action": "measure",
         "exptime": 0.8,
         "program": "fvc/sm stability: dome open, angle 50, cooling on (7 of 10)",
-        "fiducial": "on",
+        "fiducials": "on",
         "illuminator": "on",
         "leave_fiducials": "on",
-        "leave_illuminator": "on"
+        "leave_illuminator": "on",
+        "passthru": {
+            "dome": "open",
+            "angle": "50",
+            "cooling": "on"
+        }
     },
     {
         "sequence": "FVC",
         "action": "measure",
         "exptime": 0.8,
         "program": "fvc/sm stability: dome open, angle 50, cooling on (8 of 10)",
-        "fiducial": "on",
+        "fiducials": "on",
         "illuminator": "on",
         "leave_fiducials": "on",
-        "leave_illuminator": "on"
+        "leave_illuminator": "on",
+        "passthru": {
+            "dome": "open",
+            "angle": "50",
+            "cooling": "on"
+        }
     },
     {
         "sequence": "FVC",
         "action": "measure",
         "exptime": 0.8,
         "program": "fvc/sm stability: dome open, angle 50, cooling on (9 of 10)",
-        "fiducial": "on",
+        "fiducials": "on",
         "illuminator": "on",
         "leave_fiducials": "on",
-        "leave_illuminator": "on"
+        "leave_illuminator": "on",
+        "passthru": {
+            "dome": "open",
+            "angle": "50",
+            "cooling": "on"
+        }
     },
     {
         "sequence": "FVC",
         "action": "measure",
         "exptime": 0.8,
         "program": "fvc/sm stability: dome open, angle 50, cooling on (10 of 10)",
-        "fiducial": "on",
+        "fiducials": "on",
         "illuminator": "on",
         "leave_fiducials": "on",
-        "leave_illuminator": "on"
+        "leave_illuminator": "on",
+        "passthru": {
+            "dome": "open",
+            "angle": "50",
+            "cooling": "on"
+        }
     },
     {
         "sequence": "FVC",
@@ -221,107 +331,162 @@
         "exptime": 1,
         "program": "fvc/sm stability: calibrate for exptime 1s, bias included",
         "leave_fiducials": "on",
-        "leave_illuminator": "on"
+        "leave_illuminator": "on",
+        "passthru": {
+            "dome": "open",
+            "angle": "50",
+            "cooling": "on"
+        }
     },
     {
         "sequence": "FVC",
         "action": "measure",
         "exptime": 1,
         "program": "fvc/sm stability: dome open, angle 50, cooling on (1 of 10)",
-        "fiducial": "on",
+        "fiducials": "on",
         "illuminator": "on",
         "leave_fiducials": "on",
-        "leave_illuminator": "on"
+        "leave_illuminator": "on",
+        "passthru": {
+            "dome": "open",
+            "angle": "50",
+            "cooling": "on"
+        }
     },
     {
         "sequence": "FVC",
         "action": "measure",
         "exptime": 1,
         "program": "fvc/sm stability: dome open, angle 50, cooling on (2 of 10)",
-        "fiducial": "on",
+        "fiducials": "on",
         "illuminator": "on",
         "leave_fiducials": "on",
-        "leave_illuminator": "on"
+        "leave_illuminator": "on",
+        "passthru": {
+            "dome": "open",
+            "angle": "50",
+            "cooling": "on"
+        }
     },
     {
         "sequence": "FVC",
         "action": "measure",
         "exptime": 1,
         "program": "fvc/sm stability: dome open, angle 50, cooling on (3 of 10)",
-        "fiducial": "on",
+        "fiducials": "on",
         "illuminator": "on",
         "leave_fiducials": "on",
-        "leave_illuminator": "on"
+        "leave_illuminator": "on",
+        "passthru": {
+            "dome": "open",
+            "angle": "50",
+            "cooling": "on"
+        }
     },
     {
         "sequence": "FVC",
         "action": "measure",
         "exptime": 1,
         "program": "fvc/sm stability: dome open, angle 50, cooling on (4 of 10)",
-        "fiducial": "on",
+        "fiducials": "on",
         "illuminator": "on",
         "leave_fiducials": "on",
-        "leave_illuminator": "on"
+        "leave_illuminator": "on",
+        "passthru": {
+            "dome": "open",
+            "angle": "50",
+            "cooling": "on"
+        }
     },
     {
         "sequence": "FVC",
         "action": "measure",
         "exptime": 1,
         "program": "fvc/sm stability: dome open, angle 50, cooling on (5 of 10)",
-        "fiducial": "on",
+        "fiducials": "on",
         "illuminator": "on",
         "leave_fiducials": "on",
-        "leave_illuminator": "on"
+        "leave_illuminator": "on",
+        "passthru": {
+            "dome": "open",
+            "angle": "50",
+            "cooling": "on"
+        }
     },
     {
         "sequence": "FVC",
         "action": "measure",
         "exptime": 1,
         "program": "fvc/sm stability: dome open, angle 50, cooling on (6 of 10)",
-        "fiducial": "on",
+        "fiducials": "on",
         "illuminator": "on",
         "leave_fiducials": "on",
-        "leave_illuminator": "on"
+        "leave_illuminator": "on",
+        "passthru": {
+            "dome": "open",
+            "angle": "50",
+            "cooling": "on"
+        }
     },
     {
         "sequence": "FVC",
         "action": "measure",
         "exptime": 1,
         "program": "fvc/sm stability: dome open, angle 50, cooling on (7 of 10)",
-        "fiducial": "on",
+        "fiducials": "on",
         "illuminator": "on",
         "leave_fiducials": "on",
-        "leave_illuminator": "on"
+        "leave_illuminator": "on",
+        "passthru": {
+            "dome": "open",
+            "angle": "50",
+            "cooling": "on"
+        }
     },
     {
         "sequence": "FVC",
         "action": "measure",
         "exptime": 1,
         "program": "fvc/sm stability: dome open, angle 50, cooling on (8 of 10)",
-        "fiducial": "on",
+        "fiducials": "on",
         "illuminator": "on",
         "leave_fiducials": "on",
-        "leave_illuminator": "on"
+        "leave_illuminator": "on",
+        "passthru": {
+            "dome": "open",
+            "angle": "50",
+            "cooling": "on"
+        }
     },
     {
         "sequence": "FVC",
         "action": "measure",
         "exptime": 1,
         "program": "fvc/sm stability: dome open, angle 50, cooling on (9 of 10)",
-        "fiducial": "on",
+        "fiducials": "on",
         "illuminator": "on",
         "leave_fiducials": "on",
-        "leave_illuminator": "on"
+        "leave_illuminator": "on",
+        "passthru": {
+            "dome": "open",
+            "angle": "50",
+            "cooling": "on"
+        }
     },
     {
         "sequence": "FVC",
         "action": "measure",
         "exptime": 1,
         "program": "fvc/sm stability: dome open, angle 50, cooling on (10 of 10)",
-        "fiducial": "on",
+        "fiducials": "on",
         "illuminator": "on",
         "leave_fiducials": "on",
-        "leave_illuminator": "on"
+        "leave_illuminator": "on",
+        "passthru": {
+            "dome": "open",
+            "angle": "50",
+            "cooling": "on"
+        }
     },
     {
         "sequence": "FVC",
@@ -329,107 +494,162 @@
         "exptime": 1.5,
         "program": "fvc/sm stability: calibrate for exptime 1.5s, bias included",
         "leave_fiducials": "on",
-        "leave_illuminator": "on"
+        "leave_illuminator": "on",
+        "passthru": {
+            "dome": "open",
+            "angle": "50",
+            "cooling": "on"
+        }
     },
     {
         "sequence": "FVC",
         "action": "measure",
         "exptime": 1.5,
         "program": "fvc/sm stability: dome open, angle 50, cooling on (1 of 10)",
-        "fiducial": "on",
+        "fiducials": "on",
         "illuminator": "on",
         "leave_fiducials": "on",
-        "leave_illuminator": "on"
+        "leave_illuminator": "on",
+        "passthru": {
+            "dome": "open",
+            "angle": "50",
+            "cooling": "on"
+        }
     },
     {
         "sequence": "FVC",
         "action": "measure",
         "exptime": 1.5,
         "program": "fvc/sm stability: dome open, angle 50, cooling on (2 of 10)",
-        "fiducial": "on",
+        "fiducials": "on",
         "illuminator": "on",
         "leave_fiducials": "on",
-        "leave_illuminator": "on"
+        "leave_illuminator": "on",
+        "passthru": {
+            "dome": "open",
+            "angle": "50",
+            "cooling": "on"
+        }
     },
     {
         "sequence": "FVC",
         "action": "measure",
         "exptime": 1.5,
         "program": "fvc/sm stability: dome open, angle 50, cooling on (3 of 10)",
-        "fiducial": "on",
+        "fiducials": "on",
         "illuminator": "on",
         "leave_fiducials": "on",
-        "leave_illuminator": "on"
+        "leave_illuminator": "on",
+        "passthru": {
+            "dome": "open",
+            "angle": "50",
+            "cooling": "on"
+        }
     },
     {
         "sequence": "FVC",
         "action": "measure",
         "exptime": 1.5,
         "program": "fvc/sm stability: dome open, angle 50, cooling on (4 of 10)",
-        "fiducial": "on",
+        "fiducials": "on",
         "illuminator": "on",
         "leave_fiducials": "on",
-        "leave_illuminator": "on"
+        "leave_illuminator": "on",
+        "passthru": {
+            "dome": "open",
+            "angle": "50",
+            "cooling": "on"
+        }
     },
     {
         "sequence": "FVC",
         "action": "measure",
         "exptime": 1.5,
         "program": "fvc/sm stability: dome open, angle 50, cooling on (5 of 10)",
-        "fiducial": "on",
+        "fiducials": "on",
         "illuminator": "on",
         "leave_fiducials": "on",
-        "leave_illuminator": "on"
+        "leave_illuminator": "on",
+        "passthru": {
+            "dome": "open",
+            "angle": "50",
+            "cooling": "on"
+        }
     },
     {
         "sequence": "FVC",
         "action": "measure",
         "exptime": 1.5,
         "program": "fvc/sm stability: dome open, angle 50, cooling on (6 of 10)",
-        "fiducial": "on",
+        "fiducials": "on",
         "illuminator": "on",
         "leave_fiducials": "on",
-        "leave_illuminator": "on"
+        "leave_illuminator": "on",
+        "passthru": {
+            "dome": "open",
+            "angle": "50",
+            "cooling": "on"
+        }
     },
     {
         "sequence": "FVC",
         "action": "measure",
         "exptime": 1.5,
         "program": "fvc/sm stability: dome open, angle 50, cooling on (7 of 10)",
-        "fiducial": "on",
+        "fiducials": "on",
         "illuminator": "on",
         "leave_fiducials": "on",
-        "leave_illuminator": "on"
+        "leave_illuminator": "on",
+        "passthru": {
+            "dome": "open",
+            "angle": "50",
+            "cooling": "on"
+        }
     },
     {
         "sequence": "FVC",
         "action": "measure",
         "exptime": 1.5,
         "program": "fvc/sm stability: dome open, angle 50, cooling on (8 of 10)",
-        "fiducial": "on",
+        "fiducials": "on",
         "illuminator": "on",
         "leave_fiducials": "on",
-        "leave_illuminator": "on"
+        "leave_illuminator": "on",
+        "passthru": {
+            "dome": "open",
+            "angle": "50",
+            "cooling": "on"
+        }
     },
     {
         "sequence": "FVC",
         "action": "measure",
         "exptime": 1.5,
         "program": "fvc/sm stability: dome open, angle 50, cooling on (9 of 10)",
-        "fiducial": "on",
+        "fiducials": "on",
         "illuminator": "on",
         "leave_fiducials": "on",
-        "leave_illuminator": "on"
+        "leave_illuminator": "on",
+        "passthru": {
+            "dome": "open",
+            "angle": "50",
+            "cooling": "on"
+        }
     },
     {
         "sequence": "FVC",
         "action": "measure",
         "exptime": 1.5,
         "program": "fvc/sm stability: dome open, angle 50, cooling on (10 of 10)",
-        "fiducial": "on",
+        "fiducials": "on",
         "illuminator": "on",
         "leave_fiducials": "on",
-        "leave_illuminator": "on"
+        "leave_illuminator": "on",
+        "passthru": {
+            "dome": "open",
+            "angle": "50",
+            "cooling": "on"
+        }
     },
     {
         "sequence": "FVC",
@@ -437,107 +657,162 @@
         "exptime": 2,
         "program": "fvc/sm stability: calibrate for exptime 2s, bias included",
         "leave_fiducials": "on",
-        "leave_illuminator": "on"
+        "leave_illuminator": "on",
+        "passthru": {
+            "dome": "open",
+            "angle": "50",
+            "cooling": "on"
+        }
     },
     {
         "sequence": "FVC",
         "action": "measure",
         "exptime": 2,
         "program": "fvc/sm stability: dome open, angle 50, cooling on (1 of 10)",
-        "fiducial": "on",
+        "fiducials": "on",
         "illuminator": "on",
         "leave_fiducials": "on",
-        "leave_illuminator": "on"
+        "leave_illuminator": "on",
+        "passthru": {
+            "dome": "open",
+            "angle": "50",
+            "cooling": "on"
+        }
     },
     {
         "sequence": "FVC",
         "action": "measure",
         "exptime": 2,
         "program": "fvc/sm stability: dome open, angle 50, cooling on (2 of 10)",
-        "fiducial": "on",
+        "fiducials": "on",
         "illuminator": "on",
         "leave_fiducials": "on",
-        "leave_illuminator": "on"
+        "leave_illuminator": "on",
+        "passthru": {
+            "dome": "open",
+            "angle": "50",
+            "cooling": "on"
+        }
     },
     {
         "sequence": "FVC",
         "action": "measure",
         "exptime": 2,
         "program": "fvc/sm stability: dome open, angle 50, cooling on (3 of 10)",
-        "fiducial": "on",
+        "fiducials": "on",
         "illuminator": "on",
         "leave_fiducials": "on",
-        "leave_illuminator": "on"
+        "leave_illuminator": "on",
+        "passthru": {
+            "dome": "open",
+            "angle": "50",
+            "cooling": "on"
+        }
     },
     {
         "sequence": "FVC",
         "action": "measure",
         "exptime": 2,
         "program": "fvc/sm stability: dome open, angle 50, cooling on (4 of 10)",
-        "fiducial": "on",
+        "fiducials": "on",
         "illuminator": "on",
         "leave_fiducials": "on",
-        "leave_illuminator": "on"
+        "leave_illuminator": "on",
+        "passthru": {
+            "dome": "open",
+            "angle": "50",
+            "cooling": "on"
+        }
     },
     {
         "sequence": "FVC",
         "action": "measure",
         "exptime": 2,
         "program": "fvc/sm stability: dome open, angle 50, cooling on (5 of 10)",
-        "fiducial": "on",
+        "fiducials": "on",
         "illuminator": "on",
         "leave_fiducials": "on",
-        "leave_illuminator": "on"
+        "leave_illuminator": "on",
+        "passthru": {
+            "dome": "open",
+            "angle": "50",
+            "cooling": "on"
+        }
     },
     {
         "sequence": "FVC",
         "action": "measure",
         "exptime": 2,
         "program": "fvc/sm stability: dome open, angle 50, cooling on (6 of 10)",
-        "fiducial": "on",
+        "fiducials": "on",
         "illuminator": "on",
         "leave_fiducials": "on",
-        "leave_illuminator": "on"
+        "leave_illuminator": "on",
+        "passthru": {
+            "dome": "open",
+            "angle": "50",
+            "cooling": "on"
+        }
     },
     {
         "sequence": "FVC",
         "action": "measure",
         "exptime": 2,
         "program": "fvc/sm stability: dome open, angle 50, cooling on (7 of 10)",
-        "fiducial": "on",
+        "fiducials": "on",
         "illuminator": "on",
         "leave_fiducials": "on",
-        "leave_illuminator": "on"
+        "leave_illuminator": "on",
+        "passthru": {
+            "dome": "open",
+            "angle": "50",
+            "cooling": "on"
+        }
     },
     {
         "sequence": "FVC",
         "action": "measure",
         "exptime": 2,
         "program": "fvc/sm stability: dome open, angle 50, cooling on (8 of 10)",
-        "fiducial": "on",
+        "fiducials": "on",
         "illuminator": "on",
         "leave_fiducials": "on",
-        "leave_illuminator": "on"
+        "leave_illuminator": "on",
+        "passthru": {
+            "dome": "open",
+            "angle": "50",
+            "cooling": "on"
+        }
     },
     {
         "sequence": "FVC",
         "action": "measure",
         "exptime": 2,
         "program": "fvc/sm stability: dome open, angle 50, cooling on (9 of 10)",
-        "fiducial": "on",
+        "fiducials": "on",
         "illuminator": "on",
         "leave_fiducials": "on",
-        "leave_illuminator": "on"
+        "leave_illuminator": "on",
+        "passthru": {
+            "dome": "open",
+            "angle": "50",
+            "cooling": "on"
+        }
     },
     {
         "sequence": "FVC",
         "action": "measure",
         "exptime": 2,
         "program": "fvc/sm stability: dome open, angle 50, cooling on (10 of 10)",
-        "fiducial": "on",
+        "fiducials": "on",
         "illuminator": "on",
         "leave_fiducials": "on",
-        "leave_illuminator": "on"
+        "leave_illuminator": "on",
+        "passthru": {
+            "dome": "open",
+            "angle": "50",
+            "cooling": "on"
+        }
     },
     {
         "sequence": "FVC",
@@ -545,107 +820,162 @@
         "exptime": 2.5,
         "program": "fvc/sm stability: calibrate for exptime 2.5s, bias included",
         "leave_fiducials": "on",
-        "leave_illuminator": "on"
+        "leave_illuminator": "on",
+        "passthru": {
+            "dome": "open",
+            "angle": "50",
+            "cooling": "on"
+        }
     },
     {
         "sequence": "FVC",
         "action": "measure",
         "exptime": 2.5,
         "program": "fvc/sm stability: dome open, angle 50, cooling on (1 of 10)",
-        "fiducial": "on",
+        "fiducials": "on",
         "illuminator": "on",
         "leave_fiducials": "on",
-        "leave_illuminator": "on"
+        "leave_illuminator": "on",
+        "passthru": {
+            "dome": "open",
+            "angle": "50",
+            "cooling": "on"
+        }
     },
     {
         "sequence": "FVC",
         "action": "measure",
         "exptime": 2.5,
         "program": "fvc/sm stability: dome open, angle 50, cooling on (2 of 10)",
-        "fiducial": "on",
+        "fiducials": "on",
         "illuminator": "on",
         "leave_fiducials": "on",
-        "leave_illuminator": "on"
+        "leave_illuminator": "on",
+        "passthru": {
+            "dome": "open",
+            "angle": "50",
+            "cooling": "on"
+        }
     },
     {
         "sequence": "FVC",
         "action": "measure",
         "exptime": 2.5,
         "program": "fvc/sm stability: dome open, angle 50, cooling on (3 of 10)",
-        "fiducial": "on",
+        "fiducials": "on",
         "illuminator": "on",
         "leave_fiducials": "on",
-        "leave_illuminator": "on"
+        "leave_illuminator": "on",
+        "passthru": {
+            "dome": "open",
+            "angle": "50",
+            "cooling": "on"
+        }
     },
     {
         "sequence": "FVC",
         "action": "measure",
         "exptime": 2.5,
         "program": "fvc/sm stability: dome open, angle 50, cooling on (4 of 10)",
-        "fiducial": "on",
+        "fiducials": "on",
         "illuminator": "on",
         "leave_fiducials": "on",
-        "leave_illuminator": "on"
+        "leave_illuminator": "on",
+        "passthru": {
+            "dome": "open",
+            "angle": "50",
+            "cooling": "on"
+        }
     },
     {
         "sequence": "FVC",
         "action": "measure",
         "exptime": 2.5,
         "program": "fvc/sm stability: dome open, angle 50, cooling on (5 of 10)",
-        "fiducial": "on",
+        "fiducials": "on",
         "illuminator": "on",
         "leave_fiducials": "on",
-        "leave_illuminator": "on"
+        "leave_illuminator": "on",
+        "passthru": {
+            "dome": "open",
+            "angle": "50",
+            "cooling": "on"
+        }
     },
     {
         "sequence": "FVC",
         "action": "measure",
         "exptime": 2.5,
         "program": "fvc/sm stability: dome open, angle 50, cooling on (6 of 10)",
-        "fiducial": "on",
+        "fiducials": "on",
         "illuminator": "on",
         "leave_fiducials": "on",
-        "leave_illuminator": "on"
+        "leave_illuminator": "on",
+        "passthru": {
+            "dome": "open",
+            "angle": "50",
+            "cooling": "on"
+        }
     },
     {
         "sequence": "FVC",
         "action": "measure",
         "exptime": 2.5,
         "program": "fvc/sm stability: dome open, angle 50, cooling on (7 of 10)",
-        "fiducial": "on",
+        "fiducials": "on",
         "illuminator": "on",
         "leave_fiducials": "on",
-        "leave_illuminator": "on"
+        "leave_illuminator": "on",
+        "passthru": {
+            "dome": "open",
+            "angle": "50",
+            "cooling": "on"
+        }
     },
     {
         "sequence": "FVC",
         "action": "measure",
         "exptime": 2.5,
         "program": "fvc/sm stability: dome open, angle 50, cooling on (8 of 10)",
-        "fiducial": "on",
+        "fiducials": "on",
         "illuminator": "on",
         "leave_fiducials": "on",
-        "leave_illuminator": "on"
+        "leave_illuminator": "on",
+        "passthru": {
+            "dome": "open",
+            "angle": "50",
+            "cooling": "on"
+        }
     },
     {
         "sequence": "FVC",
         "action": "measure",
         "exptime": 2.5,
         "program": "fvc/sm stability: dome open, angle 50, cooling on (9 of 10)",
-        "fiducial": "on",
+        "fiducials": "on",
         "illuminator": "on",
         "leave_fiducials": "on",
-        "leave_illuminator": "on"
+        "leave_illuminator": "on",
+        "passthru": {
+            "dome": "open",
+            "angle": "50",
+            "cooling": "on"
+        }
     },
     {
         "sequence": "FVC",
         "action": "measure",
         "exptime": 2.5,
         "program": "fvc/sm stability: dome open, angle 50, cooling on (10 of 10)",
-        "fiducial": "on",
+        "fiducials": "on",
         "illuminator": "on",
         "leave_fiducials": "on",
-        "leave_illuminator": "on"
+        "leave_illuminator": "on",
+        "passthru": {
+            "dome": "open",
+            "angle": "50",
+            "cooling": "on"
+        }
     },
     {
         "sequence": "FVC",
@@ -653,538 +983,161 @@
         "exptime": 3,
         "program": "fvc/sm stability: calibrate for exptime 3s, bias included",
         "leave_fiducials": "on",
-        "leave_illuminator": "on"
+        "leave_illuminator": "on",
+        "passthru": {
+            "dome": "open",
+            "angle": "50",
+            "cooling": "on"
+        }
     },
     {
         "sequence": "FVC",
         "action": "measure",
         "exptime": 3,
         "program": "fvc/sm stability: dome open, angle 50, cooling on (1 of 10)",
-        "fiducial": "on",
+        "fiducials": "on",
         "illuminator": "on",
         "leave_fiducials": "on",
-        "leave_illuminator": "on"
+        "leave_illuminator": "on",
+        "passthru": {
+            "dome": "open",
+            "angle": "50",
+            "cooling": "on"
+        }
     },
     {
         "sequence": "FVC",
         "action": "measure",
         "exptime": 3,
         "program": "fvc/sm stability: dome open, angle 50, cooling on (2 of 10)",
-        "fiducial": "on",
+        "fiducials": "on",
         "illuminator": "on",
         "leave_fiducials": "on",
-        "leave_illuminator": "on"
+        "leave_illuminator": "on",
+        "passthru": {
+            "dome": "open",
+            "angle": "50",
+            "cooling": "on"
+        }
     },
     {
         "sequence": "FVC",
         "action": "measure",
         "exptime": 3,
         "program": "fvc/sm stability: dome open, angle 50, cooling on (3 of 10)",
-        "fiducial": "on",
+        "fiducials": "on",
         "illuminator": "on",
         "leave_fiducials": "on",
-        "leave_illuminator": "on"
+        "leave_illuminator": "on",
+        "passthru": {
+            "dome": "open",
+            "angle": "50",
+            "cooling": "on"
+        }
     },
     {
         "sequence": "FVC",
         "action": "measure",
         "exptime": 3,
         "program": "fvc/sm stability: dome open, angle 50, cooling on (4 of 10)",
-        "fiducial": "on",
+        "fiducials": "on",
         "illuminator": "on",
         "leave_fiducials": "on",
-        "leave_illuminator": "on"
+        "leave_illuminator": "on",
+        "passthru": {
+            "dome": "open",
+            "angle": "50",
+            "cooling": "on"
+        }
     },
     {
         "sequence": "FVC",
         "action": "measure",
         "exptime": 3,
         "program": "fvc/sm stability: dome open, angle 50, cooling on (5 of 10)",
-        "fiducial": "on",
+        "fiducials": "on",
         "illuminator": "on",
         "leave_fiducials": "on",
-        "leave_illuminator": "on"
+        "leave_illuminator": "on",
+        "passthru": {
+            "dome": "open",
+            "angle": "50",
+            "cooling": "on"
+        }
     },
     {
         "sequence": "FVC",
         "action": "measure",
         "exptime": 3,
         "program": "fvc/sm stability: dome open, angle 50, cooling on (6 of 10)",
-        "fiducial": "on",
+        "fiducials": "on",
         "illuminator": "on",
         "leave_fiducials": "on",
-        "leave_illuminator": "on"
+        "leave_illuminator": "on",
+        "passthru": {
+            "dome": "open",
+            "angle": "50",
+            "cooling": "on"
+        }
     },
     {
         "sequence": "FVC",
         "action": "measure",
         "exptime": 3,
         "program": "fvc/sm stability: dome open, angle 50, cooling on (7 of 10)",
-        "fiducial": "on",
+        "fiducials": "on",
         "illuminator": "on",
         "leave_fiducials": "on",
-        "leave_illuminator": "on"
+        "leave_illuminator": "on",
+        "passthru": {
+            "dome": "open",
+            "angle": "50",
+            "cooling": "on"
+        }
     },
     {
         "sequence": "FVC",
         "action": "measure",
         "exptime": 3,
         "program": "fvc/sm stability: dome open, angle 50, cooling on (8 of 10)",
-        "fiducial": "on",
+        "fiducials": "on",
         "illuminator": "on",
         "leave_fiducials": "on",
-        "leave_illuminator": "on"
+        "leave_illuminator": "on",
+        "passthru": {
+            "dome": "open",
+            "angle": "50",
+            "cooling": "on"
+        }
     },
     {
         "sequence": "FVC",
         "action": "measure",
         "exptime": 3,
         "program": "fvc/sm stability: dome open, angle 50, cooling on (9 of 10)",
-        "fiducial": "on",
+        "fiducials": "on",
         "illuminator": "on",
         "leave_fiducials": "on",
-        "leave_illuminator": "on"
+        "leave_illuminator": "on",
+        "passthru": {
+            "dome": "open",
+            "angle": "50",
+            "cooling": "on"
+        }
     },
     {
         "sequence": "FVC",
         "action": "measure",
         "exptime": 3,
         "program": "fvc/sm stability: dome open, angle 50, cooling on (10 of 10)",
-        "fiducial": "on",
+        "fiducials": "on",
         "illuminator": "on",
         "leave_fiducials": "on",
-        "leave_illuminator": "on"
-    },
-    {
-        "sequence": "FVC",
-        "action": "calibrate",
-        "exptime": 3.5,
-        "program": "fvc/sm stability: calibrate for exptime 3.5s, bias included",
-        "leave_fiducials": "on",
-        "leave_illuminator": "on"
-    },
-    {
-        "sequence": "FVC",
-        "action": "measure",
-        "exptime": 3.5,
-        "program": "fvc/sm stability: dome open, angle 50, cooling on (1 of 10)",
-        "fiducial": "on",
-        "illuminator": "on",
-        "leave_fiducials": "on",
-        "leave_illuminator": "on"
-    },
-    {
-        "sequence": "FVC",
-        "action": "measure",
-        "exptime": 3.5,
-        "program": "fvc/sm stability: dome open, angle 50, cooling on (2 of 10)",
-        "fiducial": "on",
-        "illuminator": "on",
-        "leave_fiducials": "on",
-        "leave_illuminator": "on"
-    },
-    {
-        "sequence": "FVC",
-        "action": "measure",
-        "exptime": 3.5,
-        "program": "fvc/sm stability: dome open, angle 50, cooling on (3 of 10)",
-        "fiducial": "on",
-        "illuminator": "on",
-        "leave_fiducials": "on",
-        "leave_illuminator": "on"
-    },
-    {
-        "sequence": "FVC",
-        "action": "measure",
-        "exptime": 3.5,
-        "program": "fvc/sm stability: dome open, angle 50, cooling on (4 of 10)",
-        "fiducial": "on",
-        "illuminator": "on",
-        "leave_fiducials": "on",
-        "leave_illuminator": "on"
-    },
-    {
-        "sequence": "FVC",
-        "action": "measure",
-        "exptime": 3.5,
-        "program": "fvc/sm stability: dome open, angle 50, cooling on (5 of 10)",
-        "fiducial": "on",
-        "illuminator": "on",
-        "leave_fiducials": "on",
-        "leave_illuminator": "on"
-    },
-    {
-        "sequence": "FVC",
-        "action": "measure",
-        "exptime": 3.5,
-        "program": "fvc/sm stability: dome open, angle 50, cooling on (6 of 10)",
-        "fiducial": "on",
-        "illuminator": "on",
-        "leave_fiducials": "on",
-        "leave_illuminator": "on"
-    },
-    {
-        "sequence": "FVC",
-        "action": "measure",
-        "exptime": 3.5,
-        "program": "fvc/sm stability: dome open, angle 50, cooling on (7 of 10)",
-        "fiducial": "on",
-        "illuminator": "on",
-        "leave_fiducials": "on",
-        "leave_illuminator": "on"
-    },
-    {
-        "sequence": "FVC",
-        "action": "measure",
-        "exptime": 3.5,
-        "program": "fvc/sm stability: dome open, angle 50, cooling on (8 of 10)",
-        "fiducial": "on",
-        "illuminator": "on",
-        "leave_fiducials": "on",
-        "leave_illuminator": "on"
-    },
-    {
-        "sequence": "FVC",
-        "action": "measure",
-        "exptime": 3.5,
-        "program": "fvc/sm stability: dome open, angle 50, cooling on (9 of 10)",
-        "fiducial": "on",
-        "illuminator": "on",
-        "leave_fiducials": "on",
-        "leave_illuminator": "on"
-    },
-    {
-        "sequence": "FVC",
-        "action": "measure",
-        "exptime": 3.5,
-        "program": "fvc/sm stability: dome open, angle 50, cooling on (10 of 10)",
-        "fiducial": "on",
-        "illuminator": "on",
-        "leave_fiducials": "on",
-        "leave_illuminator": "on"
-    },
-    {
-        "sequence": "FVC",
-        "action": "calibrate",
-        "exptime": 4,
-        "program": "fvc/sm stability: calibrate for exptime 4s, bias included",
-        "leave_fiducials": "on",
-        "leave_illuminator": "on"
-    },
-    {
-        "sequence": "FVC",
-        "action": "measure",
-        "exptime": 4,
-        "program": "fvc/sm stability: dome open, angle 50, cooling on (1 of 10)",
-        "fiducial": "on",
-        "illuminator": "on",
-        "leave_fiducials": "on",
-        "leave_illuminator": "on"
-    },
-    {
-        "sequence": "FVC",
-        "action": "measure",
-        "exptime": 4,
-        "program": "fvc/sm stability: dome open, angle 50, cooling on (2 of 10)",
-        "fiducial": "on",
-        "illuminator": "on",
-        "leave_fiducials": "on",
-        "leave_illuminator": "on"
-    },
-    {
-        "sequence": "FVC",
-        "action": "measure",
-        "exptime": 4,
-        "program": "fvc/sm stability: dome open, angle 50, cooling on (3 of 10)",
-        "fiducial": "on",
-        "illuminator": "on",
-        "leave_fiducials": "on",
-        "leave_illuminator": "on"
-    },
-    {
-        "sequence": "FVC",
-        "action": "measure",
-        "exptime": 4,
-        "program": "fvc/sm stability: dome open, angle 50, cooling on (4 of 10)",
-        "fiducial": "on",
-        "illuminator": "on",
-        "leave_fiducials": "on",
-        "leave_illuminator": "on"
-    },
-    {
-        "sequence": "FVC",
-        "action": "measure",
-        "exptime": 4,
-        "program": "fvc/sm stability: dome open, angle 50, cooling on (5 of 10)",
-        "fiducial": "on",
-        "illuminator": "on",
-        "leave_fiducials": "on",
-        "leave_illuminator": "on"
-    },
-    {
-        "sequence": "FVC",
-        "action": "measure",
-        "exptime": 4,
-        "program": "fvc/sm stability: dome open, angle 50, cooling on (6 of 10)",
-        "fiducial": "on",
-        "illuminator": "on",
-        "leave_fiducials": "on",
-        "leave_illuminator": "on"
-    },
-    {
-        "sequence": "FVC",
-        "action": "measure",
-        "exptime": 4,
-        "program": "fvc/sm stability: dome open, angle 50, cooling on (7 of 10)",
-        "fiducial": "on",
-        "illuminator": "on",
-        "leave_fiducials": "on",
-        "leave_illuminator": "on"
-    },
-    {
-        "sequence": "FVC",
-        "action": "measure",
-        "exptime": 4,
-        "program": "fvc/sm stability: dome open, angle 50, cooling on (8 of 10)",
-        "fiducial": "on",
-        "illuminator": "on",
-        "leave_fiducials": "on",
-        "leave_illuminator": "on"
-    },
-    {
-        "sequence": "FVC",
-        "action": "measure",
-        "exptime": 4,
-        "program": "fvc/sm stability: dome open, angle 50, cooling on (9 of 10)",
-        "fiducial": "on",
-        "illuminator": "on",
-        "leave_fiducials": "on",
-        "leave_illuminator": "on"
-    },
-    {
-        "sequence": "FVC",
-        "action": "measure",
-        "exptime": 4,
-        "program": "fvc/sm stability: dome open, angle 50, cooling on (10 of 10)",
-        "fiducial": "on",
-        "illuminator": "on",
-        "leave_fiducials": "on",
-        "leave_illuminator": "on"
-    },
-    {
-        "sequence": "FVC",
-        "action": "calibrate",
-        "exptime": 4.5,
-        "program": "fvc/sm stability: calibrate for exptime 4.5s, bias included",
-        "leave_fiducials": "on",
-        "leave_illuminator": "on"
-    },
-    {
-        "sequence": "FVC",
-        "action": "measure",
-        "exptime": 4.5,
-        "program": "fvc/sm stability: dome open, angle 50, cooling on (1 of 10)",
-        "fiducial": "on",
-        "illuminator": "on",
-        "leave_fiducials": "on",
-        "leave_illuminator": "on"
-    },
-    {
-        "sequence": "FVC",
-        "action": "measure",
-        "exptime": 4.5,
-        "program": "fvc/sm stability: dome open, angle 50, cooling on (2 of 10)",
-        "fiducial": "on",
-        "illuminator": "on",
-        "leave_fiducials": "on",
-        "leave_illuminator": "on"
-    },
-    {
-        "sequence": "FVC",
-        "action": "measure",
-        "exptime": 4.5,
-        "program": "fvc/sm stability: dome open, angle 50, cooling on (3 of 10)",
-        "fiducial": "on",
-        "illuminator": "on",
-        "leave_fiducials": "on",
-        "leave_illuminator": "on"
-    },
-    {
-        "sequence": "FVC",
-        "action": "measure",
-        "exptime": 4.5,
-        "program": "fvc/sm stability: dome open, angle 50, cooling on (4 of 10)",
-        "fiducial": "on",
-        "illuminator": "on",
-        "leave_fiducials": "on",
-        "leave_illuminator": "on"
-    },
-    {
-        "sequence": "FVC",
-        "action": "measure",
-        "exptime": 4.5,
-        "program": "fvc/sm stability: dome open, angle 50, cooling on (5 of 10)",
-        "fiducial": "on",
-        "illuminator": "on",
-        "leave_fiducials": "on",
-        "leave_illuminator": "on"
-    },
-    {
-        "sequence": "FVC",
-        "action": "measure",
-        "exptime": 4.5,
-        "program": "fvc/sm stability: dome open, angle 50, cooling on (6 of 10)",
-        "fiducial": "on",
-        "illuminator": "on",
-        "leave_fiducials": "on",
-        "leave_illuminator": "on"
-    },
-    {
-        "sequence": "FVC",
-        "action": "measure",
-        "exptime": 4.5,
-        "program": "fvc/sm stability: dome open, angle 50, cooling on (7 of 10)",
-        "fiducial": "on",
-        "illuminator": "on",
-        "leave_fiducials": "on",
-        "leave_illuminator": "on"
-    },
-    {
-        "sequence": "FVC",
-        "action": "measure",
-        "exptime": 4.5,
-        "program": "fvc/sm stability: dome open, angle 50, cooling on (8 of 10)",
-        "fiducial": "on",
-        "illuminator": "on",
-        "leave_fiducials": "on",
-        "leave_illuminator": "on"
-    },
-    {
-        "sequence": "FVC",
-        "action": "measure",
-        "exptime": 4.5,
-        "program": "fvc/sm stability: dome open, angle 50, cooling on (9 of 10)",
-        "fiducial": "on",
-        "illuminator": "on",
-        "leave_fiducials": "on",
-        "leave_illuminator": "on"
-    },
-    {
-        "sequence": "FVC",
-        "action": "measure",
-        "exptime": 4.5,
-        "program": "fvc/sm stability: dome open, angle 50, cooling on (10 of 10)",
-        "fiducial": "on",
-        "illuminator": "on",
-        "leave_fiducials": "on",
-        "leave_illuminator": "on"
-    },
-    {
-        "sequence": "FVC",
-        "action": "calibrate",
-        "exptime": 5,
-        "program": "fvc/sm stability: calibrate for exptime 5s, bias included",
-        "leave_fiducials": "on",
-        "leave_illuminator": "on"
-    },
-    {
-        "sequence": "FVC",
-        "action": "measure",
-        "exptime": 5,
-        "program": "fvc/sm stability: dome open, angle 50, cooling on (1 of 10)",
-        "fiducial": "on",
-        "illuminator": "on",
-        "leave_fiducials": "on",
-        "leave_illuminator": "on"
-    },
-    {
-        "sequence": "FVC",
-        "action": "measure",
-        "exptime": 5,
-        "program": "fvc/sm stability: dome open, angle 50, cooling on (2 of 10)",
-        "fiducial": "on",
-        "illuminator": "on",
-        "leave_fiducials": "on",
-        "leave_illuminator": "on"
-    },
-    {
-        "sequence": "FVC",
-        "action": "measure",
-        "exptime": 5,
-        "program": "fvc/sm stability: dome open, angle 50, cooling on (3 of 10)",
-        "fiducial": "on",
-        "illuminator": "on",
-        "leave_fiducials": "on",
-        "leave_illuminator": "on"
-    },
-    {
-        "sequence": "FVC",
-        "action": "measure",
-        "exptime": 5,
-        "program": "fvc/sm stability: dome open, angle 50, cooling on (4 of 10)",
-        "fiducial": "on",
-        "illuminator": "on",
-        "leave_fiducials": "on",
-        "leave_illuminator": "on"
-    },
-    {
-        "sequence": "FVC",
-        "action": "measure",
-        "exptime": 5,
-        "program": "fvc/sm stability: dome open, angle 50, cooling on (5 of 10)",
-        "fiducial": "on",
-        "illuminator": "on",
-        "leave_fiducials": "on",
-        "leave_illuminator": "on"
-    },
-    {
-        "sequence": "FVC",
-        "action": "measure",
-        "exptime": 5,
-        "program": "fvc/sm stability: dome open, angle 50, cooling on (6 of 10)",
-        "fiducial": "on",
-        "illuminator": "on",
-        "leave_fiducials": "on",
-        "leave_illuminator": "on"
-    },
-    {
-        "sequence": "FVC",
-        "action": "measure",
-        "exptime": 5,
-        "program": "fvc/sm stability: dome open, angle 50, cooling on (7 of 10)",
-        "fiducial": "on",
-        "illuminator": "on",
-        "leave_fiducials": "on",
-        "leave_illuminator": "on"
-    },
-    {
-        "sequence": "FVC",
-        "action": "measure",
-        "exptime": 5,
-        "program": "fvc/sm stability: dome open, angle 50, cooling on (8 of 10)",
-        "fiducial": "on",
-        "illuminator": "on",
-        "leave_fiducials": "on",
-        "leave_illuminator": "on"
-    },
-    {
-        "sequence": "FVC",
-        "action": "measure",
-        "exptime": 5,
-        "program": "fvc/sm stability: dome open, angle 50, cooling on (9 of 10)",
-        "fiducial": "on",
-        "illuminator": "on",
-        "leave_fiducials": "on",
-        "leave_illuminator": "on"
-    },
-    {
-        "sequence": "FVC",
-        "action": "measure",
-        "exptime": 5,
-        "program": "fvc/sm stability: dome open, angle 50, cooling on (10 of 10)",
-        "fiducial": "on",
-        "illuminator": "on",
-        "leave_fiducials": "on",
-        "leave_illuminator": "on"
+        "leave_illuminator": "on",
+        "passthru": {
+            "dome": "open",
+            "angle": "50",
+            "cooling": "on"
+        }
     }
 ]
