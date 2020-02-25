@@ -38,7 +38,7 @@ def plot_fp_temp(data, source):
         hover_line_color='black')
     colorbar = ColorBar(color_mapper=color_mapper,  # border_line_color=None,
                         ticker=AdaptiveTicker(), orientation='horizontal',
-                        title='Absolute device temperature/ °C',
+                        title='absolute device temperature / °C',
                         padding=5, location=(300, 0), height=15, width=250)
     fp_temp.add_layout(colorbar, place='above')  # above
     return fp_temp
