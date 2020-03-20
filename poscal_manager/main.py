@@ -37,7 +37,7 @@ source.selected.indices = [pcm.i_selected]  # ['1d']['indices'] = [i_selected]
 title = Div(text='''
 <font size="4">Positioner Calibrations</font> (some columns editable)''',
             width=500)
-columns = [TableColumn(field='UTC', title='UIC', width=160),
+columns = [TableColumn(field='UTC', title='UTC', width=160),
            TableColumn(field='expid', title='expid', width=50),
            TableColumn(field='test name', title='test name', width=260),
            TableColumn(field='dome', title='dome', width=50,
