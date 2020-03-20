@@ -69,7 +69,6 @@ class FPMonitor:
         dtypes = [str, str, 'datetime64[ns]', np.float32, str,
                   np.float32, np.float32, np.float32, np.float32, str]
         data = {col: pd.Series(dtype=dt) for col, dt in zip(cols, dtypes)}
-        # import pdb; pdb.set_trace()
         self.data = pi_df.join(pd.DataFrame(data=data))
         # add dummy centre cap ring so data won't be all NaN or bokeh crashes
         # self.data.loc['centre cap ring', ['device_loc', 'device_type', 'temp_color', 'line_color']] = -1, 'centre cap ring', 0, 'white'
