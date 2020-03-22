@@ -188,7 +188,7 @@ def plot_scatter(col):
     scat_src = ColumnDataSource(calibdf)
     colors = Category10[10]
     for pcid in range(10):  # make 10 lenged items when initialising plot
-        scat.circle(x='obs_r', y=f'{col}_{pcid}', source=scat_src, radius=2,
+        scat.circle(x='obs_r', y=f'{col}_{pcid}', source=scat_src, radius=1.5,
                     line_width=0, hover_fill_color='black',
                     color=colors[pcid], legend=f'PC{pcid:02}')
     scat.xaxis.axis_label = 'r / mm'
