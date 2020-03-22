@@ -3,7 +3,7 @@ start server with the following command:
     bokeh serve fp_plots --allow-websocket-origin=desi-2.kpno.noao.edu:5006
 
 view at:
-    http://desi-2.kpno.noao.edu:5006/fp_plots
+    http://desi-2.kpno.noao.edu:5006/main
 '''
 
 import posconstants as pc
@@ -98,6 +98,6 @@ update_plots()
 # output_file('main.html')
 # save(layout)
 curdoc().add_root(layout)
-curdoc().title = 'DESI Focal Plane Telemetry Monitor'
+curdoc().title = 'Focal Plane Telemetry Monitor Application'
 # add callback to update existing plots, each webpage creates a callback
 curdoc().add_periodic_callback(update_plots, 1000*refresh_interval)

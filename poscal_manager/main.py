@@ -13,23 +13,21 @@ view at: http://desi-2.kpno.noao.edu:5006/poscal_manager
 
 import poscal_manager as pm
 from bokeh.io import curdoc  # , output_file, save
-# from bokeh.layouts import row
 from bokeh.plotting import figure
-from bokeh.palettes import Magma256
+from bokeh.palettes import Magma256, Category10
 from bokeh.models import (
-    LinearColorMapper, ColorBar, AdaptiveTicker, LabelSet)
-from bokeh.models import ColumnDataSource, Button, CheckboxButtonGroup
+    LinearColorMapper, ColorBar, AdaptiveTicker, ColumnDataSource,
+    Title, Button, CheckboxButtonGroup)
 from bokeh.models.widgets.markups import Div
 from bokeh.models.widgets.tables import (
     DataTable, TableColumn, SelectEditor, IntEditor)
-from bokeh.layouts import layout
+from bokeh.layouts import column, layout
 import numpy as np
 np.seterr(all='raise')
 
 
-pcids = list(range(10))
-fpa_experts = ['Duan', 'Fanning', 'Fagrelius', 'Schubnell',
-               'Silber', 'Poppett']
+fpa_experts = ['Duan', 'Fanning', 'Fagrelius', 'Schubnell', 'Silber',
+               'Poppett', 'Kai']
 pcm = pm.PosCalManager()
 pi = pm.get_positioner_index()
 source = ColumnDataSource(data=pcm.table)
@@ -71,8 +69,8 @@ table = DataTable(source=source, columns=columns, editable=True,
                   min_width=1300, sizing_mode='stretch_width')
 plot_bt = Button(label="Plot Selected Calibration", button_type='primary',
                  width=300)
-ptls_bt_group = CheckboxButtonGroup(labels=[f'PC{i:02}' for i in pcids],
-                                    active=pcids, width=300)
+ptls_bt_group = CheckboxButtonGroup(labels=[f'PC{i:02}' for i in range(10)],
+                                    active=pcm.pcids, width=300)
 
 
 def change_selected_calibration(attr, old, new):
@@ -88,32 +86,33 @@ def on_change_source_data(attr, old, new):
 
 
 def change_ptls(attr, old, new):
-    pcids = new
-    print('Changing checked petals', old, pcids)
+    pcm.pcids = new
+    print('Changing checked petals', old, pcm.pcids)
+    process_calibdf()
+    update_histograms_and_scatters()
 
 
-names = {'R1R2_sum': 'R1+R2', 'residuals': 'RMS residuals',
-         'GEAR_CALIB_T': 'Gear ratio θ', 'GEAR_CALIB_P': 'Gear ratio φ'}
-units = {'R1R2_sum': ' / mm', 'residuals': ' / μm',
-         'GEAR_CALIB_T': '', 'GEAR_CALIB_P': ''}
-lims = {'R1R2_sum': (5.5, 6.5), 'residuals': (0, 20),
-        'GEAR_CALIB_T': (0.8, 1.2), 'GEAR_CALIB_P': (0.8, 1.2)}
-
-
-def plot_heatmap(data, col):
+def plot_heatmap(col):
     '''col is a column name in calibdf, which can be
     R1R2_sum, residuals, gear_ratio_T, gear_ratio_P'''
+    # preset data for each quantity to be plotted
+    names = {'R1R2_sum': 'R1+R2', 'residuals': 'RMS residuals',
+             'GEAR_CALIB_T': 'Gear ratio θ', 'GEAR_CALIB_P': 'Gear ratio φ'}
+    units = {'R1R2_sum': ' / mm', 'residuals': ' / mm',
+             'GEAR_CALIB_T': '', 'GEAR_CALIB_P': ''}
+    lims = {'R1R2_sum': (5.5, 6.5), 'residuals': (0, 20),
+            'GEAR_CALIB_T': (0.8, 1.2), 'GEAR_CALIB_P': (0.8, 1.2)}
+    # begin plot
+    data, calibdf = pcm.data, pcm.calibdf
     name, unit, lim = names[col], units[col], lims[col]
-    calibdf = process_calibdf(data.calibdf['FIT'])
-    calibdf['residuals'] *= 1000
     tooltips = ([('cursor obsXY', '($x, $y)')]
                 + [(col, '@'+col) for col in calibdf.columns
                    if 'residuals_' not in col])
-    title = f'{name}, expid {data.expid}, {data.mode} calibration'
     heatmap = figure(
-        title=title, tools='pan,wheel_zoom,reset,hover,save',
-        x_range=(-420, 420), y_range=(-420, 420), tooltips=tooltips,
-        aspect_scale=1, plot_width=450, plot_height=500)
+        title=f'{name}, expid {data.expid}, {data.mode}',
+        tools='pan,wheel_zoom,reset,hover,save', tooltips=tooltips,
+        aspect_scale=1, plot_width=450, plot_height=500,
+        x_range=(-420, 420), y_range=(-420, 420))
     heatmap.xaxis.axis_label = 'obsX / mm'
     heatmap.yaxis.axis_label = 'obsY / mm'
     heatmap.hover.show_arrow = True
@@ -121,93 +120,222 @@ def plot_heatmap(data, col):
     # high = calibdf[quantity].max(skipna=True)
     color_mapper = LinearColorMapper(
         palette=Magma256, low=lim[0], high=lim[1])
-    heatmap_source = ColumnDataSource(calibdf)
+    heatmap_src = ColumnDataSource(calibdf)
     heatmap.circle(
-        x='obs_x', y='obs_y', source=heatmap_source, radius=5,
+        x='obs_x', y='obs_y', source=heatmap_src, radius=5,
         fill_color={'field': col, 'transform': color_mapper},
         fill_alpha=0.7, line_color='white', line_width=1.8,
         hover_line_color='black')
     colorbar = ColorBar(
-        title=name+unit, color_mapper=color_mapper,
-        ticker=AdaptiveTicker(), orientation='horizontal',
-        padding=5, location=(0, 0), height=10, width=330)
+        title=name+unit, color_mapper=color_mapper, ticker=AdaptiveTicker(),
+        orientation='horizontal',
+        padding=5, location=(0, 0), height=10, width=350)
     heatmap.add_layout(colorbar, place='above')  # above
-    return heatmap, heatmap_source
+    return heatmap, heatmap_src
 
 
-def plot_histogram(data, quantity):
-    bottom = 0.1  # log cannot properly handle bottom = 0, set it above zero
+def plot_histogram(col):
+    cols = {'R1R2_sum': ['R1R2_sum', 'LENGTH_R1', 'LENGTH_R2'],
+            'residuals':  ['residuals', 'residuals_T', 'residuals_P'],
+            'GEAR_CALIB_T': ['GEAR_CALIB_T'],
+            'GEAR_CALIB_P': ['GEAR_CALIB_P']}
+    names = {'R1R2_sum': 'R1+R2', 'residuals': 'RMS residuals',
+             'GEAR_CALIB_T': 'Gear ratio θ', 'GEAR_CALIB_P': 'Gear ratio φ'}
+    units = {'R1R2_sum': 'mm', 'residuals': 'mm',
+             'GEAR_CALIB_T': 'dimensionless', 'GEAR_CALIB_P': 'dimensionless'}
+    # lims = {'R1R2_sum': (2.4, 7.2), 'residuals': (0, 50),
+    #         'GEAR_CALIB_T': (0.1, 1.4), 'GEAR_CALIB_P': (0.1, 1.4)}
+    locs = {'R1R2_sum': (120, 140), 'residuals': 'top_right',
+            'GEAR_CALIB_T': 'top_left', 'GEAR_CALIB_P': 'top_left'}
+    data, data_hist = pcm.data, pcm.data_hist
+    name, unit, loc = names[col], units[col], locs[col]
+    tooltips = ([('cursor obsXY', '($x, $y)')]
+                + [(k, '@'+k) for k in data_hist.keys()])
     hist = figure(
-        title=f'{quantity} distribution, {len(pcid)} petals',
-        y_axis_type='log', plot_width=450, plot_height=250)
-    # fields = [quantity] if 
-    # for device_type, color in zip(['pos', 'fid'], ['royalblue', 'orangered']):
-    #     p.quad(top=f'top_{petal_loc}_{device_type}', bottom=bottom,
-    #            left=f'left_{petal_loc}_{device_type}',
-    #            right=f'right_{petal_loc}_{device_type}',
-    #            source=source_hist, legend=device_type,
-    #            fill_color=color, line_color="white", alpha=0.5)
-    # p.y_range.start = bottom
-    # p.legend.location = "bottom_right"
-    # p.xaxis.axis_label = 'Temp / °C'
-    # p.yaxis.axis_label = 'Device Count'
-    # # add indicator labels only once
-    # labels = LabelSet(x='x', y='y', text='status_field', source=source_status,
-    #                   x_offset=10, render_mode='css', text_baseline='middle',
-    #                   text_font_size='11pt')
-    # p.circle(x='x', y='y', radius=0.4, alpha=1, line_alpha=0,
-    #          fill_color=f'color_{petal_loc}', source=source_status)
-    # p.add_layout(labels)
-    # return p
+        title=(f'{name} distribution, expid {data.expid}, {data.mode}, '
+               f'{len(pcm.pcids)} petals'),
+        tools='pan,wheel_zoom,reset,hover,save', tooltips=tooltips,
+        y_axis_type='log', plot_width=450, plot_height=300)  # , x_range=lim)
+    hist_src = ColumnDataSource(data_hist)
+    colors = iter(Category10[10])
+    for i, c in enumerate(cols[col]):
+        hist.step(source=hist_src, mode='center', alpha=0.7, legend=c,
+                  x=f'x_{c}', y=f'y_{c}',
+                  line_color=next(colors))
+    hist.xaxis.axis_label = unit
+    hist.yaxis.axis_label = 'count / bin'
+    hist.legend.location = loc
+    hist.legend.padding = 2
+    hist.legend.spacing = 1
+    return hist, hist_src
 
 
-def process_calibdf(calibdf):
-    calibdf = calibdf.join(pi)
+def plot_scatter(col):
+    names = {'R1R2_sum': 'R1+R2', 'residuals': 'RMS residuals',
+             'GEAR_CALIB_T': 'Gear ratio θ', 'GEAR_CALIB_P': 'Gear ratio φ'}
+    units = {'R1R2_sum': ' / mm', 'residuals': ' / mm',
+             'GEAR_CALIB_T': '', 'GEAR_CALIB_P': ''}
+    data, calibdf = pcm.data, pcm.calibdf
+    name, unit = names[col], units[col]
+    tooltips = ([('cursor obsXY', '($x, $y)')]
+                + [(col, '@'+col) for col in calibdf.columns
+                   if 'residuals_' not in col])
+    scat = figure(
+        title=(f'{name} distribution, expid {data.expid}, {data.mode}, '
+               f'{len(pcm.pcids)} petals'),
+        tools='pan,wheel_zoom,reset,hover,save', tooltips=tooltips,
+        plot_width=450, plot_height=300)
+    scat_src = ColumnDataSource(calibdf)
+    colors = Category10[10]
+    for pcid in range(10):  # make 10 lenged items when initialising plot
+        scat.circle(x='obs_r', y=f'{col}_{pcid}', source=scat_src, radius=2,
+                    line_width=0, hover_fill_color='black',
+                    color=colors[pcid], legend=f'PC{pcid:02}')
+    scat.xaxis.axis_label = 'r / mm'
+    scat.yaxis.axis_label = col + unit
+    scat.legend.padding = 1
+    scat.legend.spacing = 1
+    return scat, scat_src
+
+
+def process_calibdf():
+    calibdf = pcm.data.calibdf['FIT'].join(pi)
     calibdf['R1R2_sum'] = calibdf['LENGTH_R1'] + calibdf['LENGTH_R2']
-    if 'residuals' not in calibdf.columns:
+    if 'residuals' not in calibdf.columns:  # arc calibration
         npts = calibdf['residuals_T'][0].size + calibdf['residuals_P'][0].size
         calibdf['residuals'] = np.sqrt(
             ((calibdf['residuals_T']**2).apply(np.nansum)
              + (calibdf['residuals_P']**2).apply(np.nansum))/npts)
-    return calibdf
+    else:  # grid calibration
+        calibdf['residuals_T'] = calibdf['residuals_P'] = np.nan
+    # for col in ['residuals', 'residuals_T', 'residuals_P']:
+    #     calibdf[col] *= 1000  # keep in mm as often times residuals are large
+    # more fields for histograms
+    n_bins = 40
+    data_hist = {}
+    mask = calibdf['petal_loc'].isin(pcm.pcids)
+    cols = ['R1R2_sum', 'LENGTH_R1', 'LENGTH_R2', 'residuals', 'residuals_T',
+            'residuals_P', 'GEAR_CALIB_T', 'GEAR_CALIB_P']
+    for col in set(cols) & set(calibdf.columns):
+        series = calibdf[mask][col]
+        hist, edges = np.histogram(
+            series[series.notnull()].apply(np.nanrms),
+            density=False, bins=n_bins)
+        hist = hist.astype(float)
+        hist[hist == 0] += 0.1
+        # if np.all(hist == 0):  # hist is all zeros, use alternative top
+        #     hist = hist.astype(np.float64) + 0.1  # so quad doesn't crash
+        data_hist[f'x_{col}'] = (edges[:-1] + edges[1:])/2
+        data_hist[f'y_{col}'] = hist
+    # for scatter plots
+    calibdf['obs_r'] = np.linalg.norm(calibdf[['obs_x', 'obs_y']], axis=1)
+    for col in ['R1R2_sum', 'residuals', 'GEAR_CALIB_T', 'GEAR_CALIB_P']:
+        for pcid in range(10):
+            mask = calibdf['petal_loc'] == pcid
+            if pcid in pcm.pcids:
+                calibdf.loc[mask, f'{col}_{pcid}'] = calibdf.loc[mask, col]
+            else:
+                calibdf.loc[mask, f'{col}_{pcid}'] = np.nan
+    pcm.calibdf = calibdf
+    pcm.data_hist = data_hist
+
+
+def update_heatmaps():
+    hm_r1r2_src.data = pcm.calibdf
+    hm_r1r2.title.text = f'R1+R2, expid {pcm.data.expid}, {pcm.data.mode}'
+    hm_res_src.data = pcm.calibdf
+    hm_res.title.text = (
+        f'RMS residuals, expid {pcm.data.expid}, {pcm.data.mode}')
+    if 'arc' in pcm.data.mode:
+        print('Updating gear ratio heatmaps for arc calibration')
+        hm_grt_src.data = pcm.calibdf
+        hm_grt.title.text = (
+            f'Gear ratio θ, expid {pcm.data.expid}, {pcm.data.mode}')
+        hm_grp_src.data = pcm.calibdf
+        hm_grp.title.text = (
+            f'Gear ratio φ, expid {pcm.data.expid}, {pcm.data.mode}')
+
+
+def update_histograms_and_scatters():
+    hist_r1r2_src.data = pcm.data_hist
+    hist_r1r2.title.text = (
+        f'R1+R2 distribution, expid {pcm.data.expid}, {pcm.data.mode}, '
+        f'{len(pcm.pcids)} petals')
+    scat_r1r2_src.data = pcm.calibdf
+    scat_r1r2.title.text = (
+        f'R1+R2, expid {pcm.data.expid}, {pcm.data.mode}, '
+        f'{len(pcm.pcids)} petals')
+    hist_res_src.data = pcm.data_hist
+    hist_res.title.text = (
+        f'RMS residuals distribution, expid {pcm.data.expid}, '
+        f'{pcm.data.mode}, {len(pcm.pcids)} petals')
+    scat_res_src.data = pcm.calibdf
+    scat_res.title.text = (
+        f'RMS residuals, expid {pcm.data.expid}, {pcm.data.mode}, '
+        f'{len(pcm.pcids)} petals')
+    if 'arc' in pcm.data.mode:
+        print('Updating gear ratio histograms for arc calibration')
+        hist_grt_src.data = pcm.data_hist
+        hist_grt.title.text = (
+            f'Gear ratio θ distribution, expid {pcm.data.expid}, '
+            f'{pcm.data.mode}, {len(pcm.pcids)} petals')
+        scat_grt_src.data = pcm.calibdf
+        scat_grt.title.text = (
+            f'Gear ratio θ, expid {pcm.data.expid}, {pcm.data.mode}, '
+            f'{len(pcm.pcids)} petals')
+        hist_grp_src.data = pcm.data_hist
+        hist_grp.title.text = (
+            f'Gear ratio φ distribution, expid {pcm.data.expid}, '
+            f'{pcm.data.mode}, {len(pcm.pcids)} petals')
+        scat_grp_src.data = pcm.calibdf
+        scat_grp.title.text = (
+            f'Gear ratio φ, expid {pcm.data.expid}, {pcm.data.mode}, '
+            f'{len(pcm.pcids)} petals')
 
 
 def update_plots():
-    print('current selected', pcm.i_selected)
+    print('current selected', pcm.i_selected, ', pcids', pcm.pcids)
     path = pcm.df.loc[pcm.i_selected, 'data path']
-    data = pcm.read_pickle(path)
-    calibdf = process_calibdf(data.calibdf['FIT'])
-    print('Updating plots for', pcm.i_selected, path, pcids)
-    hm_r2r2_src.data = calibdf
-    hm_r1r2.title.text = f'R1+R2, expid {data.expid}, {data.mode} calibration'
-    hm_res_src.data = calibdf
-    hm_res.title.text = (
-        f'RMS residuals, expid {data.expid}, {data.mode} calibration')
-    if 'arc' in data.mode:
-        print('Updating gear ratio plots for arc calibration')
-        hm_grt_src.data = calibdf
-        hm_grt.title.text = (
-            f'Gear ratio θ, expid {data.expid}, {data.mode} calibration')
-        hm_grp_src.data = calibdf
-        hm_grp.title.text = (
-            f'Gear ratio φ, expid {data.expid}, {data.mode} calibration')
+    pcm.data = pcm.read_pickle(path)
+    process_calibdf()
+    print('Updating plots for', pcm.i_selected, path, pcm.pcids)
+    update_heatmaps()
+    update_histograms_and_scatters()
 
 
 path = pcm.df.loc[pcm.i_selected, 'data path']
-print('Plotting calibration for', pcm.i_selected, path, pcids)
-hm_r1r2, hm_r2r2_src = plot_heatmap(pcm.read_pickle(path), 'R1R2_sum')
-hm_res, hm_res_src = plot_heatmap(pcm.read_pickle(path), 'residuals')
-hm_grt, hm_grt_src = plot_heatmap(pcm.read_pickle(path), 'GEAR_CALIB_T')
-hm_grp, hm_grp_src = plot_heatmap(pcm.read_pickle(path), 'GEAR_CALIB_P')
+pcm.data = pcm.read_pickle(path)
+process_calibdf()
+print('Plotting calibration for', pcm.i_selected, path, pcm.pcids)
+# initialise plots, first column, R1+R2
+hm_r1r2, hm_r1r2_src = plot_heatmap('R1R2_sum')
+hist_r1r2, hist_r1r2_src = plot_histogram('R1R2_sum')
+scat_r1r2, scat_r1r2_src = plot_scatter('R1R2_sum')
+# second column, fitting residuals, seperated for arc cal and combined for grid
+hm_res, hm_res_src = plot_heatmap('residuals')
+hist_res, hist_res_src = plot_histogram('residuals')
+scat_res, scat_res_src = plot_scatter('residuals')
+# third column, gear ratio theta
+hm_grt, hm_grt_src = plot_heatmap('GEAR_CALIB_T')
+hist_grt, hist_grt_src = plot_histogram('GEAR_CALIB_T')
+scat_grt, scat_grt_src = plot_scatter('GEAR_CALIB_T')
+# fouth column, gear ratio phi
+hm_grp, hm_grp_src = plot_heatmap('GEAR_CALIB_P')
+hist_grp, hist_grp_src = plot_histogram('GEAR_CALIB_P')
+scat_grp, scat_grp_src = plot_scatter('GEAR_CALIB_P')
+# construct webpage layout
+col_r1r2 = column([hm_r1r2, hist_r1r2, scat_r1r2])
+col_res = column([hm_res, hist_res, scat_res])
+col_grt = column([hm_grt, hist_grt, scat_grt])
+col_grp = column([hm_grp, hist_grp, scat_grp])
+layout = layout([[title],
+                 [table],
+                 [plot_bt, ptls_bt_group],
+                 [col_r1r2, col_res, col_grt, col_grp]])
+# add callbacks and layout
 source.on_change('data', on_change_source_data)
 source.selected.on_change('indices', change_selected_calibration)
 plot_bt.on_click(update_plots)
 ptls_bt_group.on_change('active', change_ptls)
-layout = layout([[title],
-                 [table],
-                 [plot_bt, ptls_bt_group],
-                 [hm_r1r2, hm_res, hm_grt, hm_grp]])
 curdoc().title = 'DESI Positioner Calibration Manager'
 curdoc().add_root(layout)
-# output_file('main.html')
-# save(table)

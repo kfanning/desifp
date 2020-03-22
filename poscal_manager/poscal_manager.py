@@ -115,10 +115,11 @@ class PosCalManager:
                               'poscal_index.csv')
 
     def __init__(self):
+        self.pcids = list(range(10))  # initially checked pcids
         temp = os.path.join(pc.dirs['kpno'], '*/*/calibrationdata.pkl')
         self.data_paths = [p for p in glob(temp) if
                            'arc_calibration' in p or 'grid_calibration' in p]
-        self.data = {}
+        self._data = {}
         self.init_table()
 
     def init_table(self):
@@ -138,7 +139,7 @@ class PosCalManager:
         if self.data_paths:  # fill table dict
             for path in self.data_paths:  # fill in records for all paths
                 self.read_pickle(path)
-                data = self.data[path]
+                data = self._data[path]
                 if data.posids[0][0] == 'D':
                     continue  # filter out sim runs with Dxxxxx positioners
                 d['UTC'].append(data.t_i.astimezone(timezone.utc).strftime(
@@ -162,12 +163,10 @@ class PosCalManager:
         self.df.to_csv(self.table_path)
 
     def read_pickle(self, path):
-        if path not in self.data:
+        if path not in self._data:
             with open(os.path.join(path), 'rb') as h:
-                self.data[path] = pickle.load(h)
-        return self.data[path]
-
-
+                self._data[path] = pickle.load(h)
+        return self._data[path]
 
 
 if __name__ == '__main__':
