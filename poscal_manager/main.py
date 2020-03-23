@@ -111,7 +111,7 @@ def plot_heatmap(col):
     heatmap = figure(
         title=f'{name}, expid {data.expid}, {data.mode}',
         tools='pan,wheel_zoom,reset,hover,save', tooltips=tooltips,
-        aspect_scale=1, plot_width=450, plot_height=500,
+        aspect_scale=1, plot_width=500, plot_height=500,
         x_range=(-420, 420), y_range=(-420, 420))
     heatmap.xaxis.axis_label = 'obsX / mm'
     heatmap.yaxis.axis_label = 'obsY / mm'
@@ -129,7 +129,7 @@ def plot_heatmap(col):
     colorbar = ColorBar(
         title=name+unit, color_mapper=color_mapper, ticker=AdaptiveTicker(),
         orientation='horizontal',
-        padding=5, location=(0, 0), height=10, width=350)
+        padding=5, location=(0, 0), height=10, width=400)
     heatmap.add_layout(colorbar, place='above')  # above
     return heatmap, heatmap_src
 
@@ -145,7 +145,7 @@ def plot_histogram(col):
              'GEAR_CALIB_T': 'dimensionless', 'GEAR_CALIB_P': 'dimensionless'}
     # lims = {'R1R2_sum': (2.4, 7.2), 'residuals': (0, 50),
     #         'GEAR_CALIB_T': (0.1, 1.4), 'GEAR_CALIB_P': (0.1, 1.4)}
-    locs = {'R1R2_sum': (120, 140), 'residuals': 'top_right',
+    locs = {'R1R2_sum': 'top_left', 'residuals': 'top_right',
             'GEAR_CALIB_T': 'top_left', 'GEAR_CALIB_P': 'top_left'}
     data, data_hist = pcm.data, pcm.data_hist
     name, unit, loc = names[col], units[col], locs[col]
@@ -155,7 +155,7 @@ def plot_histogram(col):
         title=(f'{name} distribution, expid {data.expid}, {data.mode}, '
                f'{len(pcm.pcids)} petals'),
         tools='pan,wheel_zoom,reset,hover,save', tooltips=tooltips,
-        y_axis_type='log', plot_width=450, plot_height=300)  # , x_range=lim)
+        y_axis_type='log', plot_width=500, plot_height=350)  # , x_range=lim)
     hist_src = ColumnDataSource(data_hist)
     colors = iter(Category10[10])
     for i, c in enumerate(cols[col]):
@@ -184,7 +184,7 @@ def plot_scatter(col):
         title=(f'{name} distribution, expid {data.expid}, {data.mode}, '
                f'{len(pcm.pcids)} petals'),
         tools='pan,wheel_zoom,reset,hover,save', tooltips=tooltips,
-        plot_width=450, plot_height=300)
+        plot_width=500, plot_height=350, x_range=(15, 500))
     scat_src = ColumnDataSource(calibdf)
     colors = Category10[10]
     for pcid in range(10):  # make 10 lenged items when initialising plot
@@ -193,6 +193,7 @@ def plot_scatter(col):
                     color=colors[pcid], legend=f'PC{pcid:02}')
     scat.xaxis.axis_label = 'r / mm'
     scat.yaxis.axis_label = col + unit
+    scat.legend.location = 'top_right'
     scat.legend.padding = 1
     scat.legend.spacing = 1
     return scat, scat_src
