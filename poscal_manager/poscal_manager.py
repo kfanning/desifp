@@ -58,10 +58,10 @@ Description of environmental conditions that are recorded in table
 * B29 Fan:
     This may or may not be re-installed. This is a huge fan which
     sits on the M floor to the East of the hatch and, as its name suggests, is
-    extremely noisy.  It generates a vertical flow within the closed dome
+    extremely noisy. It generates a vertical flow within the closed dome
     during the day to avoid thermal stratification of the air and is supposed
     to facilitate flushing of the dome air once the dome and louvers are opened
-    for nighttime observing.  The noise makes any work within the dome during
+    for nighttime observing. The noise makes any work within the dome during
     the day impossible, and this has typically been turned off when any daytime
     work is going on or the mirror covers are open (because of dust that could
     be stirred up).
@@ -77,8 +77,10 @@ import numpy as np
 import pandas as pd
 from DOSlib.positioner_index import PositionerIndex
 sys.path.append('/data/focalplane/pecs/')
-os.environ['POSITIONER_LOGS_PATH'] = '/data/focalplane/logs'
-os.environ['FP_SETTINGS_PATH'] = '/data/focalplane/fp_settings'
+if os.environ.get('POSITIONER_LOGS_PATH') is None:
+    os.environ['POSITIONER_LOGS_PATH'] = '/data/focalplane/logs'
+if os.environ.get('FP_SETTINGS_PATH') is None:
+    os.environ['FP_SETTINGS_PATH'] = '/data/focalplane/fp_settings'
 import posconstants as pc
 from petaltransforms import PetalTransforms
 

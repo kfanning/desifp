@@ -20,7 +20,7 @@ from bokeh.models import (
     Title, Button, CheckboxButtonGroup)
 from bokeh.models.widgets.markups import Div
 from bokeh.models.widgets.tables import (
-    DataTable, TableColumn, SelectEditor, IntEditor)
+    DataTable, TableColumn, SelectEditor, IntEditor, NumberEditor)
 from bokeh.layouts import column, layout
 import numpy as np
 np.seterr(all='raise')
@@ -38,12 +38,18 @@ title = Div(text='''
 columns = [TableColumn(field='UTC', title='UTC', width=160),
            TableColumn(field='expid', title='expid', width=50),
            TableColumn(field='test name', title='test name', width=260),
+           TableColumn(field='exptime', title='exptime/s', width=60,
+                       editor=NumberEditor()),
            TableColumn(field='dome', title='dome', width=50,
                        editor=SelectEditor(options=['open', 'closed', '?'])),
            TableColumn(field='zenith angle', title='zenith angle', width=69,
                        editor=IntEditor()),
            TableColumn(field='tracking', title='tracking', width=50,
                        editor=SelectEditor(options=['on', 'off', '?'])),
+           TableColumn(field='T ambient', title='T ambient/°C', width=75,
+                       editor=NumberEditor()),
+           TableColumn(field='T mirror', title='T mirror/°C', width=65,
+                       editor=NumberEditor()),
            TableColumn(field='PMTC', title='PMTC', width=50,
                        editor=SelectEditor(options=['on', 'off', '?'])),
            TableColumn(field='PCVF', title='PCVF', width=50,
@@ -92,6 +98,16 @@ def change_ptls(attr, old, new):
     update_histograms_and_scatters()
 
 
+def filter_cols(cols):
+    cols = list(cols)
+    exclude = ['residuals_'] + [f'_{i}' for i in range(10)]
+
+    def is_acceptable(col):
+        return not any(s in col for s in exclude)
+
+    return [col for col in cols if is_acceptable(col)]
+
+
 def plot_heatmap(col):
     '''col is a column name in calibdf, which can be
     R1R2_sum, residuals, gear_ratio_T, gear_ratio_P'''
@@ -106,12 +122,11 @@ def plot_heatmap(col):
     data, calibdf = pcm.data, pcm.calibdf
     name, unit, lim = names[col], units[col], lims[col]
     tooltips = ([('cursor obsXY', '($x, $y)')]
-                + [(col, '@'+col) for col in calibdf.columns
-                   if 'residuals_' not in col])
+                + [(col, '@'+col) for col in filter_cols(calibdf.columns)])
     heatmap = figure(
         title=f'{name}, expid {data.expid}, {data.mode}',
         tools='pan,wheel_zoom,reset,hover,save', tooltips=tooltips,
-        aspect_scale=1, plot_width=500, plot_height=500,
+        frame_width=400, frame_height=400,
         x_range=(-420, 420), y_range=(-420, 420))
     heatmap.xaxis.axis_label = 'obsX / mm'
     heatmap.yaxis.axis_label = 'obsY / mm'
@@ -129,7 +144,7 @@ def plot_heatmap(col):
     colorbar = ColorBar(
         title=name+unit, color_mapper=color_mapper, ticker=AdaptiveTicker(),
         orientation='horizontal',
-        padding=5, location=(0, 0), height=10, width=400)
+        padding=5, location=(0, 0), height=10, width=390)
     heatmap.add_layout(colorbar, place='above')  # above
     return heatmap, heatmap_src
 
@@ -149,13 +164,13 @@ def plot_histogram(col):
             'GEAR_CALIB_T': 'top_left', 'GEAR_CALIB_P': 'top_left'}
     data, data_hist = pcm.data, pcm.data_hist
     name, unit, loc = names[col], units[col], locs[col]
-    tooltips = ([('cursor obsXY', '($x, $y)')]
+    tooltips = ([('cursor XY', '($x, $y)')]
                 + [(k, '@'+k) for k in data_hist.keys()])
     hist = figure(
         title=(f'{name} distribution, expid {data.expid}, {data.mode}, '
                f'{len(pcm.pcids)} petals'),
         tools='pan,wheel_zoom,reset,hover,save', tooltips=tooltips,
-        y_axis_type='log', plot_width=500, plot_height=350)  # , x_range=lim)
+        y_axis_type='log', frame_width=400, frame_height=300)  # , x_range=lim)
     hist_src = ColumnDataSource(data_hist)
     colors = iter(Category10[10])
     for i, c in enumerate(cols[col]):
@@ -177,14 +192,13 @@ def plot_scatter(col):
              'GEAR_CALIB_T': '', 'GEAR_CALIB_P': ''}
     data, calibdf = pcm.data, pcm.calibdf
     name, unit = names[col], units[col]
-    tooltips = ([('cursor obsXY', '($x, $y)')]
-                + [(col, '@'+col) for col in calibdf.columns
-                   if 'residuals_' not in col])
+    tooltips = ([('cursor XY', '($x, $y)')]
+                + [(col, '@'+col) for col in filter_cols(calibdf.columns)])
     scat = figure(
         title=(f'{name} distribution, expid {data.expid}, {data.mode}, '
                f'{len(pcm.pcids)} petals'),
         tools='pan,wheel_zoom,reset,hover,save', tooltips=tooltips,
-        plot_width=500, plot_height=350, x_range=(15, 500))
+        frame_width=400, frame_height=300, x_range=(15, 500))
     scat_src = ColumnDataSource(calibdf)
     colors = Category10[10]
     for pcid in range(10):  # make 10 lenged items when initialising plot
