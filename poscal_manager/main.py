@@ -100,7 +100,7 @@ def plot_heatmap(col):
              'GEAR_CALIB_T': 'Gear ratio θ', 'GEAR_CALIB_P': 'Gear ratio φ'}
     units = {'R1R2_sum': ' / mm', 'residuals': ' / mm',
              'GEAR_CALIB_T': '', 'GEAR_CALIB_P': ''}
-    lims = {'R1R2_sum': (5.5, 6.5), 'residuals': (0, 20),
+    lims = {'R1R2_sum': (5.5, 6.5), 'residuals': (0, 0.02),
             'GEAR_CALIB_T': (0.8, 1.2), 'GEAR_CALIB_P': (0.8, 1.2)}
     # begin plot
     data, calibdf = pcm.data, pcm.calibdf
@@ -229,7 +229,8 @@ def process_calibdf():
         data_hist[f'y_{col}'] = hist
     # for scatter plots
     calibdf['obs_r'] = np.linalg.norm(calibdf[['obs_x', 'obs_y']], axis=1)
-    for col in ['R1R2_sum', 'residuals', 'GEAR_CALIB_T', 'GEAR_CALIB_P']:
+    for col in ({'R1R2_sum', 'residuals', 'GEAR_CALIB_T', 'GEAR_CALIB_P'}
+                & set(calibdf.columns)):
         for pcid in range(10):
             mask = calibdf['petal_loc'] == pcid
             if pcid in pcm.pcids:
