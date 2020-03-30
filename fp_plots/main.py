@@ -8,7 +8,7 @@ view at:
 
 import posconstants as pc
 from fp_monitor import FPMonitor
-from bokeh.io import curdoc, output_file, save
+from bokeh.io import curdoc  # , output_file, save
 from bokeh.layouts import row, gridplot
 from bokeh.palettes import Magma256
 from bokeh.plotting import figure
