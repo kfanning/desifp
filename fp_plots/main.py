@@ -98,6 +98,6 @@ update_plots()
 # output_file('main.html')
 # save(layout)
 curdoc().add_root(layout)
-curdoc().title = 'Focal Plane Telemetry Monitor Application'
+curdoc().title = 'DESI Focal Plane Telemetry Monitor'
 # add callback to update existing plots, each webpage creates a callback
 curdoc().add_periodic_callback(update_plots, 1000*refresh_interval)

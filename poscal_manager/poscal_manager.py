@@ -151,7 +151,7 @@ class PosCalManager:
                 d['data path'].append(path)
                 for col in cols:
                     d[col].append('?')
-            self.table_dict_to_df()
+        self.table_dict_to_df()
         self.len = len(self.df)
         # select the latest arc calibration so that all plots are populated
         self.i_selected = (
