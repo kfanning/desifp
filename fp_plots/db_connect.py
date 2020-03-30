@@ -9,13 +9,13 @@ import psycopg2
 
 
 class DBConn:
-	host = os.getenv('$DOS_TELEMETRY_DB_HOST', 'desi-db')
-	port = os.getenv('$DOS_TELEMETRY_DB_PORT', '5442')
-	db = os.getenv('$DOS_TELEMETRY_DB_NAME', 'desi_dev')
-	user = os.getenv('$DOS_TELEMETRY_DB_USER', 'desi_reader')
-	pw = os.getenv('$DOS_TELEMETRY_DB_PASSWORD', 'reader')
+    host = os.getenv('$DOS_TELEMETRY_DB_HOST', 'desi-db')
+    port = os.getenv('$DOS_TELEMETRY_DB_PORT', '5442')
+    db = os.getenv('$DOS_TELEMETRY_DB_NAME', 'desi_dev')
+    user = os.getenv('$DOS_TELEMETRY_DB_USER', 'desi_reader')
+    pw = os.getenv('$DOS_TELEMETRY_DB_PASSWORD', 'reader')
     conn = psycopg2.connect(host=host, port=port, database=db,
-        		            user=user, password=pw)  # DB connection
+                            user=user, password=pw)  # DB connection
 
 
 # class Singleton(type):
