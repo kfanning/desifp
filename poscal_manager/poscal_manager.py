@@ -154,8 +154,8 @@ class PosCalManager:
         self.table_dict_to_df()
         self.len = len(self.df)
         # select the latest arc calibration so that all plots are populated
-        self.i_selected = (
-            self.df[self.df['test name'].str.contains('arc')].index[-1])
+        self.i_selected = (self.df[self.df['test name'].astype(str)
+                           .str.contains('arc')].index[-1])
 
     def df_to_table_dict(self):
         self.table = self.df.to_dict(orient='list')
