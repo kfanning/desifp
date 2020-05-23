@@ -19,7 +19,7 @@ Data on DocDB:
 import os
 from functools import reduce
 # from multiprocessing import Pool
-from concurrent.futures import ProcessPoolExecutor as Pool
+from multiprocessing import Pool
 import numpy as np
 import pandas as pd
 from scipy.optimize import minimize
@@ -29,22 +29,22 @@ from matplotlib.backends.backend_pdf import PdfPages
 
 metrology_dir = r'K:\Google Drive\DESI\model_drawings\DESI Focal Plate Assy and Integration\FP Structure\metrology\Zeiss Petal Metrology'
 path_hole_table = r'K:\Google Drive\DESI\model_drawings\petal\DESI-0326-D_HoleTable.xlsx'
-fig_save_dir = r'D:\20171122 (run 4)'
+fig_save_dir = r'D:\petal_metrology_results'
 petal_ids = ['01', '02', '04', '00', '03', '05', '06', '07', '08', '09',
              '10', '11']
-paths = {'01': metrology_dir + r'\ptl01\DESI-0326-E_1_chr.txt',
-         '02': metrology_dir + r'\ptl02\DESI-0326-E_2_chr.txt',
-         '04': metrology_dir + r'\ptl04\DESI-0326-E_3_chr.txt',
-         '00': metrology_dir + r'\ptl00\DESI-0326-E_5_chr.txt',
-         '03': metrology_dir + r'\ptl03\DESI-0326-E_5_chr.txt',
-         '05': metrology_dir + r'\ptl05\DESI-0326-E_6_chr.txt',
-         '06': metrology_dir + r'\ptl06\DESI-0326-E_7_chr.txt',
-         '07': metrology_dir + r'\ptl07\DESI-0326-E_8_chr.txt',
-         '08': metrology_dir + r'\ptl08\DESI-0326-E_9_chr.txt',
-         '09': metrology_dir + r'\ptl09\DESI-0326-E_10_chr.txt',
-         '10': metrology_dir + r'\ptl10\DESI-0326-E_11_chr.txt',
-         '11': metrology_dir + r'\ptl11\DESI-0326-E_12_chr.txt'}
-make_plots = True
+paths = {'01': metrology_dir + r'\zeiss metrology ptl01\DESI-0326-E_1_chr.txt',
+         '02': metrology_dir + r'\zeiss metrology ptl02\DESI-0326-E_2_chr.txt',
+         '04': metrology_dir + r'\zeiss metrology ptl04\DESI-0326-E_3_chr.txt',
+         '00': metrology_dir + r'\zeiss metrology ptl00\DESI-0326-E_5_chr.txt',
+         '03': metrology_dir + r'\zeiss metrology ptl03\DESI-0326-E_5_chr.txt',
+         '05': metrology_dir + r'\zeiss metrology ptl05\DESI-0326-E_6_chr.txt',
+         '06': metrology_dir + r'\zeiss metrology ptl06\DESI-0326-E_7_chr.txt',
+         '07': metrology_dir + r'\zeiss metrology ptl07\DESI-0326-E_8_chr.txt',
+         '08': metrology_dir + r'\zeiss metrology ptl08\DESI-0326-E_9_chr.txt',
+         '09': metrology_dir + r'\zeiss metrology ptl09\DESI-0326-E_10_chr.txt',
+         '10': metrology_dir + r'\zeiss metrology ptl10\DESI-0326-E_11_chr.txt',
+         '11': metrology_dir + r'\zeiss metrology ptl11\DESI-0326-E_12_chr.txt'}
+make_plots = False
 make_lookup_table = False
 
 
@@ -184,17 +184,17 @@ def par_list_gen(optm, half_ranges, counts):
 # this function is going to be called by pool
 
 def process_petal(petal_id):
-    
+
     path = paths[petal_id]
     # petal_dir = os.path.dirname(path)
     df_txt = pd.read_table(path) # petal metrology data from txt
     df_hole_table = pd.read_excel(path_hole_table, skiprows=17)
     hole_ids = df_hole_table['hole_id']
-    
+
     # transformation file
     df_transformations = pd.DataFrame(index = ['ABC', 'ZBF', 'SPT', 'TPT', '1DF', 'ACT'],
                                      columns = ['alpha', 'beta', 'gamma', 'Tx', 'Ty', 'Tz'])
-    
+
     # initialise dataframe
     iterables = [['diameter', 'x', 'y', 'z', 'nutation', 'precession', 'r', 'tilt', 'defocus', 'throughput', 'dtb_x', 'dtb_y', 'dtb_z'],
                  ['ABC', 'ZBF', 'SPT', 'TPT', '1DF', 'ACT'],
@@ -203,9 +203,9 @@ def process_petal(petal_id):
     index = pd.MultiIndex.from_product(iterables, names=['hole feature', 'alignment', 'hole id'])
     df = pd.DataFrame(index=index, columns = df_txt.columns).sort_index()
     idx = pd.IndexSlice
-    
+
     # ZBF alignment
-    # fill in data from metrology report for 
+    # fill in data from metrology report for
     # ABC
     df.loc[idx['diameter', 'ABC']] = df_txt[df_txt['id'].str.contains('Sh5ZnC6 Diameter\(', na=False)].values
     df.loc[idx['x', 'ABC']] = df_txt[df_txt['id'].str.contains('Spotface Center X Position ABC Alignment\(', na=False)].values
@@ -240,18 +240,18 @@ def process_petal(petal_id):
     df.loc[idx['r', 'ZBF'], 'actual'] = np.sqrt(
                                 np.square(df.loc[idx['x', 'ZBF'], 'actual'].values.astype(np.float64))
                                 + np.square(df.loc[idx['y', 'ZBF'], 'actual'].values.astype(np.float64)))
-    
+
     # calculate tilt
     theta0 = df.loc['nutation', 'ZBF']['nominal'].values.astype(np.float64)
     phi0 = df.loc['precession', 'ZBF']['nominal'].values.astype(np.float64)
     theta = df.loc['nutation', 'ZBF']['actual'].values.astype(np.float64)
     phi = df.loc['precession', 'ZBF']['actual'].values.astype(np.float64)
-    
+
     n0 = angles_to_unit_vector(theta0, phi0)
     n = angles_to_unit_vector(theta, phi)
     tilt = np.array([np.degrees(np.arccos(np.dot(n0[:, i], n[:, i]))) for i in range(514)])
     df.loc[idx['tilt', 'ZBF'], 'actual'] = tilt
-    
+
     # calculate defocus
     delta_x = np.array([
                 df.loc[idx['x', 'ZBF'], 'deviation'].values.astype(np.float64),
@@ -267,8 +267,8 @@ def process_petal(petal_id):
     df.loc[('tilt', 'ABC'), 'uppertol'] = 0.06
     df.loc[('throughput', 'ABC'), 'lowertol'] = 0.995  # 1 - throughput loss
     df.loc[('throughput', 'ABC'), 'uppertol'] = 1  # for throughput loss
-    
-    # calculate combined throughput    
+
+    # calculate combined throughput
     throughput = throughput_tilt(tilt) * throughput_defocus(delta_f)
     df.loc[idx['throughput', 'ZBF'], 'actual'] = throughput
     df.loc[idx['throughput', 'ZBF'], 'deviation'] = 1 - throughput
@@ -292,7 +292,7 @@ def process_petal(petal_id):
     x0_abc = x_abc - np.array([np.sin(theta_abc)*np.cos(phi_abc),
                                np.sin(theta_abc)*np.sin(phi_abc),
                                np.cos(theta_abc)])  # another point along axis
-    
+
     def total_residue_1(parameters):
         # this is the function to be minimised
         alpha = parameters[0]
@@ -304,16 +304,16 @@ def process_petal(petal_id):
         # rotate each column of x_abc and fill x_abc_rot
         for j in range(x_abc.shape[1]):
             x_abc_rot[:, j] = matmul(R, x_abc[:, j]) + T
-        
+
         return total_residue(x_abc_rot, x_zbf)
-    
+
     # minimisation routine
     p0 = np.array([0.0, 0.0, 0.0, 0.0, 0.0, 0.0])
     # alpha rotation about z-axis is limited by the 0.6 mm gap between petals
     bounds = ((-0.0026, 0.0026), (-np.pi/2, np.pi/2), (-np.pi/2, np.pi/2), (-10, 10), (-10, 10), (-10, 10))
-    solution_zbf = minimize(total_residue_1, p0, 
-                          bounds = bounds, 
-                          method='SLSQP', 
+    solution_zbf = minimize(total_residue_1, p0,
+                          bounds = bounds,
+                          method='SLSQP',
                           options={'disp': True})
 #    # mod out 2pi
 #    for k in range(3):
@@ -324,10 +324,10 @@ def process_petal(petal_id):
           +'Z Rotation (Yaw)  : {}° \n'.format(np.degrees(solution_zbf.x[2]))
           +'Translation: {} \n'.format(solution_zbf.x[3:])
           +'With least square: {} \n'.format(solution_zbf.fun))
-    
+
     # save transformation parameters
     df_transformations.loc['ZBF'] = solution_zbf.x # in radians
-    
+
     # Calculate R and T
     parameters = solution_zbf.x
     alpha = parameters[0]
@@ -335,10 +335,10 @@ def process_petal(petal_id):
     gamma = parameters[2]
     T = parameters[3:]
     R = Rxyz(alpha, beta, gamma) # yaw-pitch-roll system
-    
+
     # datum tooilng balls
     for j in range(3):
-        
+
         dtb_pos_zbf = np.array([df.loc[('dtb_x', 'ZBF'), 'actual'][j],
                                 df.loc[('dtb_y', 'ZBF'), 'actual'][j],
                                 df.loc[('dtb_z', 'ZBF'), 'actual'][j]])
@@ -346,12 +346,12 @@ def process_petal(petal_id):
         df.loc[('dtb_x', 'ABC'), 'actual'][j] = dtb_pos_abc[0]
         df.loc[('dtb_y', 'ABC'), 'actual'][j] = dtb_pos_abc[1]
         df.loc[('dtb_z', 'ABC'), 'actual'][j] = dtb_pos_abc[2]
-    
+
     #%% 'SPT' alignment
     # geometric fit, using spotface centres only
-    
+
     df.loc[('diameter', 'SPT')] = df.loc[('diameter', 'ABC')].values
-    
+
     def total_residue_2(parameters):
         # this is the function to be minimised
         alpha = parameters[0] # radians
@@ -365,21 +365,21 @@ def process_petal(petal_id):
             x_abc_rot[:, j] = matmul(R, x_abc[:, j]) + T
         return total_residue(x_abc_rot, x_nom)
 
-    solution_spt = minimize(total_residue_2, p0, 
-                            bounds = bounds, 
-                            method='SLSQP', 
+    solution_spt = minimize(total_residue_2, p0,
+                            bounds = bounds,
+                            method='SLSQP',
                             options={'disp': True})
-    
+
     print('PTL'+petal_id+' SPT transformation found as \n'
           +'X Rotation (Roll) : {}° \n'.format(np.degrees(solution_spt.x[0]))
           +'Y Rotation (Pitch): {}° \n'.format(np.degrees(solution_spt.x[1]))
           +'Z Rotation (Yaw)  : {}° \n'.format(np.degrees(solution_spt.x[2]))
           +'Translation: {} \n'.format(solution_spt.x[3:])
           +'With least square: {} \n'.format(solution_spt.fun))
-    
+
     # save transformation parameters
     df_transformations.loc['SPT'] = solution_spt.x
-    
+
     # write results with these parameters to dataframe
     parameters = solution_spt.x
     alpha = parameters[0] # radians
@@ -394,10 +394,10 @@ def process_petal(petal_id):
     for j in range(x_abc.shape[1]):
         x_abc_rot[:, j] = matmul(R, x_abc[:, j]) + T
         x0_abc_rot[:, j] = matmul(R, x0_abc[:, j]) + T
-    
+
     n_rot = x_abc_rot - x0_abc_rot
     [theta_rot, phi_rot] = vector_to_angles(n_rot[0, :], n_rot[1, :], n_rot[2, :])
-                
+
     df.loc[idx['x', 'SPT'], 'actual'] = x_abc_rot[0, :]
     df.loc[idx['y', 'SPT'], 'actual'] = x_abc_rot[1, :]
     df.loc[idx['z', 'SPT'], 'actual'] = x_abc_rot[2, :]
@@ -413,12 +413,12 @@ def process_petal(petal_id):
     df.loc[idx['z', 'SPT'], 'deviation'] = df.loc[idx['z', 'SPT'], 'actual'].values - df.loc[idx['z', 'ABC'], 'nominal'].values
     df.loc[idx['nutation', 'SPT'], 'deviation'] = df.loc[idx['nutation', 'SPT'], 'actual'].values - df.loc[idx['nutation', 'ABC'], 'nominal'].values
     df.loc[idx['precession', 'SPT'], 'deviation'] = df.loc[idx['precession', 'SPT'], 'actual'].values - df.loc[idx['precession', 'ABC'], 'nominal'].values
-    
-    # calculate r 
+
+    # calculate r
     df.loc[idx['r', 'SPT'], 'actual'] = np.sqrt(
                             np.square(df.loc[idx['x', 'SPT'], 'actual'].values.astype(np.float64))
                             + np.square(df.loc[idx['y', 'SPT'], 'actual'].values.astype(np.float64)))
-    
+
     # datum tooilng balls
     for j in range(3):
         x = np.array([df.loc[('dtb_x', 'ABC'), 'actual'][j],
@@ -428,15 +428,15 @@ def process_petal(petal_id):
         df.loc[('dtb_x', 'SPT'), 'actual'][j] = xp[0]
         df.loc[('dtb_y', 'SPT'), 'actual'][j] = xp[1]
         df.loc[('dtb_z', 'SPT'), 'actual'][j] = xp[2]
-    
+
     # calculate tilt
     theta = df.loc['nutation', 'SPT']['actual'].values.astype(np.float64)
     phi = df.loc['precession', 'SPT']['actual'].values.astype(np.float64)
-    
+
     n = angles_to_unit_vector(theta, phi)
     tilt = np.array([np.degrees(np.arccos(np.dot(n0[:, i], n[:, i]))) for i in range(514)])
     df.loc[idx['tilt', 'SPT'], 'actual'] = tilt
-    
+
     # calculate defocus
     delta_x = np.array([
                 df.loc[idx['x', 'SPT'], 'deviation'].values.astype(np.float64),
@@ -446,16 +446,16 @@ def process_petal(petal_id):
     delta_r = delta_x + 86.5 * (n-n0)
     delta_f = np.array([np.dot(delta_r[:, i], n0[:, i]) for i in range(514)])
     df.loc[idx['defocus', 'SPT'], 'actual'] = delta_f
-    
+
     # calculate combined throughput
     throughput = throughput_tilt(tilt) * throughput_defocus(delta_f)
     df.loc[idx['throughput', 'SPT'], 'actual'] = throughput
     df.loc[idx['throughput', 'SPT'], 'deviation'] = 1 - throughput
-    
+
     #%% 'TPT' alignment, throughput-based fitting
-    
+
     df.loc[('diameter', 'TPT')] = df.loc[('diameter', 'ABC')].values
-    
+
     def throughput_loss_min(parameters):
         # this is the function to be minimised
         alpha = parameters[0] # radians
@@ -479,25 +479,25 @@ def process_petal(petal_id):
         tilt = np.array([np.degrees(np.arccos(np.dot(n0[:, i], n_rot[:, i]))) for i in range(514)])
         delta_f = np.array([np.dot(delta_r[:, i], n0[:, i]) for i in range(514)])
         throughput = throughput_tilt(tilt) * throughput_defocus(delta_f)
-        
+
         return np.mean(1-throughput)
 
     solution_tpt = minimize(throughput_loss_min, p0,
-                          bounds = bounds, 
-                          method = 'SLSQP', 
+                          bounds = bounds,
+                          method = 'SLSQP',
                           options={'disp': True,
                                    'maxiter': 10000})
-    
+
     print('PTL'+petal_id+' TPT transformation found as \n'
           +'X Rotation (Roll) : {}° \n'.format(np.degrees(solution_tpt.x[0]))
           +'Y Rotation (Pitch): {}° \n'.format(np.degrees(solution_tpt.x[1]))
           +'Z Rotation (Yaw)  : {}° \n'.format(np.degrees(solution_tpt.x[2]))
           +'Translation: {} \n'.format(solution_tpt.x[3:])
           +'With least mean throughput loss: {} \n'.format(solution_tpt.fun))
-    
+
     # save transformation parameters
     df_transformations.loc['TPT'] = solution_tpt.x
-    
+
     # write results with these parameters to dataframe
     parameters = solution_tpt.x
     alpha = parameters[0] # radians
@@ -507,15 +507,15 @@ def process_petal(petal_id):
     R = R = Rxyz(alpha, beta, gamma) # yaw-pitch-roll system
     x_abc_rot = np.empty(x_abc.shape) # rotated matrix from ABC
     x0_abc_rot = np.empty(x_abc.shape)
-    
+
     # rotate each column of x_abc and fill x_abc_rot
     for j in range(x_abc.shape[1]):
         x_abc_rot[:, j] = matmul(R, x_abc[:, j]) + T
         x0_abc_rot[:, j] = matmul(R, x0_abc[:, j]) + T
-        
+
     n_rot = x_abc_rot - x0_abc_rot
     [theta_rot, phi_rot] = vector_to_angles(n_rot[0, :], n_rot[1, :], n_rot[2, :])
-    
+
     df.loc[('x', 'TPT'), 'actual'] = x_abc_rot[0, :]
     df.loc[('y', 'TPT'), 'actual'] = x_abc_rot[1, :]
     df.loc[('z', 'TPT'), 'actual'] = x_abc_rot[2, :]
@@ -531,7 +531,7 @@ def process_petal(petal_id):
     df.loc[('z', 'TPT'), 'deviation'] = df.loc[('z', 'TPT'), 'actual'].values - df.loc[('z', 'ABC'), 'nominal'].values
     df.loc[('nutation', 'TPT'), 'deviation'] = df.loc[('nutation', 'TPT'), 'actual'].values - df.loc[('nutation', 'ABC'), 'nominal'].values
     df.loc[('precession', 'TPT'), 'deviation'] = df.loc[('precession', 'TPT'), 'actual'].values - df.loc[('precession', 'ABC'), 'nominal'].values
-    
+
     # datum tooilng balls
     for j in range(3):
         x = np.array([df.loc[('dtb_x', 'ABC'), 'actual'][j],
@@ -541,20 +541,20 @@ def process_petal(petal_id):
         df.loc[('dtb_x', 'TPT'), 'actual'][j] = xp[0]
         df.loc[('dtb_y', 'TPT'), 'actual'][j] = xp[1]
         df.loc[('dtb_z', 'TPT'), 'actual'][j] = xp[2]
-    
-    # calculate r 
+
+    # calculate r
     df.loc[idx['r', 'TPT'], 'actual'] = np.sqrt(
                             np.square(df.loc[idx['x', 'TPT'], 'actual'].values.astype(np.float64))
                             + np.square(df.loc[idx['y', 'TPT'], 'actual'].values.astype(np.float64)))
-    
+
     # calculate tilt
     theta = df.loc['nutation', 'TPT']['actual'].values.astype(np.float64)
     phi = df.loc['precession', 'TPT']['actual'].values.astype(np.float64)
-    
+
     n = angles_to_unit_vector(theta, phi)
     tilt = np.array([np.degrees(np.arccos(np.dot(n0[:, i], n[:, i]))) for i in range(514)])
     df.loc[idx['tilt', 'TPT'], 'actual'] = tilt
-    
+
     # calculate defocus
     delta_x = np.array([
                 df.loc[idx['x', 'TPT'], 'deviation'].values.astype(np.float64),
@@ -564,24 +564,24 @@ def process_petal(petal_id):
     delta_r = delta_x + 86.5 * (n-n0)
     delta_f = np.array([np.dot(delta_r[:, i], n0[:, i]) for i in range(514)])
     df.loc[idx['defocus', 'TPT'], 'actual'] = delta_f
-    
+
     # calculate combined throughput
     throughput = throughput_tilt(tilt) * throughput_defocus(delta_f)
     df.loc[idx['throughput', 'TPT'], 'actual'] = throughput
     df.loc[idx['throughput', 'TPT'], 'deviation'] = 1 - throughput
-    
+
     #%% ACT alignment, actual tooling ball positions measured on CMM
-    
+
     df.loc[('x', 'ACT'), 'nominal'] = df.loc[('x', 'ABC'), 'nominal'].values
     df.loc[('y', 'ACT'), 'nominal'] = df.loc[('y', 'ABC'), 'nominal'].values
     df.loc[('z', 'ACT'), 'nominal'] = df.loc[('z', 'ABC'), 'nominal'].values
     df.loc[('nutation', 'ACT'), 'nominal'] = df.loc[('nutation', 'ABC'), 'nominal'].values
     df.loc[('precession', 'ACT'), 'nominal'] = df.loc[('precession', 'ABC'), 'nominal'].values
-    
+
     #%% all plots
     if make_plots:
         print('Saving plots...')
-        
+
         figtitle_prefix = 'Petal ' + str(petal_id)
         figtitles = {'diameter': 'Cylinder Diameter Deviation',
                      'x': 'Spotface Centre X Deviation',
@@ -637,10 +637,10 @@ def process_petal(petal_id):
                  'tilt': r'$\degree$',
                  'defocus': ' mm',
                  'throughput': '%'}
-    
+
         for alignment in ['ZBF', 'SPT', 'TPT']:
         # for alignment in ['ZBF']:
-            
+
             x = df.loc['x', alignment]['nominal']
             y = df.loc['y', alignment]['nominal']
             r = df.loc['r', alignment]['actual']
@@ -653,9 +653,9 @@ def process_petal(petal_id):
                        'tilt': df.loc['tilt', alignment]['actual'],
                        'defocus': df.loc['defocus', alignment]['actual'],
                        'throughput': df.loc['throughput', alignment]['actual']*100}
-            
+
             for feature in ['diameter', 'x', 'y', 'z', 'nutation', 'precession', 'tilt', 'defocus', 'throughput']:
-                
+
                 fig = plt.figure(figsize = (18, 6))
                 gs = gridspec.GridSpec(1, 2, width_ratios=[3, 2])
                 fig.suptitle(figtitle_prefix + ' ' + figtitles[feature] + ' (' + alignment + ' Alignment)')
@@ -670,8 +670,8 @@ def process_petal(petal_id):
                             'facecolor': 'white',
                             'alpha': 0.5}
                 ax0 = plt.subplot(gs[0])
-                plot0 = ax0.scatter(x, y, marker='o', lw = 4, 
-                                    c=colours[feature], cmap='plasma', 
+                plot0 = ax0.scatter(x, y, marker='o', lw = 4,
+                                    c=colours[feature], cmap='plasma',
                                     vmin = colour_range[feature][0], vmax = colour_range[feature][1])
                 fig.colorbar(plot0, ax=ax0)
                 ax0.axis('equal')
@@ -697,24 +697,29 @@ def process_petal(petal_id):
         pass
 
     # export dataframes
-    df.to_csv(os.path.join(fig_save_dir, 
+    df.to_csv(os.path.join(fig_save_dir,
                            str(petal_ids.index(petal_id)+1).zfill(2) \
                            + '-ptl_' + petal_id + '-df_data.csv'))
-    df.to_pickle(os.path.join(fig_save_dir, 
+    df.to_pickle(os.path.join(fig_save_dir,
                            str(petal_ids.index(petal_id)+1).zfill(2) \
                            + '-ptl_' + petal_id + '-df_data.pickle'),
                  compression='gzip')
-    df_transformations.to_csv(os.path.join(fig_save_dir, 
+    df_transformations.to_csv(os.path.join(fig_save_dir,
                                           str(petal_ids.index(petal_id)+1).zfill(2) \
                                           + '-ptl_' + petal_id + '-df_transformations.csv'))
-    df_transformations.to_pickle(os.path.join(fig_save_dir, 
+    df_transformations.to_pickle(os.path.join(fig_save_dir,
                                           str(petal_ids.index(petal_id)+1).zfill(2) \
                                           + '-ptl_' + petal_id + '-df_transformations.pickle'),
                                 compression='gzip')
-    
+
     #%% ICS conformity per DESI-2850
     # everything in petal local CS
-    
+
+    # re-calculate tilt in zbf
+    theta = df.loc['nutation', 'ZBF']['actual'].values.astype(np.float64)
+    phi = df.loc['precession', 'ZBF']['actual'].values.astype(np.float64)
+    n = angles_to_unit_vector(theta, phi)
+
     device_loc = np.append(hole_ids.values, [543, 544, 545])
     x_meas = np.append(df.loc['x','ZBF']['actual'].values,
                        df.loc['dtb_x','ZBF']['actual'][0:3].values)
@@ -722,13 +727,13 @@ def process_petal(petal_id):
                        df.loc['dtb_y','ZBF']['actual'][0:3].values)
     z_meas = np.append(df.loc['z','ZBF']['actual'].values,
                        df.loc['dtb_z','ZBF']['actual'][0:3].values)
-    x_meas_proj = np.append(df.loc['x','ZBF']['actual'].values + 86.5*n[0,:], 
+    x_meas_proj = np.append(df.loc['x','ZBF']['actual'].values + 86.5*n[0,:],
                             [np.nan]*3)
     y_meas_proj = np.append(df.loc['y','ZBF']['actual'].values + 86.5*n[1,:],
                             [np.nan]*3)
     z_meas_proj = np.append(df.loc['z','ZBF']['actual'].values + 86.5*n[2,:],
                             [np.nan]*3)
-    
+
     df_ics = pd.DataFrame(
                 {'petal_id': petal_id,
                  'device_loc': device_loc,
@@ -739,18 +744,18 @@ def process_petal(petal_id):
                  'y_meas_proj': y_meas_proj,
                  'z_meas_proj': z_meas_proj
                  })
-    df_ics.to_csv(os.path.join(fig_save_dir, 
+    df_ics.to_csv(os.path.join(fig_save_dir,
                            str(petal_ids.index(petal_id)+1).zfill(2) \
                            + '-ptl_' + petal_id + '-petal_metrology_ics.csv'),
-                  index = False, index_label = False, 
-                  columns = ['petal_id', 'device_loc', 
+                  index = False, index_label = False,
+                  columns = ['petal_id', 'device_loc',
                              'x_meas', 'y_meas', 'z_meas',
                              'x_meas_proj', 'y_meas_proj', 'z_meas_proj'])
-    df_ics.to_pickle(os.path.join(fig_save_dir, 
+    df_ics.to_pickle(os.path.join(fig_save_dir,
                            str(petal_ids.index(petal_id)+1).zfill(2) \
                            + '-ptl_' + petal_id + '-petal_metrology_ics.pickle'),
                      compression = 'gzip')
-            
+
     #%% DTB coordinates for all possible mounting positions
     iterables = [np.arange(10), ['dtb_0', 'dtb_1', 'dtb_2']]
     index = pd.MultiIndex.from_product(iterables, names = ['ring mounting location', 'dtb id'])
@@ -762,22 +767,22 @@ def process_petal(petal_id):
                           df.loc['dtb_z','ZBF']['actual'][j]])
             df_dtb.loc[i, dtb_id] = petal_to_cs5(x, i)
         # iterate over 10 possible mounting locations on the ring
-    df_dtb.to_csv(os.path.join(fig_save_dir, 
+    df_dtb.to_csv(os.path.join(fig_save_dir,
                            str(petal_ids.index(petal_id)+1).zfill(2) \
                            + '-ptl_' + petal_id + '-df_dtb_optimal.csv'))
-    df_dtb.to_pickle(os.path.join(fig_save_dir, 
+    df_dtb.to_pickle(os.path.join(fig_save_dir,
                            str(petal_ids.index(petal_id)+1).zfill(2) \
                            + '-ptl_' + petal_id + '-df_dtb_optimal.pickle'),
                  compression='gzip')
-    
+
     #%% pre-calculated throughput table in petal local ABC coordinate system
     # while varying around ZBF parameters as initial values
-    
+
     def tpt_eval(alpha, beta, gamma, Tx, Ty, Tz):
         # given transforamtion parameters w.r.t. ABC, return throughput
         T = np.array([Tx, Ty, Tz])
         R = Rxyz(alpha, beta, gamma) # yaw-pitch-roll system
-        
+
         # calculate tooling ball positions
         dtb_pos = np.empty((3,3))
         for i in range(3):
@@ -803,19 +808,19 @@ def process_petal(petal_id):
         delta_r = delta_x + 86.5 * (n-n0)
         delta_f = np.array([np.dot(delta_r[:, i], n0[:, i]) for i in range(514)])
         throughput = throughput_tilt(tilt) * throughput_defocus(delta_f)
-    
+
         return (dtb_pos[0, 0], dtb_pos[0, 1], dtb_pos[0, 2],
                 dtb_pos[1, 0], dtb_pos[1, 1], dtb_pos[1, 2],
                 dtb_pos[2, 0], dtb_pos[2, 1], dtb_pos[2, 2],
-                np.mean(throughput), np.std(throughput), 
+                np.mean(throughput), np.std(throughput),
                 np.sqrt(np.mean(np.square(throughput))),
                 np.mean(1-throughput), np.std(1-throughput),
                 np.sqrt(np.mean(np.square(1-throughput))))
-    
+
     if make_lookup_table:
-        
+
         tpt_eval_v = np.vectorize(tpt_eval)
-        
+
     #    parameters_list = zip(np.arange(alpha0 - 1e-4, alpha0 + 1e-4, 5e-5),
     #            np.arange(beta0 - 5e-4, beta0 + 5e-4, 2e-4),
     #            np.arange(gamma0 - 1e-3, gamma0 + 1e-3, 5e-4),
@@ -826,21 +831,21 @@ def process_petal(petal_id):
     #    results = pool_tpt_lookup.starmap(tpt_eval, parameters_list)
     #    rows = [result[0] for result in results]
     #    df_tpt_lookup = pd.concat(rows)
-        
+
         alpha0 = df_transformations.loc['ZBF']['alpha']
         beta0 = df_transformations.loc['ZBF']['beta']
         gamma0 = df_transformations.loc['ZBF']['gamma']
         Tx0 = df_transformations.loc['ZBF']['Tx']
         Ty0 = df_transformations.loc['ZBF']['Ty']
         Tz0 = df_transformations.loc['ZBF']['Tz']
-    
+
         alpha = par_list_gen(alpha0, [1e-4, 4e-4, 8e-4], [1, 1, 1, 1, 1])
         beta = par_list_gen(beta0, [2e-4, 6e-4, 12e-4], [1, 4, 10, 4, 1]) #10
         gamma = par_list_gen(gamma0, [3e-4, 8e-4, 8e-4], [0, 1, 1, 1, 0])
         Tx = par_list_gen(Tx0, [0.1, 0.3, 0.3], [0, 1, 1, 1, 0])
         Ty = par_list_gen(Ty0, [0.1, 0.3, 0.3], [0, 1, 1, 1, 0])
         Tz = par_list_gen(Tz0, [0.05, 0.15, 0.3], [1, 4, 12, 4, 1]) #12
-        # note that meshgrid axis=0 correspond to 2nd argument, beta, 
+        # note that meshgrid axis=0 correspond to 2nd argument, beta,
         # axis=1 corresonds to 1st argument, alpha. weird bug
         alpha_mg, beta_mg, gamma_mg, Tx_mg, Ty_mg, Tz_mg = np.meshgrid(
                 alpha, beta, gamma, Tx, Ty, Tz)
@@ -876,11 +881,11 @@ def process_petal(petal_id):
                                       'grad_x': gradient[3].flatten(),
                                       'grad_y': gradient[4].flatten(),
                                       'grad_z': gradient[5].flatten()})
-        
-        df_tpt_lookup.to_csv(os.path.join(fig_save_dir, 
+
+        df_tpt_lookup.to_csv(os.path.join(fig_save_dir,
                                str(petal_ids.index(petal_id)+1).zfill(2) \
                                + '-ptl_' + petal_id + '-throughput_lookup.csv'))
-        df_tpt_lookup.to_pickle(os.path.join(fig_save_dir, 
+        df_tpt_lookup.to_pickle(os.path.join(fig_save_dir,
                                str(petal_ids.index(petal_id)+1).zfill(2) \
                                + '-ptl_' + petal_id + '-throughput_lookup.pickle'),
                      compression='gzip')
@@ -889,8 +894,7 @@ def process_petal(petal_id):
         pass
 
 if __name__ == '__main__':
-    
+
     # determine quality of production petal by analysing Zeiss metrology data
-    pool = Pool() # create a multiprocessing Pool
-    pool.map(process_petal, petal_ids) # process Zeiss metrology data
-    
+    with Pool() as p:
+    	p.map(process_petal, petal_ids) # process Zeiss metrology data
