@@ -7,6 +7,7 @@ view at:
 '''
 
 import posconstants as pc
+import os
 from fp_monitor import FPMonitor
 from bokeh.io import curdoc  # , output_file, save
 from bokeh.layouts import row, gridplot
@@ -54,7 +55,7 @@ def plot_histogram(source_hist, source_status, petal_loc):
         p.quad(top=f'top_{petal_loc}_{device_type}', bottom=bottom,
                left=f'left_{petal_loc}_{device_type}',
                right=f'right_{petal_loc}_{device_type}',
-               source=source_hist, legend=device_type,
+               source=source_hist, legend_label=device_type,
                fill_color=color, line_color="white", alpha=0.5)
     p.y_range.start = bottom
     p.legend.location = "bottom_right"
@@ -71,9 +72,9 @@ def plot_histogram(source_hist, source_status, petal_loc):
 
 
 def update_plots():
-    print(f'Refreshing plots...')
+    #print(f'Refreshing plots...')
     if fpm.update_data_and_sources():  # update data using default time span
-        print('Updating plot texts...')
+        #print('Updating plot texts...')
         t_str = pc.timestamp_str(pc.now())
         fp_temp.title.text = (  # update text in plots
             f'Focal Plane Temperature (last updated: {t_str}, '
@@ -81,11 +82,13 @@ def update_plots():
         for i, petal_hist in enumerate(petal_hists):
             petal_hist.title.text = (
                 f'PC{i:02}, PTL{FPMonitor.ptlids[i]} (last updated: {t_str})')
-    print(f'Refreshing in {refresh_interval} s...')
+    #print(f'Refreshing in {refresh_interval} s...')
 
 
 # %% main
 refresh_interval = 10
+if 'DOS_FPPLOTS_LOGS' not in os.environ:
+    os.environ['DOS_FPPLOTS_LOGS'] = os.path.abspath('/data/msdos/desifp/fp_plots')
 fpm = FPMonitor(refresh_interval=refresh_interval)
 # fpm.logger.info(f'Initialising plots...')
 fp_temp = plot_fp_temp(fpm.data, fpm.source)  # initial plot, fp heatmap
@@ -94,6 +97,7 @@ petal_hists = [plot_histogram(fpm.source_hist, fpm.source_status, petal_loc)
                for petal_loc in fpm.petal_locs]
 grid = gridplot(petal_hists, ncols=len(fpm.petal_locs)//2)
 layout = row([fp_temp, grid])
+print(f'Updating plots. Refresh interval set to {refresh_interval} s') 
 update_plots()
 # output_file('main.html')
 # save(layout)

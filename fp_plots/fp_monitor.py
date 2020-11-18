@@ -49,9 +49,10 @@ class FPMonitor:
 
     def __init__(self, refresh_interval=10):
         self.logger = logging.getLogger('FP Telemetry Monitor')
-        self.logger.setLevel(logging.DEBUG)  # log everything, DEBUG level up
+        self.logger.setLevel(logging.WARN)  # log everything, DEBUG level up
+        logpath = os.environ.get('DOS_FPPLOTS_LOGS', os.path.abspath('.'))
         log_path = os.path.join(
-            os.path.abspath('.'), 'fp_plots', 'fp_plots.log')
+            logpath, 'fp_plots.log')
         open(log_path, 'a').close()
         fh = logging.FileHandler(log_path, mode='a', encoding='utf-8')
         fh.setFormatter(logging.Formatter(  # log format for each line
@@ -76,7 +77,8 @@ class FPMonitor:
         # self.data.loc['centre cap ring', ''] = 0
         # self.data.loc['centre cap ring', 'line_color'] = 'white'
         # create masks for pos and fid
-        self.posmask = self.data['device_type'] == 'POS'
+        self.posmask = ((self.data['device_type'] == 'POS') |
+                        (self.data['device_type'] == 'ETC'))
         self.fidmask = ((self.data['device_type'] == 'GIF')
                         | (self.data['device_type'] == 'FIF'))
         self.data.loc[self.posmask, 'line_color'] = 'white'
@@ -85,7 +87,7 @@ class FPMonitor:
         path = os.path.join(
             os.getenv('PLATE_CONTROL_DIR',
                       '/software/products/plate_control-trunk'),
-            'petal', 'positioner_locations_0530v14.csv')
+            'petal', 'positioner_locations_0530v18.csv')
         ptlXYZ_df = pd.read_csv(path,
                                 usecols=['device_location_id', 'X', 'Y', 'Z'],
                                 index_col='device_location_id')
@@ -134,12 +136,14 @@ class FPMonitor:
         return query  # return query even if empty and no data in 5 min
 
     def process_pc_telemetry_can_all(self, query, latest_row_only=True):
-        '''adds the result of a sql query to the data source'''
+        '''adds the result of a sql query to the data source
+           11/17/2020 now expects querry of PTL-TEMPS table which contains
+                the required data.'''
         for petal_loc in self.petal_locs:
             query_petal = query[query['pcid'] == petal_loc]
             if query_petal.empty:  # no telemetry in the past x min for any ptl
                 self.logger.info(
-                    f'No CAN telemetry found for PC0{petal_loc}, resetting...')
+                    f'No temperature telemetry found for PC0{petal_loc}, resetting...')
                 mask = self.data['petal_loc'] == petal_loc
                 self.data.loc[mask, 'time_recorded'] = pc.timestamp_str()
                 self.data.loc[mask, 'temp'] = np.nan
@@ -156,7 +160,7 @@ class FPMonitor:
                             self.logger.warning(
                                 f"Skipping DB entry in old telemetry format "
                                 f"submitted by PC-{series['pcid']} "
-                                f"at {series['time_recorded']}")
+                                f"at {series['time']}")
                             break
                         device_id = self.pi.find_by_petal_loc_device_loc(
                             series['pcid'], device_loc, key='DEVICE_ID')
@@ -164,10 +168,12 @@ class FPMonitor:
                         temps.append(temp)
                     self.logger.debug(f'Processed {len(device_ids)} devices '
                                       f'for PC0{series.pcid}')
-                    time = series['time_recorded'].strftime(
-                        '%Y-%m-%dT%H:%M:%S%z')
+                    #time = series['time_recorded'].strftime(
+                    #    '%Y-%m-%dT%H:%M:%S%z')
+                    # New format returns isoformat string. Need to cut around second decimals
+                    time = series['time'][:19] + series['time'][-6:]
                     self.data.loc[device_ids,
-                                  'time_recorded'] = time[:-2]+':'+time[-2:]
+                                  'time_recorded'] = time #time[:-2]+':'+time[-2:]
                     self.data.loc[device_ids, 'temp'] = temps
                     self.data.loc[device_ids,
                                   'posfid_state'] = series['posfid_state']
@@ -178,11 +184,15 @@ class FPMonitor:
         self.data['temp_color'] = self.data['temp']
 
     def process_pc_telemetry_status(self, query):
+        '''
+        Reads telemetry_status table from PC telemetry
+        11/17/2020 changed to PTL-STATUS table which is more or less equivalent
+        '''
         for petal_loc in self.petal_locs:
             query_petal = query[query['pcid'] == petal_loc]
             if query_petal.empty:
                 self.logger.info(
-                    f'No status telemetry for PC0{petal_loc}, resetting...')
+                    f'No PTL-STATUS for PC0{petal_loc}, resetting...')
                 for field in self.status_colors.keys():
                     self.data_status.loc[field, f'val_{petal_loc}'] = np.nan
                     self.data_status.loc[field, f'color_{petal_loc}'] = 'grey'
@@ -217,9 +227,9 @@ class FPMonitor:
         self.logger.info(f'Updating plotting sources with new telemetry data '
                          f'in the past {minutes} minutes...')
         # do one SQL query for all telemetry data in the past x min
-        query = self.query_db(minutes=minutes, table='pc_telemetry_can_all')
+        query = self.query_db(minutes=minutes, table='pc_ptl_temps')
         self.process_pc_telemetry_can_all(query)
-        query = self.query_db(minutes=minutes, table='pc_telemetry_status')
+        query = self.query_db(minutes=minutes, table='pc_ptl_status')
         self.process_pc_telemetry_status(query)
         self.source.data = self.data
         self.source_status.data = self.data_status
