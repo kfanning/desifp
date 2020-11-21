@@ -170,8 +170,11 @@ class FPMonitor:
                                       f'for PC0{series.pcid}')
                     #time = series['time_recorded'].strftime(
                     #    '%Y-%m-%dT%H:%M:%S%z')
+                    dtime = series['time']
+                    if isinstance(dtime, pd.Timestamp):
+                        dtime = dtime.isoformat()
                     # New format returns isoformat string. Need to cut around second decimals
-                    time = series['time'][:19] + series['time'][-6:]
+                    time = dtime[:19] + dtime[-6:]
                     self.data.loc[device_ids,
                                   'time_recorded'] = time #time[:-2]+':'+time[-2:]
                     self.data.loc[device_ids, 'temp'] = temps
