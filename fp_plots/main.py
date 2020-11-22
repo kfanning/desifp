@@ -11,7 +11,7 @@ import os
 from fp_monitor import FPMonitor
 from bokeh.io import curdoc  # , output_file, save
 from bokeh.layouts import row, gridplot
-from bokeh.palettes import Magma256
+from bokeh.palettes import Magma256,Plasma256
 from bokeh.plotting import figure
 from bokeh.models import (
     LinearColorMapper, ColorBar, AdaptiveTicker, LabelSet)
@@ -30,8 +30,10 @@ def plot_fp_temp(data, source):
     fp_temp.hover.show_arrow = True
     # low = data['temp_color'].min(skipna=True)
     # high = data['temp_color'].max(skipna=True)
-    low, high = 15, 30  # colormap isn't auto-updated when new data come in
-    color_mapper = LinearColorMapper(palette=Magma256, low=low, high=high)
+    # old high was 30 (warning limit)
+    low, high = 15, 35  # colormap isn't auto-updated when new data come in
+    # old palette Magma256
+    color_mapper = LinearColorMapper(palette=Plasma256, low=low, high=high)
     fp_temp.circle(
         x='obs_x', y='obs_y', source=source, radius=5,
         fill_color={'field': 'temp_color', 'transform': color_mapper},
@@ -81,7 +83,7 @@ def update_plots():
             f'refresh interval: {refresh_interval} s)')
         for i, petal_hist in enumerate(petal_hists):
             petal_hist.title.text = (
-                f'PC{i:02}, PTL{FPMonitor.ptlids[i]} (last updated: {t_str})')
+                f'PTL_LOC/PC{i:02}, PTL_ID{FPMonitor.ptlids[i]} (last updated: {t_str})')
     #print(f'Refreshing in {refresh_interval} s...')
 
 
