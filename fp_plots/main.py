@@ -11,7 +11,8 @@ import os
 from fp_monitor import FPMonitor
 from bokeh.io import curdoc  # , output_file, save
 from bokeh.layouts import row, gridplot
-from bokeh.palettes import Magma256,Plasma256
+#from bokeh.palettes import Magma256,Plasma256
+from colorcet import linear_bmy_10_95_c78
 from bokeh.plotting import figure
 from bokeh.models import (
     LinearColorMapper, ColorBar, AdaptiveTicker, LabelSet)
@@ -33,7 +34,7 @@ def plot_fp_temp(data, source):
     # old high was 30 (warning limit)
     low, high = 15, 35  # colormap isn't auto-updated when new data come in
     # old palette Magma256
-    color_mapper = LinearColorMapper(palette=Plasma256, low=low, high=high)
+    color_mapper = LinearColorMapper(palette=linear_bmy_10_95_c78, low=low, high=high)
     fp_temp.circle(
         x='obs_x', y='obs_y', source=source, radius=5,
         fill_color={'field': 'temp_color', 'transform': color_mapper},
